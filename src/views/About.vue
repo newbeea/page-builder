@@ -1,5 +1,11 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <div>This is page builder by Phil Xu</div>
   </div>
 </template>
+<style lang="scss">
+.about {
+  background: #fff;
+  padding-top: 20px;
+}
+</style>

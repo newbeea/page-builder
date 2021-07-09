@@ -1,11 +1,15 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
+import Builder from '@/views/Builder.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    redirect: '/page-builder',
+  },
+  {
+    path: '/page-builder',
+    name: 'Builder',
+    component: Builder,
   },
   {
     path: '/about',
