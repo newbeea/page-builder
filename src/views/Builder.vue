@@ -11,6 +11,17 @@
               ><div class="panel-container">
                 <div class="component-card">
                   <el-card shadow="hover"> 轮播图 </el-card>
+                  <draggable
+                    v-model="myArray"
+                    group="people"
+                    @start="drag = true"
+                    @end="drag = false"
+                    item-key="id"
+                  >
+                    <template #item="{ element }">
+                      <div>{{ element.name }}</div>
+                    </template>
+                  </draggable>
                 </div>
               </div></el-tab-pane
             >
@@ -44,9 +55,7 @@
       </div>
       <div class="pb-canvas">
         <div class="pb-device" :class="pbDeviceClass">
-          <iframe frameborder="0">
-            <div>asdf</div>
-          </iframe>
+          <pb-device></pb-device>
         </div>
       </div>
     </div>
@@ -55,15 +64,30 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import {
+  computed, defineComponent, reactive, ref, toRefs,
+} from 'vue';
+import PbDevice from '@/components/PbDevice.vue';
+import draggable from 'vuedraggable';
 
 export default defineComponent({
   name: 'Builder',
   components: {
+    PbDevice,
+    draggable,
   },
   setup() {
     const pbDevice = ref('mobile');
+    const state = reactive({
+      drag: false,
+      myArray: [
+        { name: 'John', id: 0 },
+        { name: 'Joao', id: 1 },
+        { name: 'Jean', id: 2 },
+      ],
+    });
     return {
+      ...toRefs(state),
       pbDevice,
       pbDeviceClass: computed(() => (pbDevice.value === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };
@@ -117,13 +141,11 @@ export default defineComponent({
         width: 375px;
         height: 574px;
         background: coral;
-        overflow: auto;
       }
       .pb-device-pc {
         display: block;
         width: 100%;
         height: 100%;
-        overflow: auto;
       }
     }
   }

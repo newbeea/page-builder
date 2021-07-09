@@ -19,6 +19,10 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    'max-len': ['error', { code: 300 }],
+    'no-useless-escape': 'off',
+    'no-param-reassign': 'off',
+    'vue/no-unused-components': 'warn',
     'linebreak-style': [0, 'error', 'windows'],
     '@typescript-eslint/no-unused-vars': 'off',
     'no-unused-vars': 'off',
