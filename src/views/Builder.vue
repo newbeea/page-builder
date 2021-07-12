@@ -10,18 +10,8 @@
             <el-tab-pane label="轮播"
               ><div class="panel-container">
                 <div class="component-card">
-                  <el-card shadow="hover"> 轮播图 </el-card>
-                  <draggable
-                    v-model="myArray"
-                    group="people"
-                    @start="drag = true"
-                    @end="drag = false"
-                    item-key="id"
-                  >
-                    <template #item="{ element }">
-                      <div>{{ element.name }}</div>
-                    </template>
-                  </draggable>
+                  <el-card shadow="hover" draggable="true" @dragstart="onDrag($event)"> 轮播图 </el-card>
+
                 </div>
               </div></el-tab-pane
             >
@@ -75,6 +65,11 @@ export default defineComponent({
   components: {
     PbDevice,
     draggable,
+  },
+  methods: {
+    onDrag(ev: any) {
+      ev.dataTransfer.setData('Text', 'asdf');
+    },
   },
   setup() {
     const pbDevice = ref('mobile');

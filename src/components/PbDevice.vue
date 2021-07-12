@@ -1,6 +1,7 @@
 <template>
   <!-- <pb-page></pb-page> -->
   <iframe
+    src="http://localhost:3000/iframe.html"
     ref="iframeRef"
     sandbox="allow-modals allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
     scrolling="yes"
@@ -28,24 +29,24 @@ export default defineComponent({
     onMounted(() => {
       const iframe: any = iframeRef.value;
       const iframeDocument = iframe.contentWindow.document;
-      const html = `
-<!DOCTYPE html>
-  <html>
-    <head>
-<script type="module" crossorigin src="/dist/assets/nested.2e6fae60.js"><\/script>
-  <link rel="modulepreload" href="/dist/assets/vendor.77f98efa.js">
-  <link rel="modulepreload" href="/dist/assets/common.baa26408.js">
-  <link rel="stylesheet" href="/dist/assets/common.f6ff86f2.css">
-  <link rel="stylesheet" href="/dist/assets/nested.f0c7e5b4.css">
-    </head>
-    <body>
-      <div><pre id="error" style="color: red"></pre></div>
-      <div id="app"></div>
-    </body>
-</html>`;
-      iframeDocument.open();
-      iframeDocument.write(html);
-      iframeDocument.close();
+      // iframeDocument.src = 'http://localhost:3000/iframe.html';
+      //       const iframeDocument = iframe.contentWindow.document;
+      // const html = `
+      // <!DOCTYPE html>
+      //   <html>
+      //     <head>
+      // <script type="module" crossorigin src="/assets/main.2d6b129f.js"><\/script>
+      //   <link rel="modulepreload" href="/assets/vendor.b593fb47.js">
+      //   <link rel="stylesheet" href="/assets/main.9cd118ca.css">
+      //     </head>
+      //     <body>
+      //       <div><pre id="error" style="color: red"></pre></div>
+      //       <div id="app"></div>
+      //     </body>
+      // </html>`;
+      // iframeDocument.open();
+      // iframeDocument.write(html);
+      // iframeDocument.close();
     });
 
     return {

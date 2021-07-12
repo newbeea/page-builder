@@ -19,6 +19,16 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
     'max-len': ['error', { code: 300 }],
     'no-useless-escape': 'off',
     'no-param-reassign': 'off',

@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "build:iframe": "vite --config vite.config.iframe.ts build",
+    "serve": "vite -h"
   },
   "dependencies": {
     "@vue/eslint-config-airbnb": "^5.3.0",

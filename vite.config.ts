@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { defineConfig } from 'vite';
+import { ConfigEnv, loadEnv, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import eslintPlugin from 'vite-plugin-eslint';
 import styleImport from 'vite-plugin-style-import';
 
-export default defineConfig({
+const baseConfig: UserConfig = {
   plugins: [vue(), eslintPlugin(), styleImport({
     libs: [{
       libraryName: 'element-plus',
@@ -22,7 +22,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        nested: resolve(__dirname, 'iframe.html'),
       },
     },
   },
@@ -34,4 +33,5 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
-});
+};
+export default baseConfig;
