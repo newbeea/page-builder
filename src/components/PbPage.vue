@@ -1,43 +1,64 @@
 <template>
-  <draggable
-    v-model="myArray"
-    group="people"
-    @start="drag = true"
-    @end="drag = false"
-    item-key="id"
-  >
-    <template #item="{ element }">
-      <div>{{ element.name }}</div>
-    </template>
-  </draggable>
+  <div class="pb-page">
+    <pb-container :config="config"></pb-container>
+  </div>
 </template>
 
 <script lang="ts">
 import {
-  ref, defineComponent, computed, reactive, toRefs,
+  ref, defineComponent, computed, reactive, toRefs, toRef,
 } from 'vue';
-import draggable from 'vuedraggable';
+import PbContainer from './PbContainer.vue';
 
 export default defineComponent({
   name: 'PbPage',
   components: {
-    draggable,
+    PbContainer,
   },
   props: {
   },
   methods: {
   },
   setup: () => {
-    const state = reactive({
-      drag: false,
-      myArray: [
-        { name: 'John', id: 0 },
-        { name: 'Joao', id: 1 },
-        { name: 'Jean', id: 2 },
-      ],
+    const config = ref({
+      componentName: 'Page',
+      props: {
+        style: {
+          textAlign: 'center',
+        },
+      },
+      children: [{
+        componentName: 'Div',
+        props: {
+          style: {
+            display: 'flex',
+          },
+        },
+        children: [{
+          componentName: 'Div',
+          props: {
+            style: {
+              width: '40%',
+              height: '100px',
+              backgroundColor: '#df9999',
+            },
+          },
+          children: [],
+        }, {
+          componentName: 'Div',
+          props: {
+            style: {
+              width: '60%',
+              height: '100px',
+              backgroundColor: '#c4ffc3',
+            },
+          },
+          children: [],
+        }],
+      }],
     });
     return {
-      ...toRefs(state),
+      config,
     };
   },
 });

@@ -10,7 +10,7 @@
             <el-tab-pane label="轮播"
               ><div class="panel-container">
                 <div class="component-card">
-                  <el-card shadow="hover"> 轮播图 </el-card>
+                  <!-- <el-card shadow="hover"> 轮播图 </el-card> -->
                   <draggable
                     v-model="myArray"
                     group="people"
@@ -81,9 +81,9 @@ export default defineComponent({
     const state = reactive({
       drag: false,
       myArray: [
-        { name: 'John', id: 0 },
-        { name: 'Joao', id: 1 },
-        { name: 'Jean', id: 2 },
+        { name: '轮播1', id: 0 },
+        { name: '轮播2', id: 1 },
+        { name: '轮播3', id: 2 },
       ],
     });
     return {
