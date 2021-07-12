@@ -11,7 +11,6 @@
               ><div class="panel-container">
                 <div class="component-card">
                   <el-card shadow="hover" draggable="true" @dragstart="onDrag($event)"> 轮播图 </el-card>
-
                 </div>
               </div></el-tab-pane
             >
@@ -76,9 +75,9 @@ export default defineComponent({
     const state = reactive({
       drag: false,
       myArray: [
-        { name: 'John', id: 0 },
-        { name: 'Joao', id: 1 },
-        { name: 'Jean', id: 2 },
+        { name: '轮播1', id: 0 },
+        { name: '轮播2', id: 1 },
+        { name: '轮播3', id: 2 },
       ],
     });
     return {
