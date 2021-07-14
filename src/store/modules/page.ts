@@ -4,15 +4,15 @@ import {
 import * as jsonuri from 'jsonuri';
 import store from '..';
 
-const mvBug = (from: string, to: string) => {
+const mvBug = (from: string, to: string, direction: string) => {
   const pathTo = to.split('/');
   const pathFrom = from.split('/');
   const parentPathTo = pathTo.slice(0, pathTo.length - 1);
   const parentPathFrom = pathFrom.slice(0, pathTo.length - 1);
   const toIndex = +(to.split('/').pop() || '');
   const fromIndex = +(from.split('/').slice(0, to.split('/').length).pop() || '');
-
-  return pathTo.length <= pathFrom.length && parentPathTo.join('/') === parentPathFrom.join('/') && fromIndex > toIndex;
+  const indexChanged = direction === 'after' ? fromIndex > toIndex : fromIndex <= toIndex;
+  return pathTo.length <= pathFrom.length && parentPathTo.join('/') === parentPathFrom.join('/') && indexChanged;
 };
 type ComponentConfig = {
   componentName: string,
@@ -106,10 +106,13 @@ class Page extends VuexModule {
       });
 
       console.log(currentPath, targetPath);
+      console.log(JSON.stringify(this.config));
       if (!targetPath.startsWith(currentPath)) {
-        if (!mvBug(currentPath, targetPath)) {
+        if (!mvBug(currentPath, targetPath, movement.direction)) {
+          console.log(currentPath, targetPath, movement.direction);
           jsonuri.mv(this.config, currentPath, targetPath, movement.direction);
         } else {
+          console.log(11, currentPath, targetPath, movement.direction);
           const data = jsonuri.get(this.config, currentPath);
           jsonuri.rm(this.config, currentPath);
           jsonuri.insert(this.config, targetPath, data, movement.direction);
@@ -117,7 +120,7 @@ class Page extends VuexModule {
       }
 
       // jsonuri.rm(this.config, currentPath);
-      console.log(this.config);
+      console.log(JSON.stringify(this.config));
     }
   }
 

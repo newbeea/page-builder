@@ -62,7 +62,10 @@ export default {
                 ev.cancelBubble = true;
                 ev.stopPropagation();
 
-                if (ev.offsetY > ev.target.offsetHeight / 2) {
+                if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
+                  ev.currentTarget.style['border-top'] = '2px solid red';
+                  ev.currentTarget.style['border-bottom'] = '2px solid red';
+                } else if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
                   ev.currentTarget.style['border-bottom'] = '2px solid red';
                   ev.currentTarget.style['border-top'] = 'none';
                 } else {
