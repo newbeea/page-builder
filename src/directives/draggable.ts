@@ -28,7 +28,6 @@ export default {
                 });
               }
 
-              // if (mode.includes('droppable')) {
               el.addEventListener('drop', (function (currentConfig) {
                 // console.log(currentConfig);
                 return (ev: any) => {
@@ -37,47 +36,62 @@ export default {
                   const data = ev?.dataTransfer?.getData('Text');
                   const draggingConfig = JSON.parse(data);
 
-                  console.log(currentConfig);
-                  if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
-                    options.store?.moveIn(currentConfig);
-                  } else if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
-                    options.store?.move({
-                      config: currentConfig,
-                      direction: 'after',
-                    });
-                  } else {
-                    options.store?.move({
-                      config: currentConfig,
-                      direction: 'before',
-                    });
+                  console.log(draggingConfig, currentConfig);
+                  if (mode.includes('droppable')) {
+                    if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
+                      options.store?.moveIn({
+                        draggingConfig,
+                        config: currentConfig,
+                      });
+                    }
+                  }
+                  if (mode.includes('alignable')) {
+                    if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
+                      options.store?.move({
+                        draggingConfig,
+                        config: currentConfig,
+                        direction: 'after',
+                      });
+                    } else if (ev.offsetY <= ev.target.offsetHeight * 0.25) {
+                      options.store?.move({
+                        draggingConfig,
+                        config: currentConfig,
+                        direction: 'before',
+                      });
+                    }
                   }
 
                   ev.currentTarget.style['border-top'] = 'none';
                   ev.currentTarget.style['border-bottom'] = 'none';
                 };
               }(config)));
-              // }
+
               el.addEventListener('dragover', (ev: any) => {
                 ev.preventDefault();
                 ev.cancelBubble = true;
                 ev.stopPropagation();
 
-                if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
-                  ev.currentTarget.style['border-top'] = '2px solid red';
-                  ev.currentTarget.style['border-bottom'] = '2px solid red';
-                } else if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
-                  ev.currentTarget.style['border-bottom'] = '2px solid red';
-                  ev.currentTarget.style['border-top'] = 'none';
-                } else {
-                  ev.currentTarget.style['border-top'] = '2px solid red';
-                  ev.currentTarget.style['border-bottom'] = 'none';
+                if (mode.includes('droppable')) {
+                  if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
+                    ev.currentTarget.style['border-top'] = '2px solid red';
+                    ev.currentTarget.style['border-bottom'] = '2px solid red';
+                  }
+                }
+                if (mode.includes('alignable')) {
+                  if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
+                    ev.currentTarget.style['border-bottom'] = '2px solid red';
+                    ev.currentTarget.style['border-top'] = 'none';
+                  } else if (ev.offsetY <= ev.target.offsetHeight * 0.25) {
+                    ev.currentTarget.style['border-top'] = '2px solid red';
+                    ev.currentTarget.style['border-bottom'] = 'none';
+                  }
                 }
               });
               el.addEventListener('dragenter', (ev: any) => true);
               el.addEventListener('dragleave', (ev: any) => {
                 ev.currentTarget.style['border-top'] = 'none';
                 ev.currentTarget.style['border-bottom'] = 'none';
-              }, true);
+              });
               el.addEventListener('dragend', (ev: any) => {
                 if (options.store) {
                   options.store.dragEnd();
@@ -85,7 +99,7 @@ export default {
                 // console.log(ev);
                 // ev.currentTarget.style['border-top'] = 'none';
                 // ev.currentTarget.style['border-bottom'] = 'none';
-              }, true);
+              });
             }
           } else {
             el.setAttribute('draggable', false);

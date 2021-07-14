@@ -46,7 +46,7 @@ class Page extends VuexModule {
       },
       children: [{
         componentName: 'Div',
-        // mode: 'default',
+        mode: 'alignable',
         props: {
           style: {
             width: '40%',
@@ -90,22 +90,22 @@ class Page extends VuexModule {
 
   @Mutation
   move(movement: {
+    draggingConfig: ComponentConfig,
     config: ComponentConfig,
     direction: 'before' | 'after' | 'append'
   }) {
+    let currentPath = '';
+    let targetPath = '';
+    jsonuri.walk(this.config, (value, key, parent, { path }) => {
+      if (value === this.dragging) {
+        currentPath = path;
+      }
+      if (value === movement.config) {
+        targetPath = path;
+      }
+    });
+    console.log(currentPath, targetPath);
     if (this.dragging) {
-      let currentPath = '';
-      let targetPath = '';
-      jsonuri.walk(this.config, (value, key, parent, { path }) => {
-        if (value === this.dragging) {
-          currentPath = path;
-        }
-        if (value === movement.config) {
-          targetPath = path;
-        }
-      });
-
-      console.log(currentPath, targetPath);
       console.log(JSON.stringify(this.config));
       if (!targetPath.startsWith(currentPath)) {
         if (!mvBug(currentPath, targetPath, movement.direction)) {
@@ -121,28 +121,40 @@ class Page extends VuexModule {
 
       // jsonuri.rm(this.config, currentPath);
       console.log(JSON.stringify(this.config));
+    } else {
+      jsonuri.insert(this.config, targetPath, movement.draggingConfig, movement.direction);
     }
   }
 
   @Mutation
-  moveIn(dropConfig: ComponentConfig) {
-    if (this.dragging) {
-      let currentPath = '';
-      let targetPath = '';
-      console.log(dropConfig);
-      jsonuri.walk(this.config, (value, key, parent, { path }) => {
-        if (value === this.dragging) {
-          currentPath = path;
-        }
-        if (value === dropConfig) {
-          targetPath = path;
-        }
-      });
+  moveIn(movement: {
+    draggingConfig: ComponentConfig,
+    config: ComponentConfig
+  }) {
+    let currentPath = '';
+    let targetPath = '';
+    console.log(movement.config);
+    jsonuri.walk(this.config, (value, key, parent, { path }) => {
+      if (value === this.dragging) {
+        currentPath = path;
+      }
+      if (value === movement.config) {
+        targetPath = path;
+      }
+    });
 
-      console.log(currentPath, targetPath);
-      const childrenLength = jsonuri.get(this.config, `${targetPath}/children`)?.length;
-      if (childrenLength !== undefined && !targetPath.startsWith(currentPath)) { // has children and can not mv parent to children
-        jsonuri.mv(this.config, currentPath, `${targetPath}/children/${childrenLength - 1}`, 'after');
+    console.log(currentPath, targetPath);
+
+    const childrenLength = jsonuri.get(this.config, `${targetPath}/children`)?.length;
+    console.log(childrenLength, targetPath.startsWith(currentPath));
+    if (childrenLength !== undefined) {
+      if (this.dragging) {
+        if (!targetPath.startsWith(currentPath)) { // has children and can not mv parent to children
+          jsonuri.mv(this.config, currentPath, `${targetPath}/children/${childrenLength - 1}`, 'after');
+        }
+      } else {
+        console.log(`${targetPath}/children/${childrenLength - 1}`);
+        jsonuri.insert(this.config, `${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
       }
     }
   }

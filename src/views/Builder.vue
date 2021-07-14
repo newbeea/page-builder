@@ -9,7 +9,7 @@
           <el-tabs tab-position="left">
             <el-tab-pane label="轮播"
               ><div class="panel-container">
-                <div class="component-card" v-draggable="{}">
+                <div class="component-card" v-draggable:draggable="t">
                   <el-card
                     shadow="hover"
                     draggable="true"
@@ -88,6 +88,16 @@ export default defineComponent({
     });
     return {
       ...toRefs(state),
+      t: {
+        componentName: 'Div',
+        props: {
+          style: {
+            width: '60%',
+            backgroundColor: '#c4ffc3',
+          },
+        },
+        children: [],
+      },
       pbDevice,
       pbDeviceClass: computed(() => (pbDevice.value === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };

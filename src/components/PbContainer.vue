@@ -1,5 +1,6 @@
 <template>
   <div class="pb-container" :style="style">
+    <div class="pb-placeholder" v-if="!config.children.length">+</div>
     <component
       v-draggable:[getDragMode(child)]="child"
       v-for="child in config.children"
@@ -39,9 +40,9 @@ export default defineComponent({
         return child.mode;
       }
       if (child.componentName === 'Div') {
-        return 'draggable | droppable';
+        return 'draggable | droppable | alignable';
       }
-      return '';
+      return 'alignable';
     },
   },
   setup: (props) => {
@@ -60,8 +61,13 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .pb-container {
-  min-height: 20px;
+  .pb-placeholder {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>
