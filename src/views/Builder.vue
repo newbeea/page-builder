@@ -9,8 +9,14 @@
           <el-tabs tab-position="left">
             <el-tab-pane label="轮播"
               ><div class="panel-container">
-                <div class="component-card">
-                  <el-card shadow="hover" draggable="true" @dragstart="onDrag($event)"> 轮播图 </el-card>
+                <div class="component-card" v-draggable="{}">
+                  <el-card
+                    shadow="hover"
+                    draggable="true"
+                    @dragstart="onDrag($event)"
+                  >
+                    轮播图
+                  </el-card>
                 </div>
               </div></el-tab-pane
             >

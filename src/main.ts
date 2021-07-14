@@ -2,7 +2,9 @@ import { createApp } from 'vue';
 import router from '@/router';
 import App from '@/App.vue';
 import store from '@/store';
+import Draggable from '@/directives/draggable';
 import '@/assets/common.scss';
+import PageModule from '@/store/modules/page';
 import {
   ElMenu,
   ElMenuItem,
@@ -43,4 +45,7 @@ components.forEach((component) => {
 // plugins.forEach((plugin) => {
 //   app.use(plugin);
 // });
+app.use(Draggable, {
+  store: PageModule,
+});
 app.use(store).use(router).mount('#app');

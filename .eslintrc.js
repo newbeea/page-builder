@@ -19,6 +19,7 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    'class-methods-use-this': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',

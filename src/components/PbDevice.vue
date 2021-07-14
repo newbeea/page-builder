@@ -1,13 +1,13 @@
 <template>
-  <!-- <pb-page></pb-page> -->
-  <iframe
+  <pb-page></pb-page>
+  <!-- <iframe
     src="http://localhost:3000/iframe.html"
     ref="iframeRef"
     sandbox="allow-modals allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
     scrolling="yes"
     frameborder="0"
     style="width: 100%; height: 100%; border: none"
-  ></iframe>
+  ></iframe> -->
 </template>
 
 <script lang="ts">
@@ -19,6 +19,7 @@ import PbPage from './PbPage.vue';
 export default defineComponent({
   name: 'PbDevice',
   components: {
+    PbPage,
   },
   props: {
   },
@@ -27,8 +28,8 @@ export default defineComponent({
   setup: () => {
     const iframeRef = ref(null);
     onMounted(() => {
-      const iframe: any = iframeRef.value;
-      const iframeDocument = iframe.contentWindow.document;
+      // const iframe: any = iframeRef.value;
+      // const iframeDocument = iframe.contentWindow.document;
       // iframeDocument.src = 'http://localhost:3000/iframe.html';
       //       const iframeDocument = iframe.contentWindow.document;
       // const html = `

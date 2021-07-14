@@ -1,8 +1,9 @@
 <template>
   <div class="pb-container" :style="style">
     <component
+      v-draggable:[getDragMode(child)]="child"
       v-for="child in config.children"
-      :key="child.id"
+      :key="child"
       :is="getComonentName(child)"
       :config="child"
     ></component>
@@ -33,6 +34,15 @@ export default defineComponent({
       }
       return 'PbContainer';
     },
+    getDragMode(child: any) {
+      if (child.mode) {
+        return child.mode;
+      }
+      if (child.componentName === 'Div') {
+        return 'draggable | droppable';
+      }
+      return '';
+    },
   },
   setup: (props) => {
     const state = reactive({
@@ -51,4 +61,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.pb-container {
+  min-height: 20px;
+}
 </style>
