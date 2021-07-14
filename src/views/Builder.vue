@@ -9,13 +9,13 @@
           <el-tabs tab-position="left">
             <el-tab-pane label="轮播"
               ><div class="panel-container">
-                <div class="component-card" v-draggable:draggable="t">
+                <div class="component-card" v-draggable:draggable="t.config">
                   <el-card
                     shadow="hover"
                     draggable="true"
                     @dragstart="onDrag($event)"
                   >
-                    轮播图
+                    {{ t.name }}
                   </el-card>
                 </div>
               </div></el-tab-pane
@@ -54,7 +54,21 @@
         </div>
       </div>
     </div>
-    <div class="pb-right-panel"></div>
+    <div class="pb-right-panel">
+      <el-tabs :stretch="true">
+        <el-tab-pane>
+          <template #label>
+            <span><i class="el-icon-menu"></i>Config</span>
+          </template>
+          a
+        </el-tab-pane>
+        <el-tab-pane>
+          <template #label>
+            <span><i class="el-icon-notebook-2"></i>Style</span>
+          </template>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -64,6 +78,7 @@ import {
 } from 'vue';
 import PbDevice from '@/components/PbDevice.vue';
 import draggable from 'vuedraggable';
+import { info as ImageInfo } from '@/build-in/image';
 
 export default defineComponent({
   name: 'Builder',
@@ -88,16 +103,7 @@ export default defineComponent({
     });
     return {
       ...toRefs(state),
-      t: {
-        componentName: 'Div',
-        props: {
-          style: {
-            width: '60%',
-            backgroundColor: '#c4ffc3',
-          },
-        },
-        children: [],
-      },
+      t: ImageInfo,
       pbDevice,
       pbDeviceClass: computed(() => (pbDevice.value === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };

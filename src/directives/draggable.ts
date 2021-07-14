@@ -71,12 +71,6 @@ export default {
                 ev.cancelBubble = true;
                 ev.stopPropagation();
 
-                if (mode.includes('droppable')) {
-                  if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
-                    ev.currentTarget.style['border-top'] = '2px solid red';
-                    ev.currentTarget.style['border-bottom'] = '2px solid red';
-                  }
-                }
                 if (mode.includes('alignable')) {
                   if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
                     ev.currentTarget.style['border-bottom'] = '2px solid red';
@@ -84,6 +78,15 @@ export default {
                   } else if (ev.offsetY <= ev.target.offsetHeight * 0.25) {
                     ev.currentTarget.style['border-top'] = '2px solid red';
                     ev.currentTarget.style['border-bottom'] = 'none';
+                  } else {
+                    ev.currentTarget.style['border-top'] = 'none';
+                    ev.currentTarget.style['border-bottom'] = 'none';
+                  }
+                }
+                if (mode.includes('droppable')) {
+                  if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
+                    ev.currentTarget.style['border-top'] = '2px solid red';
+                    ev.currentTarget.style['border-bottom'] = '2px solid red';
                   }
                 }
               });

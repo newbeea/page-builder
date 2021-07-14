@@ -19,10 +19,10 @@ type ComponentConfig = {
   props: {
     [key: string]: {
       [key: string]: string,
-    }
+    } | string,
   },
   mode?: string,
-  children: ComponentConfig[]
+  children?: ComponentConfig[]
 }
 @Module({
   name: 'page',
@@ -46,14 +46,22 @@ class Page extends VuexModule {
       },
       children: [{
         componentName: 'Div',
-        mode: 'alignable',
+        // mode: 'alignable',
         props: {
           style: {
             width: '40%',
             backgroundColor: '#df9999',
           },
         },
-        children: [],
+        children: [{
+          componentName: 'Image',
+          props: {
+            style: {
+              width: '100%',
+            },
+            src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
+          },
+        }],
       }, {
         componentName: 'Div',
         props: {
