@@ -11,7 +11,7 @@ const mvBug = (from: string, to: string, direction: string) => {
   const parentPathFrom = pathFrom.slice(0, pathTo.length - 1);
   const toIndex = +(to.split('/').pop() || '');
   const fromIndex = +(from.split('/').slice(0, to.split('/').length).pop() || '');
-  const indexChanged = direction === 'after' ? fromIndex > toIndex : fromIndex <= toIndex;
+  const indexChanged = direction === 'after' ? fromIndex > toIndex : fromIndex > toIndex - 1;
   return pathTo.length <= pathFrom.length && parentPathTo.join('/') === parentPathFrom.join('/') && indexChanged;
 };
 type ComponentConfig = {
