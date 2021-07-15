@@ -7,7 +7,7 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [['@', './src']],
-        extensions: ['.js', '.ts'],
+        extensions: ['.js', '.ts', '.tsx'],
       },
     },
   },
@@ -19,6 +19,7 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    'import/prefer-default-export': 'off',
     'no-await-in-loop': 'off',
     'no-eval': 'off',
     'class-methods-use-this': 'off',

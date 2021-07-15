@@ -17,9 +17,13 @@ const mvBug = (from: string, to: string, direction: string) => {
 export type ComponentConfig = {
   componentName: string,
   props: {
-    [key: string]: {
+    style?: {
       [key: string]: string,
-    } | string,
+    },
+    src?: string,
+    title?: string,
+    href?: string,
+    alt?: string,
   },
   mode?: string,
   children?: ComponentConfig[]
@@ -57,8 +61,9 @@ class Page extends VuexModule {
           componentName: 'Image',
           props: {
             style: {
-              width: '100%',
+              // width: '100%',
             },
+            href: 'https://a.com',
             src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
           },
         }],

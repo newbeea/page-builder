@@ -1,4 +1,4 @@
-import Image from './Image.vue';
+import Image from './image';
 
 const props = {
   src: {
@@ -11,7 +11,7 @@ const props = {
   },
 };
 const config = {
-  componentName: 'Image',
+  componentName: Image.name,
   props: {
     style: {
       width: '100%',
@@ -22,7 +22,7 @@ const config = {
 const thumb = '';
 const preview = '';
 const info = {
-  name: 'Image',
+  name: Image.name,
   props,
   config,
   thumb,
