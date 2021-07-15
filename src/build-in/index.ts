@@ -1,4 +1,4 @@
-import image from './image/index';
+import image from './image/image';
 
 export const componentList = [image.component];
 
