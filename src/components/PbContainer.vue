@@ -16,13 +16,12 @@ import {
   ref, defineComponent, computed, reactive, toRefs,
 } from 'vue';
 import draggable from 'vuedraggable';
-import { Image } from '@/build-in/image';
+import { ComponentConfig } from '@/store/modules/page';
 
 export default defineComponent({
   name: 'PbContainer',
   components: {
     draggable,
-    Image,
   },
   props: {
     config: {
@@ -31,13 +30,13 @@ export default defineComponent({
     },
   },
   methods: {
-    getComonentName(child: any) {
+    getComonentName(child: ComponentConfig) {
       if (child.componentName === 'Div') {
         return 'PbContainer';
       }
       return child.componentName;
     },
-    getDragMode(child: any) {
+    getDragMode(child: ComponentConfig) {
       if (child.mode) {
         return child.mode;
       }
@@ -72,7 +71,8 @@ export default defineComponent({
   outline-offset: -1px;
   .pb-placeholder {
     color: rgb(255, 208, 75);
-    height: 30px;
+    min-height: 30px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

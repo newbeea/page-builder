@@ -22,34 +22,6 @@ export default defineComponent({
   props: {
   },
   methods: {
-    onDrag(ev: any) {
-      ev.dataTransfer.setData('Text', {
-        a: 1,
-      });
-    },
-
-    drop(ev: any) {
-      ev.preventDefault();
-      const data = ev.dataTransfer.getData('Text');
-      console.log(data.a);
-    },
-    dragover(ev: any) {
-      ev.preventDefault();
-      console.log(ev);
-      if (ev.offsetY > ev.target.offsetHeight / 2) {
-        ev.target.style['border-bottom'] = '22px solid red';
-        ev.target.style['border-top'] = 'none';
-      } else {
-        ev.target.style['border-top'] = '2px solid red';
-        ev.target.style['border-bottom'] = 'none';
-      }
-      // ev.target.style.background = '#fff';
-    },
-    dragenter(ev: any) {
-      console.log(ev);
-      ev.target.style.background = '#fff';
-      return true;
-    },
   },
   setup: () => ({
     config: computed(() => PageModule.config),

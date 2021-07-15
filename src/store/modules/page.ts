@@ -14,7 +14,7 @@ const mvBug = (from: string, to: string, direction: string) => {
   const indexChanged = direction === 'after' ? fromIndex > toIndex : fromIndex > toIndex - 1;
   return pathTo.length <= pathFrom.length && parentPathTo.join('/') === parentPathFrom.join('/') && indexChanged;
 };
-type ComponentConfig = {
+export type ComponentConfig = {
   componentName: string,
   props: {
     [key: string]: {

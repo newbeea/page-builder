@@ -1,36 +1,6 @@
 <template>
   <div class="pb">
-    <div class="pb-left-panel">
-      <el-tabs :stretch="true">
-        <el-tab-pane>
-          <template #label>
-            <span><i class="el-icon-menu"></i>组件库</span>
-          </template>
-          <el-tabs tab-position="left">
-            <el-tab-pane label="轮播"
-              ><div class="panel-container">
-                <div class="component-card" v-draggable:draggable="t.config">
-                  <el-card
-                    shadow="hover"
-                    draggable="true"
-                    @dragstart="onDrag($event)"
-                  >
-                    {{ t.name }}
-                  </el-card>
-                </div>
-              </div></el-tab-pane
-            >
-            <el-tab-pane label="布局">布局</el-tab-pane>
-            <el-tab-pane label="产品">产品</el-tab-pane>
-          </el-tabs>
-        </el-tab-pane>
-        <el-tab-pane>
-          <template #label>
-            <span><i class="el-icon-notebook-2"></i>组件树</span>
-          </template>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+    <pb-left-side class="pb-left-panel"> </pb-left-side>
     <div class="pb-center-area">
       <div class="pb-canvas-toolbar">
         <i
@@ -77,19 +47,16 @@ import {
   computed, defineComponent, reactive, ref, toRefs,
 } from 'vue';
 import PbDevice from '@/components/PbDevice.vue';
-import draggable from 'vuedraggable';
-import { info as ImageInfo } from '@/build-in/image';
+import PbLeftSide from '@/components/PbLeftSide.vue';
+import ImageInfo from '@/build-in/image';
 
 export default defineComponent({
   name: 'Builder',
   components: {
     PbDevice,
-    draggable,
+    PbLeftSide,
   },
   methods: {
-    onDrag(ev: any) {
-      ev.dataTransfer.setData('Text', 'asdf');
-    },
   },
   setup() {
     const pbDevice = ref('mobile');

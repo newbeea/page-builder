@@ -19,6 +19,8 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    'no-await-in-loop': 'off',
+    'no-eval': 'off',
     'class-methods-use-this': 'off',
     'import/extensions': [
       'error',

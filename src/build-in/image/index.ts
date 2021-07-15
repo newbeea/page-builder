@@ -28,8 +28,9 @@ const info = {
   thumb,
   preview,
 };
-export {
-  Image,
-  info,
+// export default info;
 
+export default {
+  info,
+  component: Image,
 };
