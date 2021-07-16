@@ -8,7 +8,17 @@
       :is="getComonentName(child)"
       :children="child.children"
       v-bind="child.props"
-    ></component>
+    >
+      <component
+        v-draggable:[getDragMode(slot)]="slot"
+        v-for="slot in child.slots"
+        :key="slot"
+        :is="getComonentName(slot)"
+        :children="slot.children"
+        v-bind="slot.props"
+      >
+      </component>
+    </component>
   </div>
 </template>
 

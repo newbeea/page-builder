@@ -7,9 +7,20 @@ import axios from 'axios';
 import * as Vue from 'vue';
 // import thirdPartyComponents from '@/db';
 import { componentList } from '@/build-in/index';
+import {
+  ElInput,
+  ElButton,
+} from 'element-plus';
+
+const components = [
+  ElInput,
+  ElButton,
+];
 
 const app = Vue.createApp(App);
-
+components.forEach((component) => {
+  app.component(component.name, component);
+});
 (async () => {
   componentList.forEach((component) => {
     app.component(component.name, component);
