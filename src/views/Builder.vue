@@ -24,21 +24,9 @@
         </div>
       </div>
     </div>
-    <div class="pb-right-panel">
-      <el-tabs :stretch="true">
-        <el-tab-pane>
-          <template #label>
-            <span><i class="el-icon-menu"></i>Config</span>
-          </template>
-          a
-        </el-tab-pane>
-        <el-tab-pane>
-          <template #label>
-            <span><i class="el-icon-notebook-2"></i>Style</span>
-          </template>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+    <pb-right-side class="pb-right-panel">
+
+    </pb-right-side>
   </div>
 </template>
 
@@ -48,6 +36,7 @@ import {
 } from 'vue';
 import PbDevice from '@/components/PbDevice.vue';
 import PbLeftSide from '@/components/PbLeftSide.vue';
+import PbRightSide from '@/components/right-side/PbRightSide.vue';
 import ImageInfo from '@/build-in/image';
 
 export default defineComponent({
@@ -55,6 +44,7 @@ export default defineComponent({
   components: {
     PbDevice,
     PbLeftSide,
+    PbRightSide,
   },
   methods: {
   },

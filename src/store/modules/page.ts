@@ -4,6 +4,16 @@ import {
 import * as jsonuri from 'jsonuri';
 import store from '..';
 
+const img = {
+  componentName: 'Image',
+  props: {
+    style: {
+      // width: '100%',
+    },
+    // href: 'https://a.com',
+    src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
+  },
+};
 const mvBug = (from: string, to: string, direction: string) => {
   const pathTo = to.split('/');
   const pathFrom = from.split('/');
@@ -17,13 +27,7 @@ const mvBug = (from: string, to: string, direction: string) => {
 export type ComponentConfig = {
   componentName: string,
   props: {
-    style?: {
-      [key: string]: string,
-    },
-    src?: string,
-    title?: string,
-    href?: string,
-    alt?: string,
+    [key: string]: any,
   },
   mode?: string,
   children?: ComponentConfig[]
@@ -57,16 +61,7 @@ class Page extends VuexModule {
             backgroundColor: '#df9999',
           },
         },
-        children: [{
-          componentName: 'Image',
-          props: {
-            style: {
-              // width: '100%',
-            },
-            href: 'https://a.com',
-            src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
-          },
-        }],
+        children: [img],
       }, {
         componentName: 'Div',
         props: {
@@ -89,11 +84,46 @@ class Page extends VuexModule {
     }],
   }
 
+  public activeConfig: ComponentConfig = img;
+
   public dragging!: ComponentConfig | null;
+
+  public propConfig: {
+    [key: string]: Array<{
+      prop: string,
+      label: string,
+      input: string,
+    }>
+  } = {
+    Image: [
+      {
+        prop: 'src',
+        label: 'Url',
+        input: 'InputExpression',
+      },
+      {
+        prop: 'title',
+        label: 'Title',
+        input: 'InputExpression',
+      },
+      {
+        prop: 'href',
+        label: 'Link',
+        input: 'InputExpression',
+      },
+    ],
+  }
 
   @Mutation
   setDraggingConfig(draggingConfig: ComponentConfig) {
     this.dragging = draggingConfig;
+  }
+
+  @Mutation
+  setActiveConfig(activeConfig: ComponentConfig) {
+    // Object.assign(this.activeConfig, activeConfig);
+    // this.config.children?[0].children?[0].children?[0]
+    this.activeConfig = activeConfig;
   }
 
   @Mutation

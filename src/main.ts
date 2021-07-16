@@ -12,6 +12,7 @@ import {
   ElTabs,
   ElTabPane,
   ElIcon,
+  ElInput,
   // ElInfiniteScroll,
   // ElLoading,
   // ElMessage,
@@ -26,6 +27,7 @@ const components = [
   ElTabs,
   ElTabPane,
   ElIcon,
+  ElInput,
 ];
 
 // const plugins = [

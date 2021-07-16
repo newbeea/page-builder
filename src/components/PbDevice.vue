@@ -1,13 +1,13 @@
 <template>
-  <!-- <pb-page></pb-page> -->
-  <iframe
+  <pb-page></pb-page>
+  <!-- <iframe
     src="http://localhost:3000/iframe.html"
     ref="iframeRef"
     sandbox="allow-modals allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
     scrolling="yes"
     frameborder="0"
     style="width: 100%; height: 100%; border: none"
-  ></iframe>
+  ></iframe> -->
 </template>
 
 <script lang="ts">

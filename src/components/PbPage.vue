@@ -3,7 +3,9 @@
   <div style="width: 100px; height: 100px; background: #333;" id="div1" @drop="drop($event)" @dragover="dragover($event)"  @dragend="dragend($event)" @dragenter="dragenter">
   <div style="width: 50px; height: 50px; background: #fff;" id="div12" @drop="drop($event)" @dragover="dragover($event)"  @dragend="dragend($event)" @dragenter="dragenter"> </div> -->
   <div class="pb-page">
-    <pb-container :config="config"></pb-container>
+    <pb-container
+      :children="config.children"
+      v-bind="config.props"></pb-container>
   </div>
 </template>
 
@@ -24,7 +26,7 @@ export default defineComponent({
   methods: {
   },
   setup: () => ({
-    config: computed(() => PageModule.config),
+    config: PageModule.config,
   }),
 });
 </script>

@@ -1,12 +1,13 @@
 <template>
-  <div class="pb-container" :style="style">
-    <div class="pb-placeholder" v-if="!config.children?.length">+</div>
+  <div class="pb-container">
+    <div class="pb-placeholder" v-if="!children?.length">+</div>
     <component
       v-draggable:[getDragMode(child)]="child"
-      v-for="child in config.children"
+      v-for="child in children"
       :key="child"
       :is="getComonentName(child)"
-      :config="child"
+      :children="child.children"
+      v-bind="child.props"
     ></component>
   </div>
 </template>
@@ -24,10 +25,7 @@ export default defineComponent({
     draggable,
   },
   props: {
-    config: {
-      type: Object,
-      default: () => ({}),
-    },
+    children: Array,
   },
   methods: {
     getComonentName(child: ComponentConfig) {
@@ -58,7 +56,6 @@ export default defineComponent({
     });
 
     return {
-      style: props.config.props?.style,
       ...toRefs(state),
     };
   },

@@ -20,12 +20,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from 'vue';
+import {
+  computed, defineComponent, getCurrentInstance, reactive, ref, toRef, toRefs,
+} from 'vue';
 import { infoList, componentList } from '@/build-in';
 
-// componentList.forEach((component) => {
-//   app.component(component.name, component);
-// });
 export default defineComponent({
   name: 'PbComponentList',
   components: {
@@ -33,10 +32,6 @@ export default defineComponent({
   methods: {
   },
   setup(props, context) {
-    componentList.forEach((component) => {
-      getCurrentInstance()?.appContext.app.component(component.name, component);
-    });
-    console.log(getCurrentInstance()?.appContext.app);
     const components = Object.values(infoList);
     return {
       // t: ImageInfo,

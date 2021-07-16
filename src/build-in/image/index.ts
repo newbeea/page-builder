@@ -1,15 +1,17 @@
 import Image from './image';
 
-const props = {
-  src: {
+const props = [
+  {
+    prop: 'src',
     label: 'Image url',
     input: 'InputExpression',
   },
-  title: {
+  {
+    prop: 'title',
     label: 'Title',
     input: 'InputExpression',
   },
-};
+];
 const config = {
   componentName: Image.name,
   props: {
