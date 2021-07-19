@@ -34,8 +34,17 @@ export default {
                   ev.preventDefault();
                   ev.cancelBubble = true;
                   const data = ev?.dataTransfer?.getData('Text');
-                  const draggingConfig = JSON.parse(data);
-
+                  let draggingConfig;
+                  try {
+                    draggingConfig = JSON.parse(data);
+                  } catch (e) {
+                    console.log(e);
+                  }
+                  if (!draggingConfig || !draggingConfig.componentName) {
+                    ev.currentTarget.style['border-top'] = 'none';
+                    ev.currentTarget.style['border-bottom'] = 'none';
+                    return;
+                  }
                   console.log(draggingConfig, currentConfig);
                   if (mode.includes('droppable')) {
                     if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {

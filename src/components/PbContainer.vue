@@ -11,7 +11,7 @@
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
         <component
-          v-draggable:[slotDragMode]="slot"
+          v-draggable:droppable="slot"
           :is="getComonentName(slot)"
           :children="slot.children"
           v-bind="slot.props"
@@ -67,7 +67,6 @@ export default defineComponent({
     });
 
     return {
-      slotDragMode: 'droppable | alignable',
       ...toRefs(state),
     };
   },
