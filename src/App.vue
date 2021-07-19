@@ -7,10 +7,10 @@
     active-text-color="#ffd04b"
   >
     <el-menu-item index="">
-      <router-link to="/">页面构建</router-link>
+      <router-link to="/">Page Builder</router-link>
     </el-menu-item>
     <el-menu-item index="/about">
-      <router-link to="/about">文档</router-link>
+      <router-link to="/about">Docs</router-link>
     </el-menu-item>
   </el-menu>
   <router-view />
