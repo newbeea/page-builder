@@ -10,11 +10,13 @@ import { componentList } from '@/build-in/index';
 import {
   ElInput,
   ElButton,
+  ElCard,
 } from 'element-plus';
 
 const components = [
   ElInput,
   ElButton,
+  ElCard,
 ];
 
 const app = Vue.createApp(App);

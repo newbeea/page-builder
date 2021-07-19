@@ -9,15 +9,16 @@
       :children="child.children"
       v-bind="child.props"
     >
-      <component
-        v-draggable:[getDragMode(slot)]="slot"
-        v-for="slot in child.slots"
-        :key="slot"
-        :is="getComonentName(slot)"
-        :children="slot.children"
-        v-bind="slot.props"
-      >
-      </component>
+      <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
+        <component
+          v-draggable:[slotDragMode]="slot"
+          :is="getComonentName(slot)"
+          :children="slot.children"
+          v-bind="slot.props"
+        >
+        </component>
+      </template >
+
     </component>
   </div>
 </template>
@@ -51,10 +52,10 @@ export default defineComponent({
       if (child.componentName === 'Div') {
         return 'draggable | droppable | alignable';
       }
-      if (child.componentName === 'Image') {
+      if (child.componentName === 'Image' || child.componentName === 'Text') {
         return 'draggable | alignable';
       }
-      return 'alignable';
+      return 'draggable | alignable';
     },
   },
   setup: (props) => {
@@ -66,6 +67,7 @@ export default defineComponent({
     });
 
     return {
+      slotDragMode: 'droppable | alignable',
       ...toRefs(state),
     };
   },
