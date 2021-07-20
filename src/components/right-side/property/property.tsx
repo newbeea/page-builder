@@ -18,7 +18,7 @@ export default defineComponent({
       const properties = BuilderModule.propConfig[BuilderModule.activeConfig.componentName];
       const render = () => {
         const list: any = [];
-        properties.forEach((p) => {
+        properties?.forEach((p) => {
           if (p.input === 'InputExpression') {
             list.push(
             <div class={style.pbProperty}>

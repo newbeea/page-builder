@@ -72,7 +72,11 @@ class Builder extends VuexModule {
     props: {},
   };
 
-  public id = 0;
+  // public id = 0;
+
+  // public idConfigMap: {
+  //   [key: string]: ComponentConfig
+  // } = {}
 
   public activeConfig: ComponentConfig = img;
 
@@ -100,20 +104,42 @@ class Builder extends VuexModule {
         input: 'InputExpression',
       },
     ],
-    Div: [
+    Text: [
       {
-        prop: 'href',
-        label: 'Link',
+        prop: 'text',
+        label: 'Text',
+        input: 'InputExpression',
+      },
+    ],
+    ElButton: [
+      {
+        prop: 'size',
+        label: 'Size',
+        input: 'InputExpression',
+      },
+      {
+        prop: 'type',
+        label: 'Type',
+        input: 'InputExpression',
+      },
+      {
+        prop: 'round',
+        label: 'Round',
         input: 'InputExpression',
       },
     ],
   }
 
-  @Mutation
-  genId() {
-    this.id += 1;
-    config._currentId = this.id;
-  }
+  // @Mutation
+  // genId() {
+  //   this.id += 1;
+  //   config._currentId = this.id;
+  // }
+
+  // @Mutation
+  // addToMap(c: ComponentConfig) {
+  //   if (c._id) { this.idConfigMap[c._id] = c; }
+  // }
 
   @Mutation
   setConfig(componentConfig: ComponentConfig) {
@@ -122,23 +148,21 @@ class Builder extends VuexModule {
   }
 
   @Mutation
-  setBuilderActiveConfig(activeConfig: ComponentConfig) {
-    // Object.assign(this.activeConfig, activeConfig);
-    // this.config.children?[0].children?[0].children?[0]
-    this.activeConfig = activeConfig;
-    console.log(111111111111);
+  setBuilderActiveConfig(path: string) {
+    this.activeConfig = jsonuri.get(this.config, path);
   }
 
   @Action({ rawError: true })
   public fetchConfig() {
-    const travers = (c: ComponentConfig) => {
-      c._id = this.id;
-      this.genId();
-      c.children?.forEach((child: ComponentConfig) => travers(child));
-    };
-    travers(config);
+    // const travers = (c: ComponentConfig) => {
+    //   c._id = this.id;
+    //   this.addToMap(c);
+    //   this.genId();
+    //   c.children?.forEach((child: ComponentConfig) => travers(child));
+    // };
+    // travers(config);
 
-    console.log(config);
+    // console.log(config);
     this.setConfig(config);
   }
 }

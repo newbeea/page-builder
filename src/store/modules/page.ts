@@ -39,6 +39,12 @@ const mvBug = (from: string, to: string, direction: string) => {
   dynamic: true,
 })
 class Page extends VuexModule {
+  public pageState: {
+    dragging: ComponentConfig | null
+  } = {
+    dragging: null,
+  }
+
   public config: ComponentConfig = {
     componentName: 'Page',
     props: {},
@@ -48,7 +54,10 @@ class Page extends VuexModule {
 
   public activeConfig!: ComponentConfig;
 
-  public dragging!: ComponentConfig | null;
+  public dragging : ComponentConfig | null = {
+    componentName: 'Page',
+    props: {},
+  };
 
   @Mutation
   genId(id?: number | undefined) {
@@ -58,7 +67,8 @@ class Page extends VuexModule {
 
   @Mutation
   setDraggingConfig(draggingConfig: ComponentConfig) {
-    this.dragging = draggingConfig;
+    console.log('setDraggingConfig', draggingConfig);
+    this.pageState.dragging = draggingConfig;
   }
 
   @Mutation
@@ -75,16 +85,16 @@ class Page extends VuexModule {
 
   @Mutation
   setActiveConfig(activeConfig: ComponentConfig) {
-    // Object.assign(this.activeConfig, activeConfig);
-    // this.config.children?[0].children?[0].children?[0]
-    this.activeConfig = activeConfig;
-    console.log(111111);
-    notifyBuilder('onSelected', activeConfig);
+    jsonuri.walk(this.config, (value, key, parent, { path }) => {
+      if (value === activeConfig) {
+        notifyBuilder('onSelected', path);
+      }
+    });
   }
 
   @Mutation
   dragEnd() {
-    this.dragging = null;
+    this.pageState.dragging = null;
   }
 
   @Action
@@ -93,10 +103,11 @@ class Page extends VuexModule {
     config: ComponentConfig,
     direction: 'before' | 'after' | 'append'
   }) {
+    console.log(this.config, this.pageState.dragging);
     let currentPath = '';
     let targetPath = '';
     jsonuri.walk(this.config, (value, key, parent, { path }) => {
-      if (value === this.dragging) {
+      if (value === this.pageState.dragging) {
         currentPath = path;
       }
       if (value === movement.config) {
@@ -104,7 +115,7 @@ class Page extends VuexModule {
       }
     });
     console.log(currentPath, targetPath);
-    if (this.dragging) {
+    if (this.pageState.dragging) {
       console.log(JSON.stringify(this.config));
       if (!targetPath.startsWith(currentPath)) {
         if (!mvBug(currentPath, targetPath, movement.direction)) {
@@ -135,9 +146,10 @@ class Page extends VuexModule {
   }) {
     let currentPath = '';
     let targetPath = '';
-    console.log(movement.config);
+    console.log(this.pageState.dragging, movement.config);
     jsonuri.walk(this.config, (value, key, parent, { path }) => {
-      if (value === this.dragging) {
+      console.log(value);
+      if (value === this.pageState.dragging) {
         currentPath = path;
       }
       if (value === movement.config) {
@@ -150,7 +162,7 @@ class Page extends VuexModule {
     const childrenLength = jsonuri.get(this.config, `${targetPath}/children`)?.length;
     console.log(childrenLength, targetPath.startsWith(currentPath));
     if (childrenLength !== undefined) {
-      if (this.dragging) {
+      if (this.pageState.dragging) {
         if (!targetPath.startsWith(currentPath)) { // has children and can not mv parent to children
           jsonuri.mv(this.config, currentPath, `${targetPath}/children/${childrenLength - 1}`, 'after');
         }
