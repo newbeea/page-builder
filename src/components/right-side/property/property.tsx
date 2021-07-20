@@ -1,7 +1,8 @@
 import {
   defineComponent, PropType, ref, toRef,
 } from 'vue';
-import PageModule, { ComponentConfig } from '@/store/modules/page';
+import BuilderModule from '@/store/modules/builder';
+import { ComponentConfig } from '@/store/modules/types';
 import style from './property.module.scss';
 
 export default defineComponent({
@@ -14,14 +15,14 @@ export default defineComponent({
   },
   setup(props) {
     return () => {
-      const properties = PageModule.propConfig[PageModule.activeConfig.componentName];
+      const properties = BuilderModule.propConfig[BuilderModule.activeConfig.componentName];
       const render = () => {
         const list: any = [];
         properties.forEach((p) => {
           if (p.input === 'InputExpression') {
             list.push(
             <div class={style.pbProperty}>
-              <span>{p.label}</span><el-input v-model={PageModule.activeConfig.props[p.prop]}></el-input>
+              <span>{p.label}</span><el-input v-model={BuilderModule.activeConfig.props[p.prop]}></el-input>
             </div>,
             );
           }

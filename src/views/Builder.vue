@@ -38,6 +38,7 @@ import PbDevice from '@/components/PbDevice.vue';
 import PbLeftSide from '@/components/PbLeftSide.vue';
 import PbRightSide from '@/components/right-side/PbRightSide.vue';
 import ImageInfo from '@/build-in/image';
+import BuilderModule from '@/store/modules/builder';
 
 export default defineComponent({
   name: 'Builder',
@@ -49,6 +50,7 @@ export default defineComponent({
   methods: {
   },
   setup() {
+    BuilderModule.fetchConfig();
     const pbDevice = ref('mobile');
     const state = reactive({
       drag: false,

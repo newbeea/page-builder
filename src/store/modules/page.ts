@@ -3,17 +3,17 @@ import {
 } from 'vuex-module-decorators';
 import * as jsonuri from 'jsonuri';
 import store from '..';
+import { ComponentConfig } from './types';
 
-const img = {
-  componentName: 'Image',
-  props: {
-    style: {
-      // width: '100%',
-    },
-    // href: 'https://a.com',
-    src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
-  },
+const updateConfig = (newConfig: ComponentConfig) => {
+  const { top }: any = window;
+  console.log(111);
+  top.postMessage(JSON.stringify({
+    cmd: 'setConfig',
+    data: newConfig,
+  }));
 };
+
 const mvBug = (from: string, to: string, direction: string) => {
   const pathTo = to.split('/');
   const pathFrom = from.split('/');
@@ -24,14 +24,7 @@ const mvBug = (from: string, to: string, direction: string) => {
   const indexChanged = direction === 'after' ? fromIndex > toIndex : fromIndex > toIndex - 1;
   return pathTo.length <= pathFrom.length && parentPathTo.join('/') === parentPathFrom.join('/') && indexChanged;
 };
-export type ComponentConfig = {
-  componentName: string,
-  props: {
-    [key: string]: any,
-  },
-  mode?: string,
-  children?: ComponentConfig[]
-}
+
 @Module({
   name: 'page',
   store,
@@ -40,83 +33,21 @@ export type ComponentConfig = {
 class Page extends VuexModule {
   public config: ComponentConfig = {
     componentName: 'Page',
-    props: {
-      style: {
-        textAlign: 'center',
-      },
-    },
-    children: [{
-      componentName: 'Div',
-      props: {
-        style: {
-          display: 'flex',
-        },
-      },
-      children: [{
-        componentName: 'Div',
-        // mode: 'alignable',
-        props: {
-          style: {
-            width: '40%',
-            backgroundColor: '#df9999',
-          },
-        },
-        children: [img],
-      }, {
-        componentName: 'Div',
-        props: {
-          style: {
-            width: '60%',
-            backgroundColor: '#c4ffc3',
-          },
-        },
-        children: [{
-          componentName: 'Div',
-          props: {
-            style: {
-              width: '60%',
-              backgroundColor: 'black',
-            },
-          },
-          children: [],
-        }],
-      }],
-    }],
-  }
+    props: {},
+  };
 
-  public activeConfig: ComponentConfig = img;
+  public activeConfig!: ComponentConfig;
 
   public dragging!: ComponentConfig | null;
-
-  public propConfig: {
-    [key: string]: Array<{
-      prop: string,
-      label: string,
-      input: string,
-    }>
-  } = {
-    Image: [
-      {
-        prop: 'src',
-        label: 'Url',
-        input: 'InputExpression',
-      },
-      {
-        prop: 'title',
-        label: 'Title',
-        input: 'InputExpression',
-      },
-      {
-        prop: 'href',
-        label: 'Link',
-        input: 'InputExpression',
-      },
-    ],
-  }
 
   @Mutation
   setDraggingConfig(draggingConfig: ComponentConfig) {
     this.dragging = draggingConfig;
+  }
+
+  @Mutation
+  setConfig(componentConfig: ComponentConfig) {
+    this.config = componentConfig;
   }
 
   @Mutation
@@ -167,6 +98,7 @@ class Page extends VuexModule {
     } else {
       jsonuri.insert(this.config, targetPath, movement.draggingConfig, movement.direction);
     }
+    updateConfig(this.config);
   }
 
   @Mutation
@@ -200,6 +132,7 @@ class Page extends VuexModule {
         jsonuri.insert(this.config, `${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
       }
     }
+    updateConfig(this.config);
   }
 }
 

@@ -1,6 +1,8 @@
 <template>
   <pb-page v-if="!iframeMode"></pb-page>
   <iframe
+    @load="onLoad"
+    id="iframe"
     v-else
     src="http://localhost:3000/iframe.html"
     ref="iframeRef"
@@ -13,8 +15,9 @@
 
 <script lang="ts">
 import {
-  ref, defineComponent, computed, onMounted,
+  ref, defineComponent, computed, onMounted, nextTick, watch,
 } from 'vue';
+import BuilderModule from '@/store/modules/builder';
 import PbPage from './PbPage.vue';
 
 export default defineComponent({
@@ -28,8 +31,50 @@ export default defineComponent({
   },
   setup: () => {
     const iframeRef = ref(null);
+
+    const updateConfig = () => {
+      const iframe: any = iframeRef.value;
+      iframe.contentWindow.postMessage(JSON.stringify({
+        cmd: 'setConfig',
+        data: BuilderModule.config,
+      }));
+    };
+    watch(
+      () => BuilderModule.config,
+      (config, prevConfig) => {
+        updateConfig();
+      },
+      {
+        deep: true,
+      },
+    );
+
+    const onLoad = () => {
+      updateConfig();
+    };
+
+    window.addEventListener('message', (event) => {
+      if (typeof event.data === 'string') {
+        try {
+          console.log(event);
+          const data = JSON.parse(event.data);
+          if (data.cmd === 'setConfig') {
+            BuilderModule.setConfig(data.data);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
     onMounted(() => {
       // const iframe: any = iframeRef.value;
+      // setTimeout(() => {
+      //   iframe.contentWindow.postMessage(JSON.stringify(PageModule.config));
+      // }, 0);
+      // nextTick(() => {
+      //   iframe.contentWindow.postMessage('主页面消息');
+      // });
+      // console.log('aa');
       // const iframeDocument = iframe.contentWindow.document;
       // iframeDocument.src = 'http://localhost:3000/iframe.html';
       //       const iframeDocument = iframe.contentWindow.document;
@@ -52,6 +97,7 @@ export default defineComponent({
     });
 
     return {
+      onLoad,
       iframeMode: true,
       iframeRef,
     };

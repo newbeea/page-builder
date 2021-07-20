@@ -30,7 +30,7 @@ export default defineComponent({
         children: 'children',
         label: 'componentName',
       },
-      config: [PageModule.config],
+      config: computed(() => [PageModule.config]),
     };
   },
 });

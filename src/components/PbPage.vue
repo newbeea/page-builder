@@ -11,9 +11,10 @@
 
 <script lang="ts">
 import {
-  ref, defineComponent, computed, reactive, toRefs, toRef,
+  ref, defineComponent, computed, reactive, toRefs, toRef, watch,
 } from 'vue';
 import PageModule from '@/store/modules/page';
+import { config } from 'process';
 import PbContainer from './PbContainer.vue';
 
 export default defineComponent({
@@ -25,9 +26,18 @@ export default defineComponent({
   },
   methods: {
   },
-  setup: () => ({
-    config: PageModule.config,
-  }),
+  setup: () => {
+    window.addEventListener('message', (event) => {
+      console.log(event);
+      const data = JSON.parse(event.data);
+      if (data.cmd === 'setConfig') {
+        PageModule.setConfig(data.data);
+      }
+    });
+    return {
+      config: computed(() => PageModule.config),
+    };
+  },
 });
 </script>
 
