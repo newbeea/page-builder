@@ -14,6 +14,14 @@ const updateConfig = (newConfig: ComponentConfig) => {
   }));
 };
 
+const notifyBuilder = (notify: string, data: any) => {
+  const { top }: any = window;
+  top.postMessage(JSON.stringify({
+    cmd: notify,
+    data,
+  }));
+};
+
 const mvBug = (from: string, to: string, direction: string) => {
   const pathTo = to.split('/');
   const pathFrom = from.split('/');
@@ -36,9 +44,17 @@ class Page extends VuexModule {
     props: {},
   };
 
+  public id = 0;
+
   public activeConfig!: ComponentConfig;
 
   public dragging!: ComponentConfig | null;
+
+  @Mutation
+  genId(id?: number | undefined) {
+    this.id = id || this.id + 1;
+    this.config._currentId = this.id;
+  }
 
   @Mutation
   setDraggingConfig(draggingConfig: ComponentConfig) {
@@ -48,6 +64,13 @@ class Page extends VuexModule {
   @Mutation
   setConfig(componentConfig: ComponentConfig) {
     this.config = componentConfig;
+    // this.genId(this.config._currentId);
+  }
+
+  @Action({ rawError: true })
+  initConfig(componentConfig: ComponentConfig) {
+    this.setConfig(componentConfig);
+    this.genId(this.config._currentId);
   }
 
   @Mutation
@@ -55,6 +78,8 @@ class Page extends VuexModule {
     // Object.assign(this.activeConfig, activeConfig);
     // this.config.children?[0].children?[0].children?[0]
     this.activeConfig = activeConfig;
+    console.log(111111);
+    notifyBuilder('onSelected', activeConfig);
   }
 
   @Mutation
@@ -62,7 +87,7 @@ class Page extends VuexModule {
     this.dragging = null;
   }
 
-  @Mutation
+  @Action
   move(movement: {
     draggingConfig: ComponentConfig,
     config: ComponentConfig,
@@ -96,12 +121,14 @@ class Page extends VuexModule {
       // jsonuri.rm(this.config, currentPath);
       console.log(JSON.stringify(this.config));
     } else {
+      this.genId();
+      movement.draggingConfig._id = this.id;
       jsonuri.insert(this.config, targetPath, movement.draggingConfig, movement.direction);
     }
     updateConfig(this.config);
   }
 
-  @Mutation
+  @Action
   moveIn(movement: {
     draggingConfig: ComponentConfig,
     config: ComponentConfig
@@ -129,6 +156,8 @@ class Page extends VuexModule {
         }
       } else {
         console.log(`${targetPath}/children/${childrenLength - 1}`);
+        this.genId();
+        movement.draggingConfig._id = this.id;
         jsonuri.insert(this.config, `${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
       }
     }

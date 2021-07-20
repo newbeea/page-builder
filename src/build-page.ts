@@ -2,6 +2,7 @@ import App from '@/components/PbPage.vue';
 import store from '@/store';
 import '@/assets/common.scss';
 import Draggable from '@/directives/draggable';
+import Selectable from '@/directives/selectable';
 import PageModule from '@/store/modules/page';
 import axios from 'axios';
 import * as Vue from 'vue';
@@ -32,7 +33,13 @@ components.forEach((component) => {
   //   const res = await axios.get(component.url);
   //   eval(`window.Vue = Vue; ${res.data}; app.component(${component.name}.component.name, ${component.name}.component);`);
   // }
-  app.use(store).use(Draggable, {
-    store: PageModule,
-  }).mount('#app');
+  app
+    .use(store)
+    .use(Draggable, {
+      store: PageModule,
+    })
+    .use(Selectable, {
+      store: PageModule,
+    })
+    .mount('#app');
 })();

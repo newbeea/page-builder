@@ -15,7 +15,7 @@ const img = {
     src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
   },
 };
-const config = {
+const config: ComponentConfig = {
   componentName: 'Page',
   props: {
     style: {
@@ -72,6 +72,8 @@ class Builder extends VuexModule {
     props: {},
   };
 
+  public id = 0;
+
   public activeConfig: ComponentConfig = img;
 
   public propConfig: {
@@ -98,22 +100,45 @@ class Builder extends VuexModule {
         input: 'InputExpression',
       },
     ],
+    Div: [
+      {
+        prop: 'href',
+        label: 'Link',
+        input: 'InputExpression',
+      },
+    ],
+  }
+
+  @Mutation
+  genId() {
+    this.id += 1;
+    config._currentId = this.id;
   }
 
   @Mutation
   setConfig(componentConfig: ComponentConfig) {
+    console.log(123123);
     this.config = componentConfig;
   }
 
   @Mutation
-  setActiveConfig(activeConfig: ComponentConfig) {
+  setBuilderActiveConfig(activeConfig: ComponentConfig) {
     // Object.assign(this.activeConfig, activeConfig);
     // this.config.children?[0].children?[0].children?[0]
     this.activeConfig = activeConfig;
+    console.log(111111111111);
   }
 
   @Action({ rawError: true })
   public fetchConfig() {
+    const travers = (c: ComponentConfig) => {
+      c._id = this.id;
+      this.genId();
+      c.children?.forEach((child: ComponentConfig) => travers(child));
+    };
+    travers(config);
+
+    console.log(config);
     this.setConfig(config);
   }
 }

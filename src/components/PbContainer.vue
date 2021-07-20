@@ -8,6 +8,7 @@
       :is="getComonentName(child)"
       :children="child.children"
       v-bind="child.props"
+      v-selectable="child"
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
         <component
@@ -15,6 +16,7 @@
           :is="getComonentName(slot)"
           :children="slot.children"
           v-bind="slot.props"
+          v-selectable="slot"
         >
         </component>
       </template >
@@ -28,7 +30,7 @@ import {
   ref, defineComponent, computed, reactive, toRefs,
 } from 'vue';
 import draggable from 'vuedraggable';
-import { ComponentConfig } from '@/store/modules/page';
+import { ComponentConfig } from '@/store/modules/types';
 
 export default defineComponent({
   name: 'PbContainer',

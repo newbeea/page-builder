@@ -38,6 +38,7 @@ export default defineComponent({
         cmd: 'setConfig',
         data: BuilderModule.config,
       }));
+      console.log(222);
     };
     watch(
       () => BuilderModule.config,
@@ -60,6 +61,9 @@ export default defineComponent({
           const data = JSON.parse(event.data);
           if (data.cmd === 'setConfig') {
             BuilderModule.setConfig(data.data);
+          }
+          if (data.cmd === 'onSelected') {
+            BuilderModule.setBuilderActiveConfig(data.data);
           }
         } catch (e) {
           console.log(e);
@@ -95,7 +99,7 @@ export default defineComponent({
       // iframeDocument.write(html);
       // iframeDocument.close();
     });
-
+    // BuilderModule.setActiveConfig({ props: {}, componentName: 'Image' });
     return {
       onLoad,
       iframeMode: true,

@@ -1,4 +1,6 @@
 export type ComponentConfig = {
+  _currentId?: number,
+  _id?: number,
   componentName: string,
   props: {
     [key: string]: any,

@@ -31,7 +31,7 @@ export default defineComponent({
       console.log(event);
       const data = JSON.parse(event.data);
       if (data.cmd === 'setConfig') {
-        PageModule.setConfig(data.data);
+        PageModule.initConfig(data.data);
       }
     });
     return {
