@@ -15,14 +15,15 @@ export default defineComponent({
   },
   setup(props) {
     return () => {
-      const properties = BuilderModule.propConfig[BuilderModule.activeConfig.componentName];
+      const properties = BuilderModule.builderState.activeProps;
       const render = () => {
         const list: any = [];
         properties?.forEach((p) => {
-          if (p.input === 'InputExpression') {
+          if (p.input === 'InputExpression' && BuilderModule.builderState.activeConfig) {
             list.push(
             <div class={style.pbProperty}>
-              <span>{p.label}</span><el-input v-model={BuilderModule.activeConfig.props[p.prop]}></el-input>
+              <span>{p.label}</span>
+              <el-input v-model={BuilderModule.builderState.activeConfig.props[p.prop]}></el-input>
             </div>,
             );
           }

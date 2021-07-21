@@ -18,13 +18,13 @@ export default {
             ev.stopPropagation();
             ev.cancelBubble = true;
             options.store?.setActiveConfig(config);
-            if (lastHighlight) {
-              lastHighlight.style.outline = '1px dotted #ffd04b';
-              lastHighlight.style['outline-offset'] = '-1px';
-            }
-            ev.currentTarget.style.outline = '2px solid red';
-            ev.currentTarget.style['outline-offset'] = '-2px';
-            lastHighlight = ev.currentTarget;
+            // if (lastHighlight) {
+            //   lastHighlight.style.outline = '1px dotted #ffd04b';
+            //   lastHighlight.style['outline-offset'] = '-1px';
+            // }
+            // ev.currentTarget.style.outline = '2px solid red';
+            // ev.currentTarget.style['outline-offset'] = '-2px';
+            // lastHighlight = ev.currentTarget;
           });
         },
     });

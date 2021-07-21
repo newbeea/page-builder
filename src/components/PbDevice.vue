@@ -36,12 +36,12 @@ export default defineComponent({
       const iframe: any = iframeRef.value;
       iframe.contentWindow.postMessage(JSON.stringify({
         cmd: 'setConfig',
-        data: BuilderModule.config,
+        data: BuilderModule.builderState.config,
       }));
       console.log(222);
     };
     watch(
-      () => BuilderModule.config,
+      () => BuilderModule.builderState.config,
       (config, prevConfig) => {
         updateConfig();
       },
@@ -63,7 +63,7 @@ export default defineComponent({
             BuilderModule.setConfig(data.data);
           }
           if (data.cmd === 'onSelected') {
-            BuilderModule.setBuilderActiveConfig(data.data);
+            BuilderModule.setActiveConfigByPath(data.data);
           }
         } catch (e) {
           console.log(e);

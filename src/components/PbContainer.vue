@@ -9,6 +9,9 @@
       :children="child.children"
       v-bind="child.props"
       v-selectable="child"
+      :class="{
+        'pb-active': child._active
+      }"
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
         <component
@@ -17,6 +20,9 @@
           :children="slot.children"
           v-bind="slot.props"
           v-selectable="slot"
+          :class="{
+            'pb-active': slot._active
+          }"
         >
         </component>
       </template >
@@ -87,5 +93,9 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
   }
+}
+.pb-active {
+  outline: 2px solid red;
+  outline-offset: -2px;
 }
 </style>

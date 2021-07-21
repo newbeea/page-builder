@@ -1,10 +1,14 @@
 <template>
   <div class="pb-tree">
     <el-tree
+      ref="tree"
+      node-key="_id"
       :data="config"
       :expand-on-click-node="false"
       :props="defaultProps"
+      @current-change="onCurrentChange"
       default-expand-all
+      highlight-current
       draggable>
     </el-tree>
   </div>
@@ -13,10 +17,10 @@
 
 <script lang="ts">
 import {
-  computed, defineComponent, getCurrentInstance, reactive, ref, toRef, toRefs,
+  computed, defineComponent, getCurrentInstance, nextTick, reactive, ref, toRef, toRefs, watch,
 } from 'vue';
 import { infoList, componentList } from '@/build-in';
-import PageModule from '@/store/modules/page';
+import BuilderModule from '@/store/modules/builder';
 
 export default defineComponent({
   name: 'PbComponentTree',
@@ -25,12 +29,38 @@ export default defineComponent({
   methods: {
   },
   setup(props, context) {
+    const tree = ref(null);
+    watch(
+      () => BuilderModule.builderState.activeConfig,
+      (config, prevConfig) => {
+        if (BuilderModule.builderState.activeConfig) {
+          const treeRef: any = tree.value;
+          console.log(config, prevConfig, BuilderModule.builderState.activeConfig, treeRef);
+          console.log(treeRef);
+          nextTick(() => {
+            treeRef?.setCurrentNode(BuilderModule.builderState.activeConfig);
+          });
+        }
+      },
+      {
+        deep: true,
+      },
+    );
+    const onCurrentChange = (node: any) => {
+      console.log(node);
+      const treeRef: any = tree.value;
+      console.log(treeRef?.getCurrentNode());
+      BuilderModule.setActive(node);
+    };
+
     return {
+      tree,
+      onCurrentChange,
       defaultProps: {
         children: 'children',
         label: 'componentName',
       },
-      config: computed(() => [PageModule.config]),
+      config: computed(() => [BuilderModule.builderState.config]),
     };
   },
 });

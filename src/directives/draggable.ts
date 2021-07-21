@@ -11,7 +11,6 @@ export default {
     app.directive('draggable', {
       mounted:
         (el: any, binding: any) => {
-          console.log(binding.value, binding.arg);
           const mode: string = binding.arg || '';
           const config = binding.value;
           if (mode !== 'disabled') {
@@ -22,58 +21,54 @@ export default {
                   console.log(ev);
                   ev.cancelBubble = true;
                   ev?.dataTransfer?.setData('Text', JSON.stringify(config));
-                  if (options.store) {
-                    options.store.setDraggingConfig(config);
-                  }
+                  options.store?.setDraggingConfig(config);
                 });
               }
 
-              el.addEventListener('drop', (function (currentConfig) {
-                // console.log(currentConfig);
-                return (ev: any) => {
-                  ev.preventDefault();
-                  ev.cancelBubble = true;
-                  const data = ev?.dataTransfer?.getData('Text');
-                  let draggingConfig;
-                  try {
-                    draggingConfig = JSON.parse(data);
-                  } catch (e) {
-                    console.log(e);
-                  }
-                  if (!draggingConfig || !draggingConfig.componentName) {
-                    ev.currentTarget.style['border-top'] = 'none';
-                    ev.currentTarget.style['border-bottom'] = 'none';
-                    return;
-                  }
-                  console.log(draggingConfig, currentConfig);
-                  if (mode.includes('droppable')) {
-                    if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
-                      options.store?.moveIn({
-                        draggingConfig,
-                        config: currentConfig,
-                      });
-                    }
-                  }
-                  if (mode.includes('alignable')) {
-                    if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
-                      options.store?.move({
-                        draggingConfig,
-                        config: currentConfig,
-                        direction: 'after',
-                      });
-                    } else if (ev.offsetY <= ev.target.offsetHeight * 0.25) {
-                      options.store?.move({
-                        draggingConfig,
-                        config: currentConfig,
-                        direction: 'before',
-                      });
-                    }
-                  }
-
+              el.addEventListener('drop', (ev: any) => {
+                const currentConfig = config;
+                ev.preventDefault();
+                ev.cancelBubble = true;
+                const data = ev?.dataTransfer?.getData('Text');
+                let draggingConfig;
+                try {
+                  draggingConfig = JSON.parse(data);
+                } catch (e) {
+                  console.log(e);
+                }
+                if (!draggingConfig || !draggingConfig.componentName) {
                   ev.currentTarget.style['border-top'] = 'none';
                   ev.currentTarget.style['border-bottom'] = 'none';
-                };
-              }(config)));
+                  return;
+                }
+                console.log(draggingConfig, currentConfig);
+                if (mode.includes('droppable')) {
+                  if (ev.offsetY < ev.target.offsetHeight * 0.75 && ev.offsetY > ev.target.offsetHeight * 0.25) {
+                    options.store?.moveIn({
+                      draggingConfig,
+                      config: currentConfig,
+                    });
+                  }
+                }
+                if (mode.includes('alignable')) {
+                  if (ev.offsetY >= ev.target.offsetHeight * 0.75) {
+                    options.store?.move({
+                      draggingConfig,
+                      config: currentConfig,
+                      direction: 'after',
+                    });
+                  } else if (ev.offsetY <= ev.target.offsetHeight * 0.25) {
+                    options.store?.move({
+                      draggingConfig,
+                      config: currentConfig,
+                      direction: 'before',
+                    });
+                  }
+                }
+
+                ev.currentTarget.style['border-top'] = 'none';
+                ev.currentTarget.style['border-bottom'] = 'none';
+              });
 
               el.addEventListener('dragover', (ev: any) => {
                 ev.preventDefault();

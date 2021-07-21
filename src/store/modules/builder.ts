@@ -67,18 +67,38 @@ const config: ComponentConfig = {
   dynamic: true,
 })
 class Builder extends VuexModule {
-  public config: ComponentConfig = {
-    componentName: 'Page',
-    props: {},
-  };
+  // public config: ComponentConfig = {
+  //   componentName: 'Page',
+  //   props: {},
+  // };
 
-  // public id = 0;
+  public id = 0;
 
+  public builderState: {
+    config: ComponentConfig,
+    activeConfig: ComponentConfig | null,
+    activeProps: Array<{
+      prop: string,
+      label: string,
+      input: string,
+    }>,
+    activePath: string,
+    activeId: number | null,
+  } = {
+    activeConfig: null,
+    activeProps: [],
+    config: {
+      componentName: 'Page',
+      props: {},
+    },
+    activePath: '',
+    activeId: null,
+  }
   // public idConfigMap: {
   //   [key: string]: ComponentConfig
   // } = {}
 
-  public activeConfig: ComponentConfig = img;
+  // public activeConfig: ComponentConfig = img;
 
   public propConfig: {
     [key: string]: Array<{
@@ -130,37 +150,110 @@ class Builder extends VuexModule {
     ],
   }
 
-  // @Mutation
-  // genId() {
-  //   this.id += 1;
-  //   config._currentId = this.id;
-  // }
+  @Mutation
+  genId() {
+    this.id += 1;
+    this.builderState.config._currentId = this.id;
+  }
 
   // @Mutation
   // addToMap(c: ComponentConfig) {
   //   if (c._id) { this.idConfigMap[c._id] = c; }
   // }
+  @Mutation
+  SET_ACTIVE_PATH(path: string) {
+    this.builderState.activePath = path;
+  }
+
+  @Mutation
+  SET_ACTIVE_ID(id: number) {
+    this.builderState.activeId = id;
+  }
+
+  @Action
+  setActiveConfigById(id: number) {
+    this.SET_ACTIVE_BY_ID(id);
+  }
+
+  @Mutation
+  SET_ACTIVE_BY_ID(path: string) {
+    const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
+    if (activeConfig) activeConfig._active = false;
+    this.builderState.activePath = path;
+    const newActiveConfig = jsonuri.get(this.builderState.config, path);
+    this.builderState.activeConfig = newActiveConfig;
+    if (this.builderState.activeConfig?.componentName) {
+      newActiveConfig._active = true;
+      this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
+    }
+  }
 
   @Mutation
   setConfig(componentConfig: ComponentConfig) {
     console.log(123123);
-    this.config = componentConfig;
+    this.builderState.config = componentConfig;
+  }
+
+  @Action
+  setActiveConfigByPath(path: string) {
+    this.SET_ACTIVE_BY_PATH(path);
   }
 
   @Mutation
-  setBuilderActiveConfig(path: string) {
-    this.activeConfig = jsonuri.get(this.config, path);
+  SET_ACTIVE_BY_PATH(path: string) {
+    const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
+    if (activeConfig) activeConfig._active = false;
+    this.builderState.activePath = path;
+    const newActiveConfig = jsonuri.get(this.builderState.config, path);
+    this.builderState.activeConfig = newActiveConfig;
+    if (this.builderState.activeConfig?.componentName) {
+      newActiveConfig._active = true;
+      this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
+    }
+  }
+
+  @Action
+  setActive(componentConfig: ComponentConfig) {
+    jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
+      if (value._id && value._id === componentConfig._id) {
+        this.SET_ACTIVE_BY_PATH(path);
+      }
+    });
+  }
+
+  @Mutation
+  SET_ACTIVE(newActiveConfig: ComponentConfig) {
+    if (this.builderState.activeConfig !== newActiveConfig) {
+      if (this.builderState.activeConfig) {
+        this.builderState.activeConfig._active = false;
+      }
+
+      this.builderState.activeConfig = newActiveConfig;
+      if (this.builderState.activeConfig?.componentName) {
+        newActiveConfig._active = true;
+        this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
+      }
+
+      jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
+        // console.log(value);
+        if (value._id && value._id === newActiveConfig._id) {
+          this.builderState.activePath = path;
+        }
+      });
+    }
   }
 
   @Action({ rawError: true })
   public fetchConfig() {
-    // const travers = (c: ComponentConfig) => {
-    //   c._id = this.id;
-    //   this.addToMap(c);
-    //   this.genId();
-    //   c.children?.forEach((child: ComponentConfig) => travers(child));
-    // };
-    // travers(config);
+    const travers = (c: ComponentConfig) => {
+      c._id = this.id;
+      // this.addToMap(c);
+      this.genId();
+      config._currentId = c._id;
+      c.children?.forEach((child: ComponentConfig) => travers(child));
+      c.slots?.forEach((child: ComponentConfig) => travers(child));
+    };
+    travers(config);
 
     // console.log(config);
     this.setConfig(config);

@@ -65,9 +65,18 @@ class Page extends VuexModule {
     this.config._currentId = this.id;
   }
 
-  @Mutation
+  @Action
   setDraggingConfig(draggingConfig: ComponentConfig) {
     console.log('setDraggingConfig', draggingConfig);
+    // this.context.commit('setActiveConfig', draggingConfig);
+    this.SET_DRAGGING(draggingConfig);
+    if (draggingConfig._id) {
+      this.setActiveConfig(draggingConfig);
+    }
+  }
+
+  @Mutation
+  SET_DRAGGING(draggingConfig: ComponentConfig) {
     this.pageState.dragging = draggingConfig;
   }
 
@@ -77,16 +86,26 @@ class Page extends VuexModule {
     // this.genId(this.config._currentId);
   }
 
+  updateConfig = (newConfig: ComponentConfig) => {
+    const { top }: any = window;
+    console.log(111);
+    top.postMessage(JSON.stringify({
+      cmd: 'setConfig',
+      data: newConfig,
+    }));
+  };
+
   @Action({ rawError: true })
   initConfig(componentConfig: ComponentConfig) {
     this.setConfig(componentConfig);
     this.genId(this.config._currentId);
   }
 
-  @Mutation
+  @Action
   setActiveConfig(activeConfig: ComponentConfig) {
+    console.log(activeConfig);
     jsonuri.walk(this.config, (value, key, parent, { path }) => {
-      if (value === activeConfig) {
+      if (value._id && value._id === activeConfig._id) {
         notifyBuilder('onSelected', path);
       }
     });
@@ -95,6 +114,26 @@ class Page extends VuexModule {
   @Mutation
   dragEnd() {
     this.pageState.dragging = null;
+  }
+
+  @Mutation
+  INSERT_COMPONENT({ targetPath, config, direction }: {
+    targetPath: string, config: ComponentConfig, direction: 'before' | 'after' | 'append'
+  }) {
+    this.pageState.dragging = null;
+    // console.log(targetPath, config, direction);
+    const travers = (c: ComponentConfig) => {
+      this.id += 1;
+      this.config._currentId = this.id;
+      c._id = this.id;
+      console.log('id', c._id);
+      // this.config._currentId = this.id;
+      c.children?.forEach((child: ComponentConfig) => travers(child));
+      c.slots?.forEach((child: ComponentConfig) => travers(child));
+    };
+    travers(config);
+
+    jsonuri.insert(this.config, targetPath, config, direction);
   }
 
   @Action
@@ -107,7 +146,8 @@ class Page extends VuexModule {
     let currentPath = '';
     let targetPath = '';
     jsonuri.walk(this.config, (value, key, parent, { path }) => {
-      if (value === this.pageState.dragging) {
+      console.log(value, this.pageState.dragging);
+      if (value._id && value._id === this.pageState.dragging?._id) {
         currentPath = path;
       }
       if (value === movement.config) {
@@ -132,11 +172,19 @@ class Page extends VuexModule {
       // jsonuri.rm(this.config, currentPath);
       console.log(JSON.stringify(this.config));
     } else {
-      this.genId();
-      movement.draggingConfig._id = this.id;
-      jsonuri.insert(this.config, targetPath, movement.draggingConfig, movement.direction);
+      // this.genId();
+      // movement.draggingConfig._id = this.id;
+      // jsonuri.insert(this.config, targetPath, movement.draggingConfig, movement.direction);
+      this.INSERT_COMPONENT({
+        targetPath,
+        config: movement.draggingConfig,
+        direction: movement.direction,
+      });
+      // this.setActiveConfig(movement.draggingConfig);
     }
     updateConfig(this.config);
+    // notifyBuilder('onSelected', targetPath);
+    this.setActiveConfig(this.pageState.dragging || movement.draggingConfig);
   }
 
   @Action
@@ -148,8 +196,8 @@ class Page extends VuexModule {
     let targetPath = '';
     console.log(this.pageState.dragging, movement.config);
     jsonuri.walk(this.config, (value, key, parent, { path }) => {
-      console.log(value);
-      if (value === this.pageState.dragging) {
+      // console.log(value);
+      if (value._id && value._id === this.pageState.dragging?._id) {
         currentPath = path;
       }
       if (value === movement.config) {
@@ -168,12 +216,19 @@ class Page extends VuexModule {
         }
       } else {
         console.log(`${targetPath}/children/${childrenLength - 1}`);
-        this.genId();
-        movement.draggingConfig._id = this.id;
-        jsonuri.insert(this.config, `${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
+        // this.genId();
+        // movement.draggingConfig._id = this.id;
+        // jsonuri.insert(this.config, `${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
+        // this.INSERT_COMPONENT(`${targetPath}/children/${childrenLength - 1}`, movement.draggingConfig, 'after');
+        this.INSERT_COMPONENT({
+          targetPath: `${targetPath}/children/${childrenLength - 1}`,
+          config: movement.draggingConfig,
+          direction: 'after',
+        });
       }
     }
     updateConfig(this.config);
+    this.setActiveConfig(this.pageState.dragging || movement.draggingConfig);
   }
 }
 
