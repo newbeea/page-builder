@@ -150,8 +150,28 @@ class Builder extends VuexModule {
     ],
   }
 
+  @Action
+  listenPage() {
+    window.addEventListener('message', (event) => {
+      if (typeof event.data === 'string') {
+        try {
+          console.log(event);
+          const data = JSON.parse(event.data);
+          if (data.cmd === 'update-builder-config-by-page') {
+            this.UPDATE_CONFIG(data.data);
+          }
+          if (data.cmd === 'selected-by-page') {
+            this.SET_ACTIVE_BY_PATH(data.data);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  }
+
   @Mutation
-  genId() {
+  GEN_ID() {
     this.id += 1;
     this.builderState.config._currentId = this.id;
   }
@@ -189,7 +209,7 @@ class Builder extends VuexModule {
   }
 
   @Mutation
-  setConfig(componentConfig: ComponentConfig) {
+  UPDATE_CONFIG(componentConfig: ComponentConfig) {
     console.log(123123);
     this.builderState.config = componentConfig;
   }
@@ -248,7 +268,7 @@ class Builder extends VuexModule {
     const travers = (c: ComponentConfig) => {
       c._id = this.id;
       // this.addToMap(c);
-      this.genId();
+      this.GEN_ID();
       config._currentId = c._id;
       c.children?.forEach((child: ComponentConfig) => travers(child));
       c.slots?.forEach((child: ComponentConfig) => travers(child));
@@ -256,7 +276,7 @@ class Builder extends VuexModule {
     travers(config);
 
     // console.log(config);
-    this.setConfig(config);
+    this.UPDATE_CONFIG(config);
   }
 }
 

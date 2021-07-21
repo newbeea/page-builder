@@ -27,15 +27,9 @@ export default defineComponent({
   methods: {
   },
   setup: () => {
-    window.addEventListener('message', (event) => {
-      console.log(event);
-      const data = JSON.parse(event.data);
-      if (data.cmd === 'setConfig') {
-        PageModule.initConfig(data.data);
-      }
-    });
+    PageModule.listenBuilder();
     return {
-      config: computed(() => PageModule.config),
+      config: computed(() => PageModule.pageState.config),
     };
   },
 });

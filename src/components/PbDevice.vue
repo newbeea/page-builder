@@ -32,18 +32,18 @@ export default defineComponent({
   setup: () => {
     const iframeRef = ref(null);
 
-    const updateConfig = () => {
+    const postMessageToPageWindow = (cmd: string, data: any) => {
       const iframe: any = iframeRef.value;
       iframe.contentWindow.postMessage(JSON.stringify({
-        cmd: 'setConfig',
-        data: BuilderModule.builderState.config,
+        cmd,
+        data,
       }));
       console.log(222);
     };
     watch(
       () => BuilderModule.builderState.config,
       (config, prevConfig) => {
-        updateConfig();
+        postMessageToPageWindow('update-page-config-by-builder', BuilderModule.builderState.config);
       },
       {
         deep: true,
@@ -51,25 +51,13 @@ export default defineComponent({
     );
 
     const onLoad = () => {
-      updateConfig();
+      postMessageToPageWindow('init-page-config', {
+        lastId: BuilderModule.builderState.config._currentId,
+        config: BuilderModule.builderState.config,
+      });
     };
 
-    window.addEventListener('message', (event) => {
-      if (typeof event.data === 'string') {
-        try {
-          console.log(event);
-          const data = JSON.parse(event.data);
-          if (data.cmd === 'setConfig') {
-            BuilderModule.setConfig(data.data);
-          }
-          if (data.cmd === 'onSelected') {
-            BuilderModule.setActiveConfigByPath(data.data);
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    });
+    BuilderModule.listenPage();
     onMounted(() => {
       // const iframe: any = iframeRef.value;
       // setTimeout(() => {
