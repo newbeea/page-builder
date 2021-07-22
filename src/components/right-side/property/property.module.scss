@@ -2,7 +2,8 @@
   padding: 10px;
   display: flex;
   align-items: center;
-  span {
-    width: 100px;
+  .pb-title {
+    width: 80px;
+    flex-shrink: 0;
   }
 }

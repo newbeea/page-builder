@@ -19,7 +19,6 @@ const config: ComponentConfig = {
   componentName: 'Page',
   props: {
     style: {
-      textAlign: 'center',
     },
   },
   children: [{
@@ -80,7 +79,7 @@ class Builder extends VuexModule {
     activeProps: Array<{
       prop: string,
       label: string,
-      input: string,
+      input: any,
     }>,
     activePath: string,
     activeId: number | null,
@@ -104,48 +103,86 @@ class Builder extends VuexModule {
     [key: string]: Array<{
       prop: string,
       label: string,
-      input: string,
+      input: any,
     }>
   } = {
     Image: [
       {
         prop: 'src',
         label: 'Url',
-        input: 'InputExpression',
+        input: {
+          component: 'InputExpression',
+        },
       },
       {
         prop: 'title',
         label: 'Title',
-        input: 'InputExpression',
+        input: {
+          component: 'InputExpression',
+        },
       },
       {
         prop: 'href',
         label: 'Link',
-        input: 'InputExpression',
+        input: {
+          component: 'InputExpression',
+        },
       },
     ],
     Text: [
       {
         prop: 'text',
         label: 'Text',
-        input: 'InputExpression',
+        input: {
+          component: 'InputExpression',
+        },
       },
     ],
     ElButton: [
       {
         prop: 'size',
         label: 'Size',
-        input: 'InputExpression',
+        input: {
+          component: 'Select',
+          config: {
+            options: [{
+              value: 'medium',
+            }, {
+              value: 'small',
+            }, {
+              value: 'mini',
+            }],
+          },
+        },
       },
       {
         prop: 'type',
         label: 'Type',
-        input: 'InputExpression',
+        input: {
+          component: 'Select',
+          config: {
+            options: [{
+              value: 'primary',
+            }, {
+              value: 'success',
+            }, {
+              value: 'warning',
+            }, {
+              value: 'danger',
+            }, {
+              value: 'info',
+            }, {
+              value: 'text',
+            }],
+          },
+        },
       },
       {
         prop: 'round',
         label: 'Round',
-        input: 'InputExpression',
+        input: {
+          component: 'Switch',
+        },
       },
     ],
   }
@@ -190,23 +227,23 @@ class Builder extends VuexModule {
     this.builderState.activeId = id;
   }
 
-  @Action
-  setActiveConfigById(id: number) {
-    this.SET_ACTIVE_BY_ID(id);
-  }
+  // @Action
+  // setActiveConfigById(id: number) {
+  //   this.SET_ACTIVE_BY_ID(id);
+  // }
 
-  @Mutation
-  SET_ACTIVE_BY_ID(path: string) {
-    const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
-    if (activeConfig) activeConfig._active = false;
-    this.builderState.activePath = path;
-    const newActiveConfig = jsonuri.get(this.builderState.config, path);
-    this.builderState.activeConfig = newActiveConfig;
-    if (this.builderState.activeConfig?.componentName) {
-      newActiveConfig._active = true;
-      this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
-    }
-  }
+  // @Mutation
+  // SET_ACTIVE_BY_ID(path: string) {
+  //   const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
+  //   if (activeConfig) activeConfig._active = false;
+  //   this.builderState.activePath = path;
+  //   const newActiveConfig = jsonuri.get(this.builderState.config, path);
+  //   this.builderState.activeConfig = newActiveConfig;
+  //   if (this.builderState.activeConfig?.componentName) {
+  //     newActiveConfig._active = true;
+  //     this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
+  //   }
+  // }
 
   @Mutation
   UPDATE_CONFIG(componentConfig: ComponentConfig) {

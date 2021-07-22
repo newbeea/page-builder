@@ -23,7 +23,6 @@ export const infoList = [
       componentName: 'ElInput',
       props: {
         style: {
-          width: '100%',
         },
       },
     },
@@ -35,7 +34,6 @@ export const infoList = [
       props: {
         type: 'success',
         style: {
-          width: '100%',
         },
       },
       slots: [{

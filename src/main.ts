@@ -14,6 +14,9 @@ import {
   ElIcon,
   ElInput,
   ElTree,
+  ElSelect,
+  ElOption,
+  ElSwitch,
   // ElInfiniteScroll,
   // ElLoading,
   // ElMessage,
@@ -30,6 +33,9 @@ const components = [
   ElIcon,
   ElInput,
   ElTree,
+  ElSelect,
+  ElOption,
+  ElSwitch,
 ];
 
 // const plugins = [
