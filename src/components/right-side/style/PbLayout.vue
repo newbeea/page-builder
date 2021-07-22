@@ -284,7 +284,7 @@ export default defineComponent({
 .pb-margin-padding {
   padding: 10px;
   .inline-input {
-    width: 60px;
+    width: 57px;
   }
   .pb-margin {
     span {

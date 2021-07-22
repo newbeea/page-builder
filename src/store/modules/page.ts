@@ -42,12 +42,14 @@ class Page extends VuexModule {
   public pageState: {
     dragging: ComponentConfig | null,
     config: ComponentConfig
+    activeConfig: ComponentConfig | null,
   } = {
     dragging: null,
     config: {
       componentName: 'Page',
       props: {},
     },
+    activeConfig: null,
   }
 
   public config: ComponentConfig = {
@@ -141,6 +143,9 @@ class Page extends VuexModule {
     const genId = (c: ComponentConfig) => {
       this.id += 1;
       c._id = this.id;
+      if (!c.props.style) {
+        c.props.style = {};
+      }
       c.children?.forEach((child: ComponentConfig) => genId(child));
       c.slots?.forEach((child: ComponentConfig) => genId(child));
     };

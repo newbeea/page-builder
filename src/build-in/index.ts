@@ -53,10 +53,14 @@ export const infoList = [
       slots: [{
         componentName: 'Div',
         slotName: 'header',
+        props: {
+        },
         children: [],
       }, {
         componentName: 'Div',
         slotName: 'default',
+        props: {
+        },
         children: [],
       }],
     },
