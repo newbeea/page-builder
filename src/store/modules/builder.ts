@@ -42,6 +42,7 @@ const config: ComponentConfig = {
       componentName: 'Div',
       props: {
         style: {
+          display: 'flex',
           width: '60%',
           backgroundColor: '#c4ffc3',
         },
@@ -49,10 +50,6 @@ const config: ComponentConfig = {
       children: [{
         componentName: 'Div',
         props: {
-          style: {
-            width: '60%',
-            backgroundColor: 'black',
-          },
         },
         children: [],
       }],
@@ -213,6 +210,27 @@ class Builder extends VuexModule {
     this.builderState.config._currentId = this.id;
   }
 
+  @Mutation
+  UPDATE_STYLE({ value, key }: {
+    value: string,
+    key: string,
+  }) {
+    if (this.builderState.activeConfig?.props.style) {
+      this.builderState.activeConfig.props.style[key] = value;
+    }
+  }
+
+  @Action
+  updateStyle({ value, key }: {
+    value: string,
+    key: string,
+  }) {
+    this.UPDATE_STYLE({
+      value,
+      key,
+    });
+  }
+
   // @Mutation
   // addToMap(c: ComponentConfig) {
   //   if (c._id) { this.idConfigMap[c._id] = c; }
@@ -307,6 +325,9 @@ class Builder extends VuexModule {
       // this.addToMap(c);
       this.GEN_ID();
       config._currentId = c._id;
+      if (!c.props.style) {
+        c.props.style = {};
+      }
       c.children?.forEach((child: ComponentConfig) => travers(child));
       c.slots?.forEach((child: ComponentConfig) => travers(child));
     };

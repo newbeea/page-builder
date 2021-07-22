@@ -33,6 +33,7 @@ export const infoList = [
       componentName: 'ElButton',
       props: {
         type: 'success',
+        size: 'mini',
         style: {
         },
       },

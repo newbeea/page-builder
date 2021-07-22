@@ -1,0 +1,9 @@
+.pb-property {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  .pb-title {
+    width: 80px;
+    flex-shrink: 0;
+  }
+}

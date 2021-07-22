@@ -125,7 +125,7 @@ export default defineComponent({
     }
   }
   .pb-right-panel {
-    width: 300px;
+    width: 400px;
     background: rgb(247, 247, 247);
   }
   .panel-container {
