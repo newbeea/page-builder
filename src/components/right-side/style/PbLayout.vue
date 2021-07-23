@@ -1,6 +1,6 @@
 <template>
   <div class="pb-property">
-    <span class="pb-title">display</span>
+    <span class="pb-title">Display</span>
     <el-radio-group v-model="style.display" size="mini">
 
       <el-radio-button v-for="o in displayOptions" :key="o.value" :label="o.value">
@@ -10,6 +10,56 @@
       </el-radio-button>
 
     </el-radio-group>
+  </div>
+  <div v-if="style.display == 'flex'">
+    <div class="pb-property">
+      <span class="pb-title">Direction</span>
+      <el-radio-group v-model="style.flexDirection" size="mini">
+
+        <el-radio-button v-for="o in directionOptions" :key="o.value" :label="o.value">
+          <el-tooltip effect="light" :content="o.value" placement="top">
+            <span class="pb-icon iconfont" :class="o.icon"></span>
+          </el-tooltip>
+        </el-radio-button>
+
+      </el-radio-group>
+    </div>
+    <div class="pb-property">
+      <span class="pb-title">Main axis</span>
+      <el-radio-group v-model="style.justifyContent" size="mini">
+
+        <el-radio-button v-for="o in justifyContentOptions" :key="o.value" :label="o.value">
+          <el-tooltip effect="light" :content="o.value" placement="top">
+            <span class="pb-icon iconfont" :class="o.icon"></span>
+          </el-tooltip>
+        </el-radio-button>
+
+      </el-radio-group>
+    </div>
+    <div class="pb-property">
+      <span class="pb-title">Cross axis</span>
+      <el-radio-group v-model="style.alignItems" size="mini">
+
+        <el-radio-button v-for="o in alignItemsOptions" :key="o.value" :label="o.value">
+          <el-tooltip effect="light" :content="o.value" placement="top">
+            <span class="pb-icon iconfont" :class="o.icon"></span>
+          </el-tooltip>
+        </el-radio-button>
+
+      </el-radio-group>
+    </div>
+    <div class="pb-property">
+      <span class="pb-title">Wrap</span>
+      <el-radio-group v-model="style.flexWrap" size="mini">
+
+        <el-radio-button v-for="o in flexWrapOptions" :key="o.value" :label="o.value">
+          <el-tooltip effect="light" :content="o.value" placement="top">
+            <span class="pb-icon iconfont" :class="o.icon"></span>
+          </el-tooltip>
+        </el-radio-button>
+
+      </el-radio-group>
+    </div>
   </div>
   <div class="pb-size">
     <div class="pb-size-item">
@@ -175,25 +225,86 @@ export default defineComponent({
       },
     ];
 
-    const cssValueSuggestions = [
+    const directionOptions = [
       {
-        value: '5px',
-        label: '5px',
+        value: 'row',
+        icon: 'icon-flex-direction-row',
       },
       {
-        value: '10px',
-        label: '10px',
+        value: 'row-reverse',
+        icon: 'icon-flex-direction-row-reverse',
       },
       {
-        value: '50%',
-        label: '50%',
+        value: 'column',
+        icon: 'icon-flex-direction-column',
       },
       {
-        value: '100%',
-        label: '100%',
+        value: 'column-reverse',
+        icon: 'icon-flex-direction-column-reverse',
       },
     ];
-    // const style = computed(() => BuilderModule.builderState.activeConfig?.props?.style || {});
+
+    const justifyContentOptions = [
+      {
+        value: 'flex-start',
+        icon: 'icon-justifyCotent_flex-start',
+      },
+      {
+        value: 'flex-end',
+        icon: 'icon-justifyContent_flex-end',
+      },
+      {
+        value: 'center',
+        icon: 'icon-justifyContent_center',
+      },
+      {
+        value: 'space-around',
+        icon: 'icon-justifyContent_space-around',
+      },
+      {
+        value: 'space-between',
+        icon: 'icon-justifyContent_space-between',
+      },
+    ];
+
+    const alignItemsOptions = [
+      {
+        value: 'flex-start',
+        icon: 'icon-alignItems_flex-start',
+      },
+      {
+        value: 'flex-end',
+        icon: 'icon-alignItems_flex-end',
+      },
+      {
+        value: 'center',
+        icon: 'icon-alignItems_center',
+      },
+      {
+        value: 'baseline',
+        icon: 'icon-alignItems_baseline',
+      },
+      {
+        value: 'stretch',
+        icon: 'icon-alignItems_stretch',
+      },
+    ];
+
+    const flexWrapOptions = [
+      {
+        value: 'wrap',
+        icon: 'icon-wrap',
+      },
+      {
+        value: 'wrap-reverse',
+        icon: 'icon-wrap1',
+      },
+      {
+        value: 'nowrap',
+        icon: 'icon-nowrap',
+      },
+    ];
+
     const handleSelect = (item: any) => {
       console.log('key', item);
       if (item.label.startsWith('set')) {
@@ -212,6 +323,10 @@ export default defineComponent({
       querySearch,
       queryMarginPadding,
       handleSelect,
+      directionOptions,
+      justifyContentOptions,
+      alignItemsOptions,
+      flexWrapOptions,
     };
   },
 });
@@ -224,11 +339,12 @@ export default defineComponent({
   }
 }
 @font-face {
-  font-family: 'iconfont';  /* Project id 2692908 */
-  src: url('//at.alicdn.com/t/font_2692908_mmgi3ldxhop.woff2?t=1626935314738') format('woff2'),
-       url('//at.alicdn.com/t/font_2692908_mmgi3ldxhop.woff?t=1626935314738') format('woff'),
-       url('//at.alicdn.com/t/font_2692908_mmgi3ldxhop.ttf?t=1626935314738') format('truetype');
+  font-family: "iconfont"; /* Project id 2692908 */
+  src: url('//at.alicdn.com/t/font_2692908_w64j2p54yea.woff2?t=1627012480728') format('woff2'),
+       url('//at.alicdn.com/t/font_2692908_w64j2p54yea.woff?t=1627012480728') format('woff'),
+       url('//at.alicdn.com/t/font_2692908_w64j2p54yea.ttf?t=1627012480728') format('truetype');
 }
+
 .el-collapse-item__header {
   padding: 0 10px;
 }
@@ -247,6 +363,78 @@ export default defineComponent({
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-wrap:before {
+    content: "\ea04";
+  }
+
+  .icon-wrap1:before {
+    content: "\e71c";
+  }
+
+  .icon-alignItems_flex-start:before {
+    content: "\e60a";
+  }
+
+  .icon-alignItems_flex-end:before {
+    content: "\e600";
+  }
+
+  .icon-alignItems_center:before {
+    content: "\e601";
+  }
+
+  .icon-alignItems_baseline:before {
+    content: "\e602";
+  }
+
+  .icon-alignItems_stretch:before {
+    content: "\e603";
+  }
+
+  .icon-justifyContent_flex-end:before {
+    content: "\e604";
+  }
+
+  .icon-justifyContent_space-between:before {
+    content: "\e605";
+  }
+
+  .icon-justifyContent_center:before {
+    content: "\e606";
+  }
+
+  .icon-justifyContent_space-around:before {
+    content: "\e607";
+  }
+
+  .icon-justifyCotent_flex-start:before {
+    content: "\e608";
+  }
+
+  .icon-nowrap:before {
+    content: "\e609";
+  }
+
+  .icon-operate-wrap-reverse:before {
+    content: "\e6f0";
+  }
+
+  .icon-flex-direction-row-reverse:before {
+    content: "\e618";
+  }
+
+  .icon-flex-direction-column:before {
+    content: "\e641";
+  }
+
+  .icon-flex-direction-column-reverse:before {
+    content: "\e642";
+  }
+
+  .icon-flex-direction-row:before {
+    content: "\e643";
   }
 
   .icon-yincang1:before {
