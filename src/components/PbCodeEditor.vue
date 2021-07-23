@@ -44,7 +44,7 @@ export default defineComponent({
   setup(props, context) {
     const root = ref<HTMLElement>();
     const editorRef = shallowRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-    let editor: monaco.editor.IStandaloneCodeEditor;
+
     let onChangeListener: monaco.IDisposable | undefined;
     const formatCode = () => {
       window.requestIdleCallback(
@@ -73,6 +73,10 @@ export default defineComponent({
           // }
         });
         editorRef.value!.getAction('editor.action.formatDocument').run();
+        // const editor = editorRef.value;
+        // // 获取编辑器的textModel文本
+        // const model = editor.getModel();
+        // model?.setValue('{}');
         // formatCode();
       });
     });

@@ -307,14 +307,12 @@ export default defineComponent({
 
     const handleSelect = (item: any) => {
       console.log('key', item);
-      if (item.label.startsWith('set')) {
-        item.keys.forEach((key: string) => {
-          BuilderModule.updateStyle({
-            value: item.value,
-            key,
-          });
+      item.keys?.forEach((key: string) => {
+        BuilderModule.updateStyle({
+          value: item.value,
+          key,
         });
-      }
+      });
       // style[key] = item.label;
     };
     return {
