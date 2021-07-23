@@ -40,6 +40,8 @@ export const infoList = [
       slots: [{
         componentName: 'Div',
         slotName: 'default',
+        props: {
+        },
         children: [],
       }],
     },

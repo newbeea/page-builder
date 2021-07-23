@@ -12,6 +12,7 @@ const baseConfig: UserConfig = {
       localsConvention: 'camelCase',
     },
   },
+
   plugins: [vue(), vueJsx(), eslintPlugin(), styleImport({
     libs: [{
       libraryName: 'element-plus',
@@ -29,6 +30,7 @@ const baseConfig: UserConfig = {
       input: {
         main: resolve(__dirname, 'index.html'),
       },
+
     },
   },
   define: {

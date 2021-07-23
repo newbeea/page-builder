@@ -1,5 +1,4 @@
 import { defineComponent, PropType } from 'vue';
-import style from './text.module.scss';
 
 export default defineComponent({
   name: 'Text',

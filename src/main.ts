@@ -25,6 +25,8 @@ import {
   ElRadioGroup,
   ElTooltip,
   ElAutocomplete,
+  ElDrawer,
+  ElButton,
   // ElInfiniteScroll,
   // ElLoading,
   // ElMessage,
@@ -52,6 +54,8 @@ const components = [
   ElRadioGroup,
   ElTooltip,
   ElAutocomplete,
+  ElDrawer,
+  ElButton,
 ];
 
 // const plugins = [

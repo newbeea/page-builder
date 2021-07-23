@@ -19,6 +19,7 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
     'no-await-in-loop': 'off',

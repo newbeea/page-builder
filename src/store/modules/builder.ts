@@ -231,6 +231,18 @@ class Builder extends VuexModule {
     });
   }
 
+  @Mutation
+  UPDATE_STYLES(style: any) {
+    if (this.builderState.activeConfig?.props) {
+      this.builderState.activeConfig.props.style = style;
+    }
+  }
+
+  @Action
+  updateStyles(style: any) {
+    this.UPDATE_STYLES(style);
+  }
+
   // @Mutation
   // addToMap(c: ComponentConfig) {
   //   if (c._id) { this.idConfigMap[c._id] = c; }

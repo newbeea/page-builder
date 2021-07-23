@@ -6,8 +6,7 @@
     "build": "vite build",
     "build:iframe": "vite --config vite.config.iframe.ts build",
     "build:lib": "vite --config vite.config.lib.ts build",
-    "serve": "vite -h",
-    "clean": "vite --force"
+    "serve": "vite serve"
   },
   "dependencies": {
     "@vue/eslint-config-airbnb": "^5.3.0",
@@ -16,6 +15,7 @@
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.55",
     "jsonuri": "^2.3.1",
+    "monaco-editor": "^0.26.1",
     "sass-loader": "^12.1.0",
     "vue": "^3.0.5",
     "vue-router": "^4.0.10",
