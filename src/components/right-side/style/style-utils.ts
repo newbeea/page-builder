@@ -29,7 +29,7 @@ const queryMarginPadding = (property: string, position: string) => (queryString:
   const results: Array<{
     value: string,
     label: string,
-    keys: string[],
+    keys?: string[],
   }> = [...cssValueSuggestions];
   if (position === 'top-bottom') {
     results.push({

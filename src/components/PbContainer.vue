@@ -7,16 +7,22 @@
       :key="child"
       :is="getComonentName(child)"
       :children="child.children"
-      v-bind="bindProps(child)"
+      v-bind="child.props"
       v-selectable="child"
+      :class="[{
+        'pb-active': child._active
+      }, child.props.classes]"
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
         <component
           v-draggable:droppable="slot"
           :is="getComonentName(slot)"
           :children="slot.children"
-          v-bind="bindProps(slot)"
+          v-bind="slot.props"
           v-selectable="slot"
+          :class="[{
+            'pb-active': slot._active
+          }, slot.props.classes]"
         >
         </component>
       </template >
@@ -68,15 +74,7 @@ export default defineComponent({
       ],
     });
 
-    const bindProps = (config: any) => {
-      if (config.props.className && config._active) {
-        config.props.className += ' pb-active';
-      }
-      return config.props;
-    };
-
     return {
-      bindProps,
       ...toRefs(state),
     };
   },

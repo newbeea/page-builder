@@ -41,11 +41,11 @@ const mvBug = (from: string, to: string, direction: string) => {
 class Page extends VuexModule {
   public pageState: {
     dragging: ComponentConfig | null,
-    config: ComponentConfig | null,
+    config: ComponentConfig | undefined,
     activeConfig: ComponentConfig | null,
   } = {
     dragging: null,
-    config: null,
+    config: undefined,
     activeConfig: null,
   }
 
