@@ -11,7 +11,6 @@ const config = {
   componentName: Text.name,
   props: {
     style: {
-      width: '100%',
     },
     text: 'text',
   },

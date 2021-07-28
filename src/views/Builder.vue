@@ -80,6 +80,7 @@ export default defineComponent({
   .pb-left-panel {
     width: 240px;
     background: rgb(247, 247, 247);
+    height: 100%;
   }
   .pb-center-area {
     flex-grow: 1;

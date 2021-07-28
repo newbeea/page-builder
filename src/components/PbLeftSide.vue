@@ -1,12 +1,12 @@
 <template>
-  <el-tabs :stretch="true">
+  <el-tabs class="pb-left" :stretch="true">
     <el-tab-pane>
       <template #label>
         <span><i class="el-icon-menu"></i>Components</span>
       </template>
       <pb-component-list></pb-component-list>
     </el-tab-pane>
-    <el-tab-pane>
+    <el-tab-pane class="pb-panel">
       <template #label>
         <span><i class="el-icon-notebook-2"></i>Layout</span>
       </template>
@@ -28,3 +28,10 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.el-tabs__content {
+  height: calc(100% - 60px);
+  overflow: auto  !important;
+}
+
+</style>
