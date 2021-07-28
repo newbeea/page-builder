@@ -1,9 +1,12 @@
 <template>
   <div class="pb-style-panel" v-if="active">
 
-    <el-collapse  v-model="activeNames">
+    <el-collapse v-model="activeNames">
       <el-collapse-item class="pb-style-panel" title="Layout" name="layout" >
-        <pb-layout></pb-layout>
+        <pb-layout v-model="style" @updateByKeys="updateByKeys"></pb-layout>
+      </el-collapse-item>
+      <el-collapse-item class="pb-style-panel" v-for="p in thirdPartyComponents" :key="p.name" title="Background" name="background" >
+        <component :is="p.name" v-model="style"></component>
       </el-collapse-item>
     </el-collapse>
     <div class="pb-css-btn-wrapper">
@@ -13,7 +16,7 @@
       title="Css"
       v-model="codeEditor"
       direction="ltr"
-      :modal="false"
+      :modal="true"
       destroy-on-close>
       <pb-code-editor
         :code="css"
@@ -23,16 +26,22 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import {
+  computed, defineComponent, ref, getCurrentInstance,
+} from 'vue';
 import BuilderModule from '@/store/modules/builder';
 import PbCodeEditor from '@/components/PbCodeEditor.vue';
+import axios from 'axios';
+import * as Vue from 'vue';
 import PbLayout from './PbLayout.vue';
 
+console.log(Vue, getCurrentInstance);
 export default defineComponent({
   name: 'PbStyle',
   components: {
     PbLayout,
     PbCodeEditor,
+    // PbBackground,
   },
   setup() {
     const codeEditor = ref(false);
@@ -42,12 +51,43 @@ export default defineComponent({
       console.log(style);
       BuilderModule.updateStyles(style);
     };
+
+    const updateStyles = (styles: any) => {
+      BuilderModule.updateStyles(styles);
+      console.log(styles);
+    };
+
+    const updateByKeys = (keys: any[], value: string) => {
+      keys?.forEach((key: string) => {
+        BuilderModule.updateStyle({
+          value,
+          key,
+        });
+      });
+    };
+
+    const active = computed(() => BuilderModule.builderState.activeConfig);
+
+    const thirdPartyPanelsReady = ref(false);
+    const thirdPartyComponents = [
+      {
+        url: 'http://localhost:3000/dist/pb.umd.js',
+        style: 'http://localhost:3000/dist/style.css',
+        name: 'PbBackground',
+      },
+    ];
+
     return {
-      active: computed(() => BuilderModule.builderState.activeConfig),
+      active,
       activeNames: ['layout'],
-      css: computed(() => JSON.stringify(BuilderModule.builderState.activeConfig?.props.style)),
+      css: computed(() => JSON.stringify(active.value?.props.style)),
+      style: computed(() => active.value?.props.style),
       codeEditor,
       onCodeChange,
+      updateByKeys,
+      updateStyles,
+      thirdPartyComponents,
+      thirdPartyPanelsReady,
     };
   },
 });

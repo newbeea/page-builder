@@ -6,7 +6,7 @@ import Selectable from '@/directives/selectable';
 import PageModule from '@/store/modules/page';
 import axios from 'axios';
 import * as Vue from 'vue';
-// import thirdPartyComponents from '@/db';
+import thirdPartyComponents from '@/db';
 import { componentList } from '@/build-in/index';
 import {
   ElInput,
@@ -30,9 +30,18 @@ components.forEach((component) => {
   });
   // for (let i = 0; i < thirdPartyComponents.length; i += 1) {
   //   const component = thirdPartyComponents[i];
+
+  //   const head = document.querySelector('head');
+  //   const link = document.createElement('link');
+  //   link.href = component.style;
+  //   link.rel = 'stylesheet';
+  //   link.type = 'text/css';
+  //   head?.appendChild(link);
+
   //   const res = await axios.get(component.url);
   //   eval(`window.Vue = Vue; ${res.data}; app.component(${component.name}.component.name, ${component.name}.component);`);
   // }
+
   app
     .use(store)
     .use(Draggable, {

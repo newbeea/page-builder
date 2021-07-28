@@ -1,7 +1,10 @@
 import image from './image';
 import text from './text';
 
-export const componentList = [image.component, text.component];
+export const componentList = [
+  image.component,
+  text.component,
+];
 
 export const infoList = [
 
@@ -16,7 +19,8 @@ export const infoList = [
       children: [],
     },
   },
-  image.info, text.info,
+  image.info,
+  text.info,
   {
     name: 'ElInput',
     config: {

@@ -37,7 +37,7 @@ import {
 import PbDevice from '@/components/PbDevice.vue';
 import PbLeftSide from '@/components/PbLeftSide.vue';
 import PbRightSide from '@/components/right-side/PbRightSide.vue';
-import ImageInfo from '@/build-in/image';
+// import ImageInfo from '@/build-in/image';
 import BuilderModule from '@/store/modules/builder';
 
 export default defineComponent({
@@ -62,7 +62,7 @@ export default defineComponent({
     });
     return {
       ...toRefs(state),
-      t: ImageInfo,
+      // t: ImageInfo,
       pbDevice,
       pbDeviceClass: computed(() => (pbDevice.value === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };

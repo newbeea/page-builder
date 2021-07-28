@@ -71,7 +71,7 @@ class Builder extends VuexModule {
   public id = 0;
 
   public builderState: {
-    config: ComponentConfig,
+    config: ComponentConfig | null,
     activeConfig: ComponentConfig | null,
     activeProps: Array<{
       prop: string,
@@ -83,10 +83,7 @@ class Builder extends VuexModule {
   } = {
     activeConfig: null,
     activeProps: [],
-    config: {
-      componentName: 'Page',
-      props: {},
-    },
+    config: null,
     activePath: '',
     activeId: null,
   }
@@ -207,7 +204,7 @@ class Builder extends VuexModule {
   @Mutation
   GEN_ID() {
     this.id += 1;
-    this.builderState.config._currentId = this.id;
+    if (this.builderState.config) { this.builderState.config._currentId = this.id; }
   }
 
   @Mutation
@@ -301,11 +298,17 @@ class Builder extends VuexModule {
 
   @Action
   setActive(componentConfig: ComponentConfig) {
-    jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
-      if (value._id && value._id === componentConfig._id) {
-        this.SET_ACTIVE_BY_PATH(path);
-      }
-    });
+    if (componentConfig._id === 0) {
+      this.SET_ACTIVE_BY_PATH('');
+    } else {
+      jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
+        console.log(value, path);
+
+        if (value._id && value._id === componentConfig._id) {
+          this.SET_ACTIVE_BY_PATH(path);
+        }
+      });
+    }
   }
 
   @Mutation

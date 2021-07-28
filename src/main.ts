@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import * as Vue from 'vue';
 import router from '@/router';
 import App from '@/App.vue';
 import store from '@/store';
@@ -27,12 +28,14 @@ import {
   ElAutocomplete,
   ElDrawer,
   ElButton,
+  ElColorPicker,
   // ElInfiniteScroll,
   // ElLoading,
   // ElMessage,
   // ElMessageBox,
   // ElNotification,
 } from 'element-plus';
+import axios from 'axios';
 
 const components = [
   ElMenu,
@@ -56,6 +59,7 @@ const components = [
   ElAutocomplete,
   ElDrawer,
   ElButton,
+  ElColorPicker,
 ];
 
 // const plugins = [
@@ -66,7 +70,7 @@ const components = [
 //   ElNotification,
 // ];
 
-const app = createApp(App);
+const app = Vue.createApp(App);
 
 components.forEach((component) => {
   app.component(component.name, component);
@@ -78,4 +82,30 @@ components.forEach((component) => {
 app.use(Draggable, {
   store: PageModule,
 });
-app.use(store).use(router).mount('#app');
+app.use(store).use(router);
+
+(async () => {
+  const thirdPartyPanels = [
+    {
+      url: 'http://localhost:3000/dist/pb.umd.js',
+      style: 'http://localhost:3000/dist/style.css',
+      name: 'PbBackground',
+    },
+  ];
+  for (let i = 0; i < thirdPartyPanels.length; i += 1) {
+    const component = thirdPartyPanels[i];
+
+    const head = document.querySelector('head');
+    const link = document.createElement('link');
+    link.href = component.style;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    head?.appendChild(link);
+
+    const res = await axios.get(component.url);
+    eval(`window.Vue = Vue; ${res.data}; console.log(PbBackground); app.component(PbBackground.name, PbBackground);`);
+  }
+
+  app
+    .mount('#app');
+})();

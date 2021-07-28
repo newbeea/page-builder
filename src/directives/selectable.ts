@@ -13,8 +13,8 @@ export default {
       mounted:
         (el: any, binding: any) => {
           const config = binding.value;
+          console.log(config);
           el.addEventListener('click', (ev: any) => {
-            console.log(ev);
             ev.stopPropagation();
             ev.cancelBubble = true;
             options.store?.setActiveConfig(config);

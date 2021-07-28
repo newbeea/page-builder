@@ -193,14 +193,17 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import BuilderModule from '@/store/modules/builder';
 import { querySearch, queryMarginPadding } from './style-utils';
 
 export default defineComponent({
   name: 'PbLayout',
+  props: {
+    modelValue: Object,
+  },
+  emits: ['updateByKeys', 'updateStyles'],
   components: {
   },
-  setup() {
+  setup(props, context) {
     const displayOptions = [
       {
         value: 'block',
@@ -306,17 +309,15 @@ export default defineComponent({
     ];
 
     const handleSelect = (item: any) => {
-      console.log('key', item);
-      item.keys?.forEach((key: string) => {
-        BuilderModule.updateStyle({
-          value: item.value,
-          key,
-        });
-      });
-      // style[key] = item.label;
+      context.emit('updateByKeys', item.keys, item.value);
+      // const style = { ...props.modelValue };
+      // item.keys?.forEach((key: string) => {
+      //   style[key] = item.value;
+      // });
+      // context.emit('updateStyles', style);
     };
     return {
-      style: computed(() => BuilderModule.builderState.activeConfig?.props?.style || {}),
+      style: computed(() => props.modelValue),
       displayOptions,
       querySearch,
       queryMarginPadding,

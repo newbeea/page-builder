@@ -28,7 +28,7 @@ import {
 } from 'vue';
 import { infoList, componentList } from '@/build-in';
 import PageModule from '@/store/modules/page';
-import Image from '@/build-in/image/image';
+// import Image from '@/build-in/image/image';
 
 // componentList.forEach((component) => {
 //   app.component(component.name, component);
@@ -36,7 +36,7 @@ import Image from '@/build-in/image/image';
 export default defineComponent({
   name: 'PbComponentList',
   components: {
-    Image,
+    // Image,
 
   },
   methods: {
@@ -44,9 +44,9 @@ export default defineComponent({
   setup(props, context) {
     // const a = toRef(PageModule.activeConfig, 'props');
     // a.value = 'sdf';
-    componentList.forEach((component) => {
-      getCurrentInstance()?.appContext.app.component(component.name, component);
-    });
+    // componentList.forEach((component) => {
+    //   getCurrentInstance()?.appContext.app.component(component.name, component);
+    // });
     console.log(getCurrentInstance()?.appContext.app);
     const components = Object.values(infoList);
     return {

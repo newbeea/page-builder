@@ -4,6 +4,12 @@
   <div style="width: 50px; height: 50px; background: #fff;" id="div12" @drop="drop($event)" @dragover="dragover($event)"  @dragend="dragend($event)" @dragenter="dragenter"> </div> -->
   <div class="pb-page">
     <pb-container
+      v-if="config"
+      v-draggable:droppable="config"
+      v-selectable="config"
+      :class="{
+        'pb-active': config._active
+      }"
       :children="config.children"
       v-bind="config.props"></pb-container>
   </div>
@@ -14,7 +20,6 @@ import {
   ref, defineComponent, computed, reactive, toRefs, toRef, watch,
 } from 'vue';
 import PageModule from '@/store/modules/page';
-import { config } from 'process';
 import PbContainer from './PbContainer.vue';
 
 export default defineComponent({

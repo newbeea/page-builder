@@ -41,14 +41,11 @@ const mvBug = (from: string, to: string, direction: string) => {
 class Page extends VuexModule {
   public pageState: {
     dragging: ComponentConfig | null,
-    config: ComponentConfig
+    config: ComponentConfig | null,
     activeConfig: ComponentConfig | null,
   } = {
     dragging: null,
-    config: {
-      componentName: 'Page',
-      props: {},
-    },
+    config: null,
     activeConfig: null,
   }
 
@@ -118,15 +115,22 @@ class Page extends VuexModule {
   @Action
   setActiveConfig(activeConfig: ComponentConfig) {
     console.log(activeConfig);
-    jsonuri.walk(this.pageState.config, (value, key, parent, { path }) => {
-      if (value._id && value._id === activeConfig._id) {
-        // notifyBuilder('onSelected', path);
-        this.postMessageToBuilderWindow({
-          cmd: 'selected-by-page',
-          data: path,
-        });
-      }
-    });
+    if (activeConfig._id === 0) {
+      this.postMessageToBuilderWindow({
+        cmd: 'selected-by-page',
+        data: '',
+      });
+    } else {
+      jsonuri.walk(this.pageState.config, (value, key, parent, { path }) => {
+        if (value && value._id && value._id === activeConfig._id) {
+          // notifyBuilder('onSelected', path);
+          this.postMessageToBuilderWindow({
+            cmd: 'selected-by-page',
+            data: path,
+          });
+        }
+      });
+    }
   }
 
   @Action

@@ -6,6 +6,7 @@
     "build": "vite build",
     "build:iframe": "vite --config vite.config.iframe.ts build",
     "build:lib": "vite --config vite.config.lib.ts build",
+    "build:panel": "vite --config vite.config.panel.ts build",
     "serve": "vite serve"
   },
   "dependencies": {
