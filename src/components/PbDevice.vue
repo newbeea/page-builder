@@ -52,7 +52,7 @@ export default defineComponent({
 
     const onLoad = () => {
       postMessageToPageWindow('init-page-config', {
-        lastId: BuilderModule.builderState.config._currentId,
+        lastId: BuilderModule.builderState.config?._currentId,
         config: BuilderModule.builderState.config,
       });
     };
