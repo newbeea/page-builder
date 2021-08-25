@@ -72,6 +72,9 @@ class Builder extends VuexModule {
   public id = 0;
 
   public builderState: {
+    pageReady: boolean,
+    panels: any[],
+    componentList: any[],
     config: ComponentConfig | undefined,
     activeConfig: ComponentConfig | null,
     activeProps: Array<{
@@ -82,6 +85,9 @@ class Builder extends VuexModule {
     activePath: string,
     activeId: number | null,
   } = {
+    pageReady: false,
+    panels: [],
+    componentList: [],
     activeConfig: null,
     activeProps: [],
     config: undefined,
@@ -182,6 +188,20 @@ class Builder extends VuexModule {
     ],
   }
 
+  @Mutation
+  SET_PANELS(panels: any[]) {
+    this.builderState.panels = panels;
+  }
+
+  @Mutation
+  SET_COMPONENTS(componentList: any[]) {
+    console.log(componentList);
+    this.builderState.componentList = componentList;
+    componentList.forEach((c) => {
+      this.propConfig[c.name] = c.props;
+    });
+  }
+
   @Action
   listenPage() {
     window.addEventListener('message', (event) => {
@@ -195,11 +215,19 @@ class Builder extends VuexModule {
           if (data.cmd === 'selected-by-page') {
             this.SET_ACTIVE_BY_PATH(data.data);
           }
+          if (data.cmd === 'page-ready') {
+            this.PAGE_READY();
+          }
         } catch (e) {
           console.log(e);
         }
       }
     });
+  }
+
+  @Mutation
+  PAGE_READY() {
+    this.builderState.pageReady = true;
   }
 
   @Mutation

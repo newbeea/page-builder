@@ -41,5 +41,10 @@ const baseConfig: UserConfig = {
       '@': resolve(__dirname, 'src'),
     },
   },
+  server: {
+    proxy: {
+      '^/api': 'http://localhost:7001',
+    },
+  },
 };
 export default baseConfig;

@@ -5,7 +5,7 @@
       <el-collapse-item class="pb-style-panel" title="Layout" name="layout" >
         <pb-layout v-model="style" @updateByKeys="updateByKeys"></pb-layout>
       </el-collapse-item>
-      <el-collapse-item class="pb-style-panel" v-for="p in thirdPartyComponents" :key="p.name" title="Background" name="background" >
+      <el-collapse-item class="pb-style-panel" v-for="p in thirdPartyComponents" :key="p.name" :title="p.title" :name="p.name" >
         <component :is="p.name" v-model="style"></component>
       </el-collapse-item>
     </el-collapse>
@@ -69,13 +69,7 @@ export default defineComponent({
     const active = computed(() => BuilderModule.builderState.activeConfig);
 
     const thirdPartyPanelsReady = ref(false);
-    const thirdPartyComponents = [
-      {
-        url: 'http://localhost:3000/dist/pb.umd.js',
-        style: 'http://localhost:3000/dist/style.css',
-        name: 'PbBackground',
-      },
-    ];
+    const thirdPartyComponents = computed(() => BuilderModule.builderState.panels);
 
     return {
       active,

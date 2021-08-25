@@ -1,7 +1,6 @@
 <template>
   <pb-page v-if="!iframeMode"></pb-page>
   <iframe
-    @load="onLoad"
     id="iframe"
     v-else
     src="http://localhost:3000/iframe.html"
@@ -50,12 +49,15 @@ export default defineComponent({
       },
     );
 
-    const onLoad = () => {
-      postMessageToPageWindow('init-page-config', {
-        lastId: BuilderModule.builderState.config?._currentId,
-        config: BuilderModule.builderState.config,
-      });
-    };
+    watch(
+      () => BuilderModule.builderState.pageReady,
+      (config, prevConfig) => {
+        postMessageToPageWindow('init-page-config', {
+          lastId: BuilderModule.builderState.config?._currentId,
+          config: BuilderModule.builderState.config,
+        });
+      },
+    );
 
     BuilderModule.listenPage();
     onMounted(() => {
@@ -89,7 +91,6 @@ export default defineComponent({
     });
     // BuilderModule.setActiveConfig({ props: {}, componentName: 'Image' });
     return {
-      onLoad,
       iframeMode: true,
       iframeRef,
     };

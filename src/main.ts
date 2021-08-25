@@ -6,6 +6,8 @@ import store from '@/store';
 import Draggable from '@/directives/draggable';
 import '@/assets/common.scss';
 import PageModule from '@/store/modules/page';
+import BuilderModule from '@/store/modules/builder';
+import axios from 'axios';
 import {
   ElMenu,
   ElMenuItem,
@@ -35,7 +37,6 @@ import {
   // ElMessageBox,
   // ElNotification,
 } from 'element-plus';
-import axios from 'axios';
 
 const components = [
   ElMenu,
@@ -85,27 +86,28 @@ app.use(Draggable, {
 app.use(store).use(router);
 
 (async () => {
-  const thirdPartyPanels = [
-    {
-      url: 'http://localhost:3000/dist/pb.umd.js',
-      style: 'http://localhost:3000/dist/style.css',
-      name: 'PbBackground',
-    },
-  ];
+  const { data: response } = await axios.get('/api/panels');
+
+  const thirdPartyPanels = response.data;
+  BuilderModule.SET_PANELS(thirdPartyPanels);
   for (let i = 0; i < thirdPartyPanels.length; i += 1) {
     const component = thirdPartyPanels[i];
 
     const head = document.querySelector('head');
     const link = document.createElement('link');
-    link.href = component.style;
+    link.href = component.cssUrl;
     link.rel = 'stylesheet';
     link.type = 'text/css';
     head?.appendChild(link);
 
-    const res = await axios.get(component.url);
-    eval(`window.Vue = Vue; ${res.data}; console.log(PbBackground); app.component(PbBackground.name, PbBackground);`);
+    const res = await axios.get(component.umdUrl);
+    eval(`window.Vue = Vue; ${res.data}; console.log(component.name); app.component(component.name, ${component.name});`);
   }
 
+  const { data: res } = await axios.get('/api/components');
+
+  const componentList = res.data;
+  BuilderModule.SET_COMPONENTS(componentList);
   app
     .mount('#app');
 })();

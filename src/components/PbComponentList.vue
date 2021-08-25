@@ -27,7 +27,7 @@ import {
   computed, defineComponent, getCurrentInstance, reactive, ref, toRef, toRefs,
 } from 'vue';
 import { infoList, componentList } from '@/build-in';
-import PageModule from '@/store/modules/page';
+import BuilderModule from '@/store/modules/builder';
 // import Image from '@/build-in/image/image';
 
 // componentList.forEach((component) => {
@@ -51,8 +51,8 @@ export default defineComponent({
     const components = Object.values(infoList);
     return {
       // t: ImageInfo,
-      a: computed(() => PageModule.activeConfig),
-      components,
+      // a: computed(() => PageModule.activeConfig),
+      components: computed(() => BuilderModule.builderState.componentList),
     };
   },
 });

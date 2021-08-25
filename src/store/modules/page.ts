@@ -75,6 +75,10 @@ class Page extends VuexModule {
         this.SET_ID(data.data.lastId);
       }
     });
+    this.postMessageToBuilderWindow({
+      cmd: 'page-ready',
+      data: '',
+    });
   }
 
   @Action
