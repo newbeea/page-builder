@@ -129,10 +129,5 @@ export default defineComponent({
     width: 400px;
     background: rgb(247, 247, 247);
   }
-  .panel-container {
-    .component-card {
-      padding: 10px;
-    }
-  }
 }
 </style>

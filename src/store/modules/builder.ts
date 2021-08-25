@@ -107,85 +107,6 @@ class Builder extends VuexModule {
       input: any,
     }>
   } = {
-    Image: [
-      {
-        prop: 'src',
-        label: 'Url',
-        input: {
-          component: 'InputExpression',
-        },
-      },
-      {
-        prop: 'title',
-        label: 'Title',
-        input: {
-          component: 'InputExpression',
-        },
-      },
-      {
-        prop: 'href',
-        label: 'Link',
-        input: {
-          component: 'InputExpression',
-        },
-      },
-    ],
-    Text: [
-      {
-        prop: 'text',
-        label: 'Text',
-        input: {
-          component: 'InputExpression',
-        },
-      },
-    ],
-    ElButton: [
-      {
-        prop: 'size',
-        label: 'Size',
-        input: {
-          component: 'Select',
-          config: {
-            options: [{
-              value: 'medium',
-            }, {
-              value: 'small',
-            }, {
-              value: 'mini',
-            }],
-          },
-        },
-      },
-      {
-        prop: 'type',
-        label: 'Type',
-        input: {
-          component: 'Select',
-          config: {
-            options: [{
-              value: 'primary',
-            }, {
-              value: 'success',
-            }, {
-              value: 'warning',
-            }, {
-              value: 'danger',
-            }, {
-              value: 'info',
-            }, {
-              value: 'text',
-            }],
-          },
-        },
-      },
-      {
-        prop: 'round',
-        label: 'Round',
-        input: {
-          component: 'Switch',
-        },
-      },
-    ],
   }
 
   @Mutation
@@ -198,7 +119,7 @@ class Builder extends VuexModule {
     console.log(componentList);
     this.builderState.componentList = componentList;
     componentList.forEach((c) => {
-      this.propConfig[c.name] = c.props;
+      this.propConfig[c.componentName] = c.props;
     });
   }
 

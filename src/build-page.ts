@@ -34,6 +34,7 @@ components.forEach((component) => {
   const componentList = response.data;
   for (let i = 0; i < componentList.length; i += 1) {
     const component = componentList[i];
+    eval('window.Vue = Vue;');
     if (component.lib) {
       const head = document.querySelector('head');
       const link = document.createElement('link');
@@ -43,7 +44,10 @@ components.forEach((component) => {
       head?.appendChild(link);
 
       const res = await axios.get(component.lib.umdUrl);
-      eval(`window.Vue = Vue; ${res.data}; app.component(component.name, ${component.name});`);
+      eval(`${res.data};`);
+    }
+    if (component.componentName && !component.buildIn) {
+      eval(`app.component(component.componentName, ${component.componentName});`);
     }
   }
 

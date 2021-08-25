@@ -19,7 +19,6 @@
 import {
   computed, defineComponent, getCurrentInstance, nextTick, reactive, ref, toRef, toRefs, watch,
 } from 'vue';
-import { infoList, componentList } from '@/build-in';
 import BuilderModule from '@/store/modules/builder';
 
 export default defineComponent({

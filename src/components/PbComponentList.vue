@@ -1,24 +1,25 @@
 <template>
   <el-tabs tab-position="left">
-    <el-tab-pane label="轮播"
+    <el-tab-pane v-for="(components, key) in category" :key="key" :label="key"
       ><div class="panel-container">
         <div
           v-for="c in components"
-          :key="c.name"
+          :key="c.id"
           class="component-card"
           v-draggable:draggable="c.config"
         >
-          <el-card shadow="hover">
-            {{ c.name }}
-          </el-card>
+          <div class="card-container" :style="{
+            backgroundImage: c.thumb ? `url(${c.thumb})` : ''
+          }">
+            <span v-if="!c.thumb">{{c.label}}</span>
+          </div>
+
         </div>
         <!-- <el-input v-model="a.src"></el-input> -->
         <!-- <Image v-bind="a.props" :children="[]"></Image> -->
 
       </div></el-tab-pane
     >
-    <el-tab-pane label="布局">布局</el-tab-pane>
-    <el-tab-pane label="产品">产品</el-tab-pane>
   </el-tabs>
 </template>
 
@@ -26,13 +27,9 @@
 import {
   computed, defineComponent, getCurrentInstance, reactive, ref, toRef, toRefs,
 } from 'vue';
-import { infoList, componentList } from '@/build-in';
-import BuilderModule from '@/store/modules/builder';
-// import Image from '@/build-in/image/image';
 
-// componentList.forEach((component) => {
-//   app.component(component.name, component);
-// });
+import BuilderModule from '@/store/modules/builder';
+
 export default defineComponent({
   name: 'PbComponentList',
   components: {
@@ -47,13 +44,32 @@ export default defineComponent({
     // componentList.forEach((component) => {
     //   getCurrentInstance()?.appContext.app.component(component.name, component);
     // });
-    console.log(getCurrentInstance()?.appContext.app);
-    const components = Object.values(infoList);
+    const category: any = {};
+    BuilderModule.builderState.componentList.forEach((c: any) => {
+      category[c.category] = category[c.category] || [];
+      category[c.category].push(c);
+    });
     return {
       // t: ImageInfo,
       // a: computed(() => PageModule.activeConfig),
-      components: computed(() => BuilderModule.builderState.componentList),
+      // components: computed(() => BuilderModule.builderState.componentList),
+      categoryList: Object.values(category),
+      category,
     };
   },
 });
 </script>
+<style lang="scss" scoped>
+.component-card {
+
+  padding: 10px;
+  .card-container {
+    background: #fff;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    background-position: center;
+    background-size: cover;
+  }
+}
+</style>
