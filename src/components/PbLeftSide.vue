@@ -21,7 +21,7 @@ import PbComponentList from '@/components/PbComponentList.vue'; // @ is an alias
 import PbComponentTree from '@/components/PbComponentTree.vue'; // @ is an alias to /src
 
 export default defineComponent({
-  name: 'Home',
+  name: 'PbLeftSide',
   components: {
     PbComponentList,
     PbComponentTree,

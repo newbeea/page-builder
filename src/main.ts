@@ -8,75 +8,11 @@ import '@/assets/common.scss';
 import PageModule from '@/store/modules/page';
 import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
-import {
-  ElMenu,
-  ElMenuItem,
-  ElCard,
-  ElTabs,
-  ElTabPane,
-  ElIcon,
-  ElInput,
-  ElTree,
-  ElSelect,
-  ElOption,
-  ElSwitch,
-  ElCollapse,
-  ElCollapseItem,
-  ElForm,
-  ElFormItem,
-  ElRadioButton,
-  ElRadioGroup,
-  ElTooltip,
-  ElAutocomplete,
-  ElDrawer,
-  ElButton,
-  ElColorPicker,
-  // ElInfiniteScroll,
-  // ElLoading,
-  // ElMessage,
-  // ElMessageBox,
-  // ElNotification,
-} from 'element-plus';
-
-const components = [
-  ElMenu,
-  ElMenuItem,
-  ElCard,
-  ElTabs,
-  ElTabPane,
-  ElIcon,
-  ElInput,
-  ElTree,
-  ElSelect,
-  ElOption,
-  ElSwitch,
-  ElCollapse,
-  ElCollapseItem,
-  ElForm,
-  ElFormItem,
-  ElRadioButton,
-  ElRadioGroup,
-  ElTooltip,
-  ElAutocomplete,
-  ElDrawer,
-  ElButton,
-  ElColorPicker,
-];
-
-// const plugins = [
-//   ElInfiniteScroll,
-//   ElLoading,
-//   ElMessage,
-//   ElMessageBox,
-//   ElNotification,
-// ];
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 
 const app = Vue.createApp(App);
-
-components.forEach((component) => {
-  app.component(component.name, component);
-});
-
+app.use(ElementPlus);
 // plugins.forEach((plugin) => {
 //   app.use(plugin);
 // });
@@ -101,7 +37,7 @@ app.use(store).use(router);
     head?.appendChild(link);
 
     const res = await axios.get(component.umdUrl);
-    eval(`window.Vue = Vue; ${res.data}; console.log(component.name); app.component(component.name, ${component.name});`);
+    eval(`window.Vue = Vue; ${res.data}; app.component(component.name, ${component.name});`);
   }
 
   const { data: res } = await axios.get('/api/components');

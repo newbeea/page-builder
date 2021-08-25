@@ -6,7 +6,6 @@ import Selectable from '@/directives/selectable';
 import PageModule from '@/store/modules/page';
 import axios from 'axios';
 import * as Vue from 'vue';
-import thirdPartyComponents from '@/db';
 import { componentList as buildInList } from '@/build-in/index';
 import {
   ElInput,
@@ -47,7 +46,8 @@ components.forEach((component) => {
       eval(`${res.data};`);
     }
     if (component.componentName && !component.buildIn) {
-      eval(`app.component(component.componentName, ${component.componentName});`);
+      // console.log(`${component.componentName}`);
+      eval(`console.log(1, ${component.componentName}); app.component(component.componentName, ${component.componentName});`);
     }
   }
 
