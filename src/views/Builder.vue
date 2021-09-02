@@ -3,20 +3,39 @@
     <pb-left-side class="pb-left-panel"> </pb-left-side>
     <div class="pb-center-area">
       <div class="pb-canvas-toolbar">
-        <i
-          class="el-icon-s-platform device-icon"
-          :class="{
-            active: pbDevice != 'mobile',
-          }"
-          @click="pbDevice = 'pc'"
-        ></i>
-        <i
-          class="el-icon-mobile-phone device-icon"
-          :class="{
-            active: pbDevice == 'mobile',
-          }"
-          @click="pbDevice = 'mobile'"
-        ></i>
+        <div class="device">
+          <i
+            class="el-icon-s-platform device-icon"
+            :class="{
+              active: pbDevice != 'mobile',
+            }"
+            @click="pbDevice = 'pc'"
+          ></i>
+          <i
+            class="el-icon-mobile-phone device-icon"
+            :class="{
+              active: pbDevice == 'mobile',
+            }"
+            @click="pbDevice = 'mobile'"
+          ></i>
+        </div>
+        <div class="mode">
+          <i
+            class="el-icon-edit device-icon"
+            :class="{
+              active: pbMode == 'edit',
+            }"
+            @click="setMode('edit')"
+          ></i>
+          <i
+            class="el-icon-view device-icon"
+            :class="{
+              active: pbMode == 'view',
+            }"
+            @click="setMode('view')"
+          ></i>
+        </div>
+
       </div>
       <div class="pb-canvas">
         <div class="pb-device" :class="pbDeviceClass">
@@ -51,20 +70,27 @@ export default defineComponent({
   },
   setup() {
     BuilderModule.fetchConfig();
-    const pbDevice = ref('mobile');
     const state = reactive({
-      drag: false,
+      pbDevice: 'mobile',
+      pbMode: 'edit',
       myArray: [
         { name: '轮播1', id: 0 },
         { name: '轮播2', id: 1 },
         { name: '轮播3', id: 2 },
       ],
     });
+
+    const setMode = (mode: string) => {
+      BuilderModule.postMessageToPageWindow({
+        cmd: 'set-page-mode',
+        data: mode,
+      });
+      state.pbMode = mode;
+    };
     return {
       ...toRefs(state),
-      // t: ImageInfo,
-      pbDevice,
-      pbDeviceClass: computed(() => (pbDevice.value === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
+      setMode,
+      pbDeviceClass: computed(() => (state.pbDevice === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };
   },
 });
@@ -95,7 +121,7 @@ export default defineComponent({
       justify-content: center;
       align-items: center;
       .device-icon {
-        font-size: 30px;
+        font-size: 24px;
         color: rgb(84, 92, 100);
         &.active {
           color: #409eff;

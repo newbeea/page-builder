@@ -72,6 +72,7 @@ class Builder extends VuexModule {
   public id = 0;
 
   public builderState: {
+    page: any,
     pageReady: boolean,
     panels: any[],
     componentList: any[],
@@ -85,6 +86,7 @@ class Builder extends VuexModule {
     activePath: string,
     activeId: number | null,
   } = {
+    page: undefined,
     pageReady: false,
     panels: [],
     componentList: [],
@@ -107,6 +109,25 @@ class Builder extends VuexModule {
       input: any,
     }>
   } = {
+  }
+
+  @Mutation
+  SET_PAGE(page: any) {
+    this.builderState.page = page;
+  }
+
+  @Action
+  postMessageToPageWindow({ cmd, data }: {
+    cmd: string,
+    data: any,
+  }) {
+    // console.log(this.builderState.page);
+    const iframe: any = this.builderState.page;
+    iframe.contentWindow.postMessage(JSON.stringify({
+      cmd,
+      data,
+    }));
+    console.log(222);
   }
 
   @Mutation

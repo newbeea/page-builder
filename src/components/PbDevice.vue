@@ -30,19 +30,26 @@ export default defineComponent({
   },
   setup: () => {
     const iframeRef = ref(null);
+    onMounted(() => {
+      console.log(iframeRef);
+      BuilderModule.SET_PAGE(iframeRef);
+    });
 
-    const postMessageToPageWindow = (cmd: string, data: any) => {
-      const iframe: any = iframeRef.value;
-      iframe.contentWindow.postMessage(JSON.stringify({
-        cmd,
-        data,
-      }));
-      console.log(222);
-    };
+    // const postMessageToPageWindow = (cmd: string, data: any) => {
+    //   const iframe: any = iframeRef.value;
+    //   iframe.contentWindow.postMessage(JSON.stringify({
+    //     cmd,
+    //     data,
+    //   }));
+    //   console.log(222);
+    // };
     watch(
       () => BuilderModule.builderState.config,
       (config, prevConfig) => {
-        postMessageToPageWindow('update-page-config-by-builder', BuilderModule.builderState.config);
+        BuilderModule.postMessageToPageWindow({
+          cmd: 'update-page-config-by-builder',
+          data: BuilderModule.builderState.config,
+        });
       },
       {
         deep: true,
@@ -52,9 +59,12 @@ export default defineComponent({
     watch(
       () => BuilderModule.builderState.pageReady,
       (config, prevConfig) => {
-        postMessageToPageWindow('init-page-config', {
-          lastId: BuilderModule.builderState.config?._currentId,
-          config: BuilderModule.builderState.config,
+        BuilderModule.postMessageToPageWindow({
+          cmd: 'init-page-config',
+          data: {
+            lastId: BuilderModule.builderState.config?._currentId,
+            config: BuilderModule.builderState.config,
+          },
         });
       },
     );

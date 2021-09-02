@@ -1,6 +1,8 @@
 <template>
-  <div class="pb-container">
-    <div class="pb-placeholder" v-if="!children?.length">+</div>
+  <div class="pb-container" :class="{
+    outline: mode === 'edit'
+    }">
+    <div class="pb-placeholder" v-if="!children?.length && mode === 'edit'">+</div>
     <component
       v-draggable:[getDragMode(child)]="child"
       v-for="child in children"
@@ -10,7 +12,7 @@
       v-bind="child.props"
       v-selectable="child"
       :class="[{
-        'pb-active': child._active
+        'pb-active': child._active && mode === 'edit'
       }, child.props.classes]"
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
@@ -21,7 +23,7 @@
           v-bind="slot.props"
           v-selectable="slot"
           :class="[{
-            'pb-active': slot._active
+            'pb-active': slot._active && mode === 'edit'
           }, slot.props.classes]"
         >
         </component>
@@ -37,6 +39,7 @@ import {
 } from 'vue';
 import draggable from 'vuedraggable';
 import { ComponentConfig } from '@/store/modules/types';
+import PageModule from '@/store/modules/page';
 
 export default defineComponent({
   name: 'PbContainer',
@@ -75,6 +78,7 @@ export default defineComponent({
     });
 
     return {
+      mode: computed(() => PageModule.pageState.mode),
       ...toRefs(state),
     };
   },
@@ -83,8 +87,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .pb-container {
-  outline: 1px dotted rgb(255, 208, 75);
-  outline-offset: -1px;
+  &.outline {
+    outline: 1px dotted rgb(255, 208, 75);
+    outline-offset: -1px;
+  }
+
   .pb-placeholder {
     color: rgb(255, 208, 75);
     min-height: 30px;

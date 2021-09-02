@@ -40,10 +40,12 @@ const mvBug = (from: string, to: string, direction: string) => {
 })
 class Page extends VuexModule {
   public pageState: {
+    mode: string,
     dragging: ComponentConfig | null,
     config: ComponentConfig | undefined,
     activeConfig: ComponentConfig | null,
   } = {
+    mode: 'edit',
     dragging: null,
     config: undefined,
     activeConfig: null,
@@ -73,6 +75,8 @@ class Page extends VuexModule {
       } else if (data.cmd === 'init-page-config') {
         this.UPDATE_CONFIG(data.data.config);
         this.SET_ID(data.data.lastId);
+      } else if (data.cmd === 'set-page-mode') {
+        this.SET_MODE(data.data);
       }
     });
     this.postMessageToBuilderWindow({
@@ -94,6 +98,11 @@ class Page extends VuexModule {
   @Mutation
   UPDATE_CONFIG(config: ComponentConfig) {
     this.pageState.config = config;
+  }
+
+  @Mutation
+  SET_MODE(mode: string) {
+    this.pageState.mode = mode;
   }
 
   @Mutation
