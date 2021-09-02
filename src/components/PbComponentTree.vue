@@ -10,6 +10,18 @@
       default-expand-all
       highlight-current
       draggable>
+      <template #default="{ node, data }">
+        <span class="custom-tree-node">
+          <span>{{ node.label }}</span>
+          <span>
+            <!-- <a
+              @click="append(data)">
+              Append
+            </a> -->
+            <i class="el-icon-delete" @click.stop="deleteComponent(data)"></i>
+          </span>
+        </span>
+      </template>
     </el-tree>
   </div>
 
@@ -48,12 +60,17 @@ export default defineComponent({
     const onCurrentChange = (node: any) => {
       console.log(node);
       const treeRef: any = tree.value;
-      console.log(treeRef?.getCurrentNode());
+      console.log('getCurrentNode', treeRef?.getCurrentNode());
       BuilderModule.setActive(node);
     };
 
+    const deleteComponent = (data: any) => {
+      console.log('node', data);
+      BuilderModule.deleteComponent(data);
+    };
     return {
       tree,
+      deleteComponent,
       onCurrentChange,
       defaultProps: {
         children: 'children',
@@ -78,6 +95,14 @@ export default defineComponent({
   .el-tree-node.is-current > .el-tree-node__content {
     background-color: #409eff !important;
     color: #fff;
+  }
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
   }
 }
 

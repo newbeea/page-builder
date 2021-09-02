@@ -124,6 +124,23 @@ class Builder extends VuexModule {
   }
 
   @Action
+  deleteComponent(component: any) {
+    jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
+      console.log(value._id, path);
+
+      if (value._id && value._id === component._id) {
+        if (this.builderState.activePath === path) {
+          this.SET_ACTIVE_BY_PATH('');
+        } else {
+          this.SET_ACTIVE_BY_PATH(this.builderState.activePath);
+        }
+        console.log(path);
+        jsonuri.rm(this.builderState.config, path);
+      }
+    });
+  }
+
+  @Action
   listenPage() {
     window.addEventListener('message', (event) => {
       if (typeof event.data === 'string') {
