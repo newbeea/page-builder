@@ -1,9 +1,8 @@
 <template>
-  <div class="pb-container" :class="{
-    outline: mode === 'edit'
-    }">
+  <div class="pb-container">
     <div class="pb-placeholder" v-if="!children?.length && mode === 'edit'">+</div>
     <component
+      v-show="!child._hide"
       v-draggable:[getDragMode(child)]="child"
       v-for="child in children"
       :key="child"
@@ -12,7 +11,9 @@
       v-bind="child.props"
       v-selectable="child"
       :class="[{
-        'pb-active': child._active && mode === 'edit'
+        'outline': mode === 'edit',
+        'pb-active': child._active && mode === 'edit',
+
       }, child.props.classes]"
     >
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
@@ -94,10 +95,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .pb-container {
-  &.outline {
-    outline: 1px dotted rgb(255, 208, 75);
-    outline-offset: -1px;
-  }
 
   .pb-placeholder {
     color: rgb(255, 208, 75);
@@ -107,9 +104,14 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
   }
+  .outline {
+    outline: 1px dotted rgb(255, 208, 75);
+    outline-offset: -1px;
+  }
+  .pb-active {
+    outline: 2px solid red;
+    outline-offset: -2px;
+  }
 }
-.pb-active {
-  outline: 2px solid red;
-  outline-offset: -2px;
-}
+
 </style>

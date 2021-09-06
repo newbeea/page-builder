@@ -14,12 +14,15 @@
         <span class="custom-tree-node">
           <span class="name" v-if="data.name">{{data.name}}</span>
           <span class="name" v-else>{{ data.componentName }}</span>
-          <span>
+          <span v-if="data._id">
             <!-- <a
               @click="append(data)">
               Append
             </a> -->
-            <i class="el-icon-delete" @click.stop="deleteComponent(data)"></i>
+            <i class="el-icon-view " :class="{
+              active: !data._hide
+            }" @click.stop="hideComponent(data)"></i>
+            <i class="el-icon-delete active" @click.stop="deleteComponent(data)"></i>
           </span>
         </span>
       </template>
@@ -69,9 +72,15 @@ export default defineComponent({
       console.log('node', data);
       BuilderModule.deleteComponent(data);
     };
+    const hideComponent = (data: any) => {
+      console.log('node', data);
+      data._hide = !data._hide;
+      // BuilderModule.deleteComponent(data);
+    };
     return {
       tree,
       deleteComponent,
+      hideComponent,
       onCurrentChange,
       defaultProps: {
         children: 'children',
@@ -91,15 +100,15 @@ export default defineComponent({
   .el-tree-node__content{
     // display: block!important;
     &:hover{
-      background-color: #40a0ff86;
+      background-color: #bcdcfc86;
     }
   }
   .el-tree-node__children {
     overflow: visible!important;
   }
   .el-tree-node.is-current > .el-tree-node__content {
-    background-color: #409eff !important;
-    color: #fff;
+    background-color: #bcdcfc !important;
+    // color: #fff;
   }
   .custom-tree-node {
     flex: 1;
@@ -110,6 +119,9 @@ export default defineComponent({
     padding-right: 8px;
     .name {
       margin-right: 8px;
+    }
+    .active {
+      color: #409eff;
     }
   }
 }
