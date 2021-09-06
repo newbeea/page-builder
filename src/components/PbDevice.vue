@@ -56,18 +56,18 @@ export default defineComponent({
       },
     );
 
-    watch(
-      () => BuilderModule.builderState.pageReady,
-      (config, prevConfig) => {
-        BuilderModule.postMessageToPageWindow({
-          cmd: 'init-page-config',
-          data: {
-            lastId: BuilderModule.builderState.config?._currentId,
-            config: BuilderModule.builderState.config,
-          },
-        });
-      },
-    );
+    // watch(
+    //   () => BuilderModule.builderState.pageReady,
+    //   (config, prevConfig) => {
+    //     BuilderModule.postMessageToPageWindow({
+    //       cmd: 'init-page-config',
+    //       data: {
+    //         lastId: BuilderModule.builderState.config?._currentId,
+    //         config: BuilderModule.builderState.config,
+    //       },
+    //     });
+    //   },
+    // );
 
     BuilderModule.listenPage();
     onMounted(() => {

@@ -20,11 +20,11 @@ const config: ComponentConfig = {
   componentName: 'Page',
   customCss: `
   
-    @media only screen and (max-width: 540px) {
-      body {
-        color: red;
-      }
-    }
+@media only screen and (max-width: 540px) {
+  body {
+    color: red;
+  }
+}
     
   `,
   props: {
@@ -191,18 +191,19 @@ class Builder extends VuexModule {
             this.SET_ACTIVE_BY_PATH(data.data);
           }
           if (data.cmd === 'page-ready') {
-            this.PAGE_READY();
+            this.postMessageToPageWindow({
+              cmd: 'init-page-config',
+              data: {
+                lastId: this.builderState.config?._currentId,
+                config: this.builderState.config,
+              },
+            });
           }
         } catch (e) {
           console.log(e);
         }
       }
     });
-  }
-
-  @Mutation
-  PAGE_READY() {
-    this.builderState.pageReady = true;
   }
 
   @Mutation
