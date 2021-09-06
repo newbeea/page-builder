@@ -26,10 +26,15 @@ global.MonacoEnvironment = {
 export default defineComponent({
   props: {
     modelValue: String,
+
     code: {
       // 代码
       type: String as PropType<string>,
       required: true,
+    },
+    lang: {
+      type: String,
+      default: () => ('json'),
     },
     options: {
       type: Object as PropType<monaco.editor.IStandaloneEditorConstructionOptions>,
@@ -59,7 +64,7 @@ export default defineComponent({
       nextTick(() => {
         console.log(1111111);
         editorRef.value = monaco.editor.create(root.value as HTMLElement, {
-          language: 'json',
+          language: props.lang,
           value: props.code,
         });
 

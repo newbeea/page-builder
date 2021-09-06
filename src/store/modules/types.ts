@@ -7,6 +7,7 @@ export type ComponentConfig = {
     [key: string]: any,
   },
   mode?: string,
-  children?: ComponentConfig[]
-  slots?: ComponentConfig[]
+  children?: ComponentConfig[],
+  slots?: ComponentConfig[],
+  customCss?: string,
 }

@@ -10,17 +10,32 @@
       </el-collapse-item>
     </el-collapse>
     <div class="pb-css-btn-wrapper">
-      <el-button class="pb-css-btn" @click="codeEditor = true" type="primary">Edit css</el-button>
+      <el-button class="pb-css-btn" @click="styleJsonEditor = true" type="primary">Edit style</el-button>
     </div>
     <el-drawer
-      title="Css"
-      v-model="codeEditor"
+      title="Style"
+      v-model="styleJsonEditor"
       direction="ltr"
       :modal="true"
       destroy-on-close>
       <pb-code-editor
-        :code="css"
-        :onChange="onCodeChange"></pb-code-editor>
+        :code="styleJson"
+        :onChange="onStyleJsonChange"></pb-code-editor>
+    </el-drawer>
+
+    <div class="pb-css-btn-wrapper">
+      <el-button class="pb-css-btn" @click="cssStringEditor = true" type="primary">Custom css</el-button>
+    </div>
+    <el-drawer
+      title="Css"
+      v-model="cssStringEditor"
+      direction="ltr"
+      :modal="true"
+      destroy-on-close>
+      <pb-code-editor
+        lang="css"
+        :code="cssString"
+        :onChange="onCssStringChange"></pb-code-editor>
     </el-drawer>
   </div>
 </template>
@@ -44,19 +59,16 @@ export default defineComponent({
     // PbBackground,
   },
   setup() {
-    const codeEditor = ref(false);
-
-    const onCodeChange = (code: string) => {
+    const styleJsonEditor = ref(false);
+    const onStyleJsonChange = (code: string) => {
       const style = JSON.parse(code);
       console.log(style);
       BuilderModule.updateStyles(style);
     };
-
     const updateStyles = (styles: any) => {
       BuilderModule.updateStyles(styles);
       console.log(styles);
     };
-
     const updateByKeys = (keys: any[], value: string) => {
       keys?.forEach((key: string) => {
         BuilderModule.updateStyle({
@@ -64,6 +76,10 @@ export default defineComponent({
           key,
         });
       });
+    };
+    const cssStringEditor = ref(false);
+    const onCssStringChange = (code: string) => {
+      BuilderModule.SET_CUSTOM_CSS(code);
     };
 
     const active = computed(() => BuilderModule.builderState.activeConfig);
@@ -74,10 +90,13 @@ export default defineComponent({
     return {
       active,
       activeNames: ['layout'],
-      css: computed(() => JSON.stringify(active.value?.props.style)),
+      styleJson: computed(() => JSON.stringify(active.value?.props.style)),
       style: computed(() => active.value?.props.style),
-      codeEditor,
-      onCodeChange,
+      styleJsonEditor,
+      cssString: computed(() => BuilderModule.builderState.config?.customCss),
+      cssStringEditor,
+      onCssStringChange,
+      onStyleJsonChange,
       updateByKeys,
       updateStyles,
       thirdPartyComponents,

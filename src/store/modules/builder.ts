@@ -18,6 +18,15 @@ const img = {
 };
 const config: ComponentConfig = {
   componentName: 'Page',
+  customCss: `
+  
+    @media only screen and (max-width: 540px) {
+      body {
+        color: red;
+      }
+    }
+    
+  `,
   props: {
     style: {
     },
@@ -114,6 +123,13 @@ class Builder extends VuexModule {
   @Mutation
   SET_PAGE(page: any) {
     this.builderState.page = page;
+  }
+
+  @Mutation
+  SET_CUSTOM_CSS(css: string) {
+    if (this.builderState.config) {
+      this.builderState.config.customCss = css;
+    }
   }
 
   @Action
