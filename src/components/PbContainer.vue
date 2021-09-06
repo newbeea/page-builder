@@ -56,7 +56,21 @@ export default defineComponent({
       }
       return child.componentName;
     },
-    getDragMode(child: ComponentConfig) {
+
+  },
+  setup: (props) => {
+    const state = reactive({
+      drag: false,
+      mode: computed(() => PageModule.pageState.mode),
+      myArray: [
+        { name: '轮播1', id: 0 },
+      ],
+    });
+
+    const getDragMode = (child: ComponentConfig) => {
+      if (state.mode !== 'edit') {
+        return '';
+      }
       if (child.mode) {
         return child.mode;
       }
@@ -67,18 +81,11 @@ export default defineComponent({
         return 'draggable | alignable';
       }
       return 'draggable | alignable';
-    },
-  },
-  setup: (props) => {
-    const state = reactive({
-      drag: false,
-      myArray: [
-        { name: '轮播1', id: 0 },
-      ],
-    });
+    };
 
     return {
-      mode: computed(() => PageModule.pageState.mode),
+      getDragMode,
+      // mode: computed(() => PageModule.pageState.mode),
       ...toRefs(state),
     };
   },

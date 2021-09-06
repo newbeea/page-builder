@@ -10,9 +10,10 @@
       default-expand-all
       highlight-current
       draggable>
-      <template #default="{ node, data }">
+      <template #default="{ data }">
         <span class="custom-tree-node">
-          <span>{{ node.label }}</span>
+          <span class="name" v-if="data.name">{{data.name}}</span>
+          <span class="name" v-else>{{ data.componentName }}</span>
           <span>
             <!-- <a
               @click="append(data)">
@@ -88,9 +89,13 @@ export default defineComponent({
     background-color: transparent;
   }
   .el-tree-node__content{
+    // display: block!important;
     &:hover{
       background-color: #40a0ff86;
     }
+  }
+  .el-tree-node__children {
+    overflow: visible!important;
   }
   .el-tree-node.is-current > .el-tree-node__content {
     background-color: #409eff !important;
@@ -103,6 +108,9 @@ export default defineComponent({
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+    .name {
+      margin-right: 8px;
+    }
   }
 }
 
