@@ -77,6 +77,8 @@ class Page extends VuexModule {
         this.SET_ID(data.data.lastId);
       } else if (data.cmd === 'set-page-mode') {
         this.SET_MODE(data.data);
+      } else if (data.cmd === 'set-fonts') {
+        this.SET_FONTS(data.data);
       }
     });
     this.postMessageToBuilderWindow({
@@ -93,6 +95,15 @@ class Page extends VuexModule {
       cmd,
       data,
     }));
+  }
+
+  @Mutation
+  SET_FONTS(fonts: string) {
+    const head = document.getElementsByTagName('head')[0];
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(fonts));
+    head.appendChild(style);
   }
 
   @Mutation

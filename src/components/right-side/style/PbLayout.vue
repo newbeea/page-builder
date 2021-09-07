@@ -337,12 +337,6 @@ export default defineComponent({
     width: auto !important;
   }
 }
-@font-face {
-  font-family: "iconfont"; /* Project id 2692908 */
-  src: url('//at.alicdn.com/t/font_2692908_w64j2p54yea.woff2?t=1627012480728') format('woff2'),
-       url('//at.alicdn.com/t/font_2692908_w64j2p54yea.woff?t=1627012480728') format('woff'),
-       url('//at.alicdn.com/t/font_2692908_w64j2p54yea.ttf?t=1627012480728') format('truetype');
-}
 
 .el-collapse-item__header {
   padding: 0 10px;
@@ -354,106 +348,6 @@ export default defineComponent({
   .pb-title {
     width: 80px;
     flex-shrink: 0;
-  }
-
-  .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 16px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .icon-wrap:before {
-    content: "\ea04";
-  }
-
-  .icon-wrap1:before {
-    content: "\e71c";
-  }
-
-  .icon-alignItems_flex-start:before {
-    content: "\e60a";
-  }
-
-  .icon-alignItems_flex-end:before {
-    content: "\e600";
-  }
-
-  .icon-alignItems_center:before {
-    content: "\e601";
-  }
-
-  .icon-alignItems_baseline:before {
-    content: "\e602";
-  }
-
-  .icon-alignItems_stretch:before {
-    content: "\e603";
-  }
-
-  .icon-justifyContent_flex-end:before {
-    content: "\e604";
-  }
-
-  .icon-justifyContent_space-between:before {
-    content: "\e605";
-  }
-
-  .icon-justifyContent_center:before {
-    content: "\e606";
-  }
-
-  .icon-justifyContent_space-around:before {
-    content: "\e607";
-  }
-
-  .icon-justifyCotent_flex-start:before {
-    content: "\e608";
-  }
-
-  .icon-nowrap:before {
-    content: "\e609";
-  }
-
-  .icon-operate-wrap-reverse:before {
-    content: "\e6f0";
-  }
-
-  .icon-flex-direction-row-reverse:before {
-    content: "\e618";
-  }
-
-  .icon-flex-direction-column:before {
-    content: "\e641";
-  }
-
-  .icon-flex-direction-column-reverse:before {
-    content: "\e642";
-  }
-
-  .icon-flex-direction-row:before {
-    content: "\e643";
-  }
-
-  .icon-yincang1:before {
-    content: "\e762";
-  }
-
-  .icon-buju_inline:before {
-    content: "\e745";
-  }
-
-  .icon-a-buju_inlineblock:before {
-    content: "\e746";
-  }
-
-  .icon-buju_block:before {
-    content: "\e747";
-  }
-
-  .icon-buju_flex:before {
-    content: "\e748";
   }
 }
 .pb-size {

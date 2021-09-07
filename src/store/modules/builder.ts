@@ -80,6 +80,8 @@ class Builder extends VuexModule {
 
   public id = 0;
 
+  public fonts: Set<string> = new Set();
+
   public builderState: {
     page: any,
     pageReady: boolean,
@@ -130,6 +132,15 @@ class Builder extends VuexModule {
     if (this.builderState.config) {
       this.builderState.config.customCss = css;
     }
+  }
+
+  @Action
+  setFonts(font: string) {
+    this.fonts.add(font);
+    this.postMessageToPageWindow({
+      cmd: 'set-fonts',
+      data: font,
+    });
   }
 
   @Action
@@ -236,7 +247,7 @@ class Builder extends VuexModule {
   @Mutation
   UPDATE_STYLES(style: any) {
     if (this.builderState.activeConfig?.props) {
-      this.builderState.activeConfig.props.style = style;
+      Object.assign(this.builderState.activeConfig.props.style, style);
     }
   }
 

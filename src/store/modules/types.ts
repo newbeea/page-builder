@@ -10,4 +10,5 @@ export type ComponentConfig = {
   children?: ComponentConfig[],
   slots?: ComponentConfig[],
   customCss?: string,
+  fonts?: string[],
 }
