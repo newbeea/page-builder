@@ -2,15 +2,16 @@
   <div class="pb-font">
     <div class="font-family">
       <span>Font Family</span>
-      <el-select @change="onFontSelected" v-model="style.fontFamily" filterable placeholder="请选择">
+      <el-select class="font-select" @change="onFontSelected" v-model="style.fontFamily" filterable placeholder="请选择">
         <el-option
           v-for="item in fonts"
-          :key="item.fontFamily"
-          :label="item.fontFamily"
-          :value="item.fontFamily"
+          :key="item"
+          :label="item"
+          :value="item"
         >
         </el-option>
       </el-select>
+      <el-button @click="openDialog">+</el-button>
     </div>
     <div class="inputs">
       <div class="">
@@ -54,6 +55,29 @@
         active: style.textDecoration === 'line-through'
       }" @click="onLineThroughClick()"></span>
     </div>
+
+    <el-dialog
+      title="Font"
+      v-model="dialogVisible"
+      width="90%"
+    >
+
+      <el-form label-position="top" label-width="80px">
+        <el-form-item label="Font Family">
+          <el-input v-model="font.fontFamily"></el-input>
+        </el-form-item>
+        <el-form-item label="Font Url">
+          <el-input v-model="font.url"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="addFont" :loading="adding">Add Font</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -63,6 +87,8 @@ import {
 } from 'vue';
 import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
+import { buildInFonts } from './style-utils';
 
 export default defineComponent({
   name: 'PbFont',
@@ -117,13 +143,7 @@ export default defineComponent({
       });
     };
 
-    const fonts = ref<any[]>([{
-      fontFamily: 'inherit',
-    }, {
-      fontFamily: 'Arial',
-    },
-
-    ]);
+    const fonts = ref<any[]>(buildInFonts);
 
     const fontMap: any = {};
 
@@ -139,14 +159,43 @@ export default defineComponent({
         `);
       }
     };
+
+    const font = ref({
+      fontFamily: '',
+      url: '',
+    });
+    const adding = ref(false);
+    const dialogVisible = ref(false);
+    const addFont = async () => {
+      if (!font.value.fontFamily || !font.value.url) {
+        ElMessage('Empty');
+        return;
+      }
+      adding.value = true;
+      await axios.post('/api/fonts', font.value);
+      fontMap[font.value.fontFamily] = font.value;
+      fonts.value.push(font.value.fontFamily);
+      adding.value = false;
+      dialogVisible.value = false;
+    };
+    const openDialog = () => {
+      font.value.fontFamily = '';
+      font.value.url = '';
+      dialogVisible.value = true;
+    };
     onMounted(async () => {
       const res = await axios.get('/api/fonts');
-      fonts.value.push(...res.data.data);
       res.data.data.forEach((f: any) => {
         fontMap[f.fontFamily] = f;
+        fonts.value.push(f.fontFamily);
       });
     });
     return {
+      font,
+      dialogVisible,
+      addFont,
+      openDialog,
+      adding,
       fonts,
       onFontSelected,
       onBoldClick,
@@ -163,10 +212,11 @@ export default defineComponent({
 .pb-font {
   padding: 10px;
   .font-family {
-    span {
-      margin-right: 10px;
-    }
+    // .font-select {
+    //   margin: 0 10px;
+    // }
     align-items: center;
+    justify-content: space-between;
     display: flex;
   }
   .inputs {

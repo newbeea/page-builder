@@ -1,3 +1,18 @@
+const buildInFonts = [
+  'inherit',
+  'Sans-serif',
+  'Arial',
+  'Tahoma',
+  'Verdana',
+  'Lucida Grande',
+  'Times New Roman',
+  'Georgia',
+  '微软雅黑',
+  '华文细黑',
+  '宋体',
+  '黑体',
+
+];
 const cssValueSuggestions = [
   {
     value: '5px',
@@ -55,6 +70,7 @@ const queryMarginPadding = (property: string, position: string) => (queryString:
 };
 
 export {
+  buildInFonts,
   querySearch,
   queryMarginPadding,
 };
