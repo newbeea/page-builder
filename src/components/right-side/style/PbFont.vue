@@ -54,6 +54,16 @@
       <span class="pb-icon iconfont icon-icon_line-through" :class="{
         active: style.textDecoration === 'line-through'
       }" @click="onLineThroughClick()"></span>
+
+      <span class="pb-icon iconfont icon-text-align-left" :class="{
+        active: style.textAlign === 'left'
+      }" @click="onTextAlignClick('left')"></span>
+      <span class="pb-icon iconfont icon-text-align-center" :class="{
+        active: style.textAlign === 'center'
+      }" @click="onTextAlignClick('center')"></span>
+      <span class="pb-icon iconfont icon-text-align-right" :class="{
+        active: style.textAlign === 'right'
+      }" @click="onTextAlignClick('right')"></span>
     </div>
 
     <el-dialog
@@ -97,6 +107,7 @@ export default defineComponent({
       fontWeight: string,
       fontStyle: string,
       textDecoration: string,
+      textAlign: string,
       fontFamily: string,
     }>,
   },
@@ -140,6 +151,12 @@ export default defineComponent({
       const textDecoration = style.value?.textDecoration === 'line-through' ? '' : 'line-through';
       context.emit('updateStyles', {
         textDecoration,
+      });
+    };
+
+    const onTextAlignClick = (textAlign: string) => {
+      context.emit('updateStyles', {
+        textAlign,
       });
     };
 
@@ -202,6 +219,7 @@ export default defineComponent({
       onItalicClick,
       onUnderlineClick,
       onLineThroughClick,
+      onTextAlignClick,
       querySearch,
       style,
     };

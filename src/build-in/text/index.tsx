@@ -6,6 +6,6 @@ export default defineComponent({
     text: String,
   },
   setup(props) {
-    return () => (<span>{props.text}</span>);
+    return () => (<div>{props.text}</div>);
   },
 });
