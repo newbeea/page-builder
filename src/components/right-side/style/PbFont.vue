@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import {
-  computed, defineComponent, onMounted, PropType, ref,
+  computed, defineComponent, onMounted, PropType, reactive, ref,
 } from 'vue';
 import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
@@ -177,27 +177,27 @@ export default defineComponent({
       }
     };
 
-    const font = ref({
+    const font = reactive({
       fontFamily: '',
       url: '',
     });
     const adding = ref(false);
     const dialogVisible = ref(false);
     const addFont = async () => {
-      if (!font.value.fontFamily || !font.value.url) {
+      if (!font.fontFamily || !font.url) {
         ElMessage('Empty');
         return;
       }
       adding.value = true;
-      await axios.post('/api/fonts', font.value);
-      fontMap[font.value.fontFamily] = font.value;
-      fonts.value.push(font.value.fontFamily);
+      await axios.post('/api/fonts', font);
+      fontMap[font.fontFamily] = font;
+      fonts.value.push(font.fontFamily);
       adding.value = false;
       dialogVisible.value = false;
     };
     const openDialog = () => {
-      font.value.fontFamily = '';
-      font.value.url = '';
+      font.fontFamily = '';
+      font.url = '';
       dialogVisible.value = true;
     };
     onMounted(async () => {

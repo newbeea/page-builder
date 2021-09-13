@@ -11,22 +11,91 @@
       highlight-current
       draggable>
       <template #default="{ data }">
-        <span class="custom-tree-node">
-          <span class="name" v-if="data.name">{{data.name}}</span>
-          <span class="name" v-else>{{ data.componentName }}</span>
-          <span v-if="data._id">
+        <el-popover
+          :show-after="500"
+          placement="bottom" :width="200" trigger="hover">
+          <template #reference>
+            <span class="custom-tree-node">
+              <span class="name" v-if="data.name">{{data.name}}</span>
+              <span class="name" v-else>{{ data.componentName }}</span>
+               <span v-if="data._id">
+
+                <i class="el-icon-view " :class="{
+                  active: !data._hide
+                }" @click.stop="hideComponent(data)"></i>
+               </span>
+            </span>
+          </template>
+          <div class="pb-context-menu">
+            <!-- <div
+              class="pb-context-menu-item"
+              @click.stop="hideComponent(data)"
+            >
+              <i class="el-icon-view " :class="{
+                active: !data._hide
+              }" ></i>
+              <span v-show="data._hide">Hide</span>
+              <span v-show="!data._hide">Show</span>
+            </div> -->
+            <div
+              class="pb-context-menu-item"
+              @click.stop="deleteComponent(data)">
+              <i class="el-icon-delete active" ></i>
+              <span>Delete</span>
+            </div>
+            <div
+              class="pb-context-menu-item"
+              @click.stop="createTemplateDialog(data)">
+              <i class="el-icon-delete active" ></i>
+              <span>Create Template</span>
+            </div>
+          </div>
+
+        <!-- <span class="custom-tree-node"> -->
+          <!-- <span class="name" v-if="data.name">{{data.name}}</span>
+          <span class="name" v-else>{{ data.componentName }}</span> -->
+          <!-- <span v-if="data._id"> -->
+
             <!-- <a
               @click="append(data)">
               Append
             </a> -->
-            <i class="el-icon-view " :class="{
+            <!-- <i class="el-icon-view " :class="{
               active: !data._hide
             }" @click.stop="hideComponent(data)"></i>
-            <i class="el-icon-delete active" @click.stop="deleteComponent(data)"></i>
-          </span>
-        </span>
+            <i class="el-icon-delete active" @click.stop="deleteComponent(data)"></i> -->
+          <!-- </span> -->
+        <!-- </span> -->
+        </el-popover>
       </template>
     </el-tree>
+    <el-dialog
+      title="Template"
+      v-model="showDialog"
+      width="90%"
+    >
+
+      <el-form label-position="top" label-width="80px">
+        <el-form-item label="Label">
+          <el-input v-model="template.label"></el-input>
+        </el-form-item>
+        <el-form-item label="Category">
+          <el-input v-model="template.category"></el-input>
+        </el-form-item>
+        <el-form-item label="Thumbnail">
+          <el-input v-model="template.thumb"></el-input>
+        </el-form-item>
+        <el-form-item label="Preview">
+          <el-input v-model="template.preview"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showDialog = false">Cancel</el-button>
+          <el-button type="primary" @click="createTemplate" :loading="loading">Create Template</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 
 </template>
@@ -36,6 +105,8 @@ import {
   computed, defineComponent, getCurrentInstance, nextTick, reactive, ref, toRef, toRefs, watch,
 } from 'vue';
 import BuilderModule from '@/store/modules/builder';
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   name: 'PbComponentTree',
@@ -77,8 +148,60 @@ export default defineComponent({
       data._hide = !data._hide;
       // BuilderModule.deleteComponent(data);
     };
+    const loading = ref(false);
+    const current = ref(null);
+    const showDialog = ref(false);
+    const template = reactive({
+      thumb: '',
+      preview: '',
+      config: {
+      },
+      category: '',
+      componentName: 'PbContainer',
+      label: '',
+      buildIn: true,
+    });
+    const createTemplateDialog = (data: any) => {
+      current.value = data;
+      template.config = JSON.parse(JSON.stringify(data, (key, value) => {
+        if (key.startsWith('_')) {
+          return undefined;
+        }
+        return value;
+      }));
+      showDialog.value = true;
+      // BuilderModule.deleteComponent(data);
+    };
+    const createTemplate = async () => {
+      try {
+        await axios.post('/api/template', {
+          component: template,
+        });
+        showDialog.value = false;
+        BuilderModule.ADD_TEMPLATE(JSON.parse(JSON.stringify(template)));
+        Object.assign(template, {
+          thumb: '',
+          preview: '',
+          config: {
+          },
+          category: '',
+          componentName: 'PbContainer',
+          label: '',
+          buildIn: true,
+        });
+      } catch (e) {
+        ElMessage(e.message);
+      }
+
+      loading.value = false;
+    };
     return {
+      loading,
+      showDialog,
       tree,
+      template,
+      createTemplate,
+      createTemplateDialog,
       deleteComponent,
       hideComponent,
       onCurrentChange,
@@ -124,6 +247,20 @@ export default defineComponent({
       color: #409eff;
     }
   }
+
+}
+.pb-context-menu {
+  .pb-context-menu-item {
+    padding: 4px;
+    &:hover {
+      background: #40a0ff4b;
+    }
+    i {
+      margin-right: 10px;
+    }
+    cursor: pointer;
+  }
+
 }
 
 </style>

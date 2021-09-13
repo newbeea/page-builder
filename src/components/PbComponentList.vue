@@ -44,16 +44,20 @@ export default defineComponent({
     // componentList.forEach((component) => {
     //   getCurrentInstance()?.appContext.app.component(component.name, component);
     // });
-    const category: any = {};
-    BuilderModule.builderState.componentList.forEach((c: any) => {
-      category[c.category] = category[c.category] || [];
-      category[c.category].push(c);
+
+    const category = computed(() => {
+      const categories: any = {
+        Layout: [],
+        Basic: [],
+      };
+      BuilderModule.builderState.componentList.forEach((c: any) => {
+        categories[c.category] = categories[c.category] || [];
+        categories[c.category].push(c);
+      });
+      return categories;
     });
+
     return {
-      // t: ImageInfo,
-      // a: computed(() => PageModule.activeConfig),
-      // components: computed(() => BuilderModule.builderState.componentList),
-      categoryList: Object.values(category),
       category,
     };
   },

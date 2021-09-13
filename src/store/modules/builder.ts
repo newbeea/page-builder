@@ -171,6 +171,11 @@ class Builder extends VuexModule {
     });
   }
 
+  @Mutation
+  ADD_TEMPLATE(template: any) {
+    this.builderState.componentList.push(template);
+  }
+
   @Action
   deleteComponent(component: any) {
     jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
