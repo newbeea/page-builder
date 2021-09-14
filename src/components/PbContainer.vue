@@ -1,6 +1,13 @@
 <template>
+
   <div class="pb-container">
     <div class="pb-placeholder" v-if="!children?.length && mode === 'edit'">+</div>
+    <template v-for="child in children" :key="child">
+      <pb-css v-if="child.css">
+        {{child.css}}
+      </pb-css>
+    </template>
+
     <component
       v-show="!child._hide"
       v-draggable:[getDragMode(child)]="child"
@@ -16,6 +23,7 @@
 
       }, child.props.classes]"
     >
+
       <template  v-for="slot in child.slots" :key="slot" v-slot:[slot.slotName]>
         <component
           v-draggable:droppable="slot"

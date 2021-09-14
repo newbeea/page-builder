@@ -98,7 +98,7 @@ export default defineComponent({
       styleJson: computed(() => JSON.stringify(active.value?.props.style)),
       style: computed(() => active.value?.props.style),
       styleJsonEditor,
-      cssString: computed(() => BuilderModule.builderState.config?.customCss),
+      cssString: computed(() => active.value?.css),
       cssStringEditor,
       onCssStringChange,
       onStyleJsonChange,

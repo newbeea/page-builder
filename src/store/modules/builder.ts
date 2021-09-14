@@ -18,21 +18,22 @@ const img = {
 };
 const config: ComponentConfig = {
   componentName: 'Page',
-  customCss: `
-  
-@media only screen and (max-width: 540px) {
-  body {
-    color: red;
-  }
-}
-    
-  `,
+
   props: {
     style: {
     },
   },
   children: [{
     componentName: 'Div',
+    css: `
+  
+    @media only screen and (max-width: 540px) {
+      body {
+        color: red;
+      }
+    }
+        
+      `,
     props: {
       style: {
         display: 'flex',
@@ -129,18 +130,18 @@ class Builder extends VuexModule {
 
   @Mutation
   SET_CUSTOM_CSS(css: string) {
-    if (this.builderState.config) {
-      this.builderState.config.customCss = css;
+    if (this.builderState.activeConfig) {
+      this.builderState.activeConfig.css = css;
     }
   }
 
   @Action
   setFonts(font: string) {
-    this.fonts.add(font);
-    this.postMessageToPageWindow({
-      cmd: 'set-fonts',
-      data: font,
-    });
+    if (!this.builderState.activeConfig?.css?.includes(font)) {
+      if (this.builderState.activeConfig) {
+        this.builderState.activeConfig.css = this.builderState.activeConfig.css ? this.builderState.activeConfig.css + font : font;
+      }
+    }
   }
 
   @Action

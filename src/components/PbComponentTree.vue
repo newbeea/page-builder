@@ -46,7 +46,7 @@
             <div
               class="pb-context-menu-item"
               @click.stop="createTemplateDialog(data)">
-              <i class="el-icon-delete active" ></i>
+              <i class="el-icon-plus active" ></i>
               <span>Create Template</span>
             </div>
           </div>

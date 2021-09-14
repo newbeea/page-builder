@@ -9,6 +9,6 @@ export type ComponentConfig = {
   mode?: string,
   children?: ComponentConfig[],
   slots?: ComponentConfig[],
-  customCss?: string,
+  css?: string,
   fonts?: string[],
 }

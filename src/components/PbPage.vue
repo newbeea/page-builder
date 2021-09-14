@@ -1,7 +1,7 @@
 <template>
-  <!-- <div draggable="true" @dragstart="onDrag($event)">1</div>
-  <div style="width: 100px; height: 100px; background: #333;" id="div1" @drop="drop($event)" @dragover="dragover($event)"  @dragend="dragend($event)" @dragenter="dragenter">
-  <div style="width: 50px; height: 50px; background: #fff;" id="div12" @drop="drop($event)" @dragover="dragover($event)"  @dragend="dragend($event)" @dragenter="dragenter"> </div> -->
+  <pb-css v-if="config && config.css">
+    {{config.css}}
+  </pb-css>
   <div class="pb-page">
     <pb-container
       v-if="config"

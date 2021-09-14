@@ -20,6 +20,12 @@ const components = [
 ];
 
 const app = Vue.createApp(App);
+app.component('pb-css', {
+  render() {
+    const { h } = Vue;
+    return h('style', this.$slots.default());
+  },
+});
 components.forEach((component) => {
   app.component(component.name, component);
 });

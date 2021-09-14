@@ -108,13 +108,6 @@ class Page extends VuexModule {
 
   @Mutation
   UPDATE_CONFIG(config: ComponentConfig) {
-    if (config.customCss) {
-      const head = document.getElementsByTagName('head')[0];
-      const style = document.createElement('style');
-      style.type = 'text/css';
-      style.appendChild(document.createTextNode(config.customCss));
-      head.appendChild(style);
-    }
     this.pageState.config = config;
   }
 
