@@ -3,39 +3,43 @@
     <pb-left-side class="pb-left-panel"> </pb-left-side>
     <div class="pb-center-area">
       <div class="pb-canvas-toolbar">
-        <div class="device">
+        <div class="group device">
           <i
-            class="el-icon-s-platform device-icon"
+            class="el-icon-s-platform toolbar-icon"
             :class="{
               active: pbDevice != 'mobile',
             }"
             @click="pbDevice = 'pc'"
           ></i>
           <i
-            class="el-icon-mobile-phone device-icon"
+            class="el-icon-mobile-phone toolbar-icon"
             :class="{
               active: pbDevice == 'mobile',
             }"
             @click="pbDevice = 'mobile'"
           ></i>
         </div>
-        <div class="mode">
+        <div class="group mode">
           <i
-            class="el-icon-edit device-icon"
+            class="el-icon-edit toolbar-icon"
             :class="{
               active: pbMode == 'edit',
             }"
             @click="setMode('edit')"
           ></i>
           <i
-            class="el-icon-view device-icon"
+            class="el-icon-view toolbar-icon"
             :class="{
               active: pbMode == 'view',
             }"
             @click="setMode('view')"
           ></i>
         </div>
-
+        <div class="group operation">
+          <i v-show="pbMode == 'view'"
+            class="el-icon-document-copy toolbar-icon copy-html"
+          ></i>
+        </div>
       </div>
       <div class="pb-canvas">
         <div class="pb-device" :class="pbDeviceClass">
@@ -53,11 +57,13 @@
 import {
   computed, defineComponent, reactive, ref, toRefs,
 } from 'vue';
+import Clipboard from 'clipboard';
 import PbDevice from '@/components/PbDevice.vue';
 import PbLeftSide from '@/components/PbLeftSide.vue';
 import PbRightSide from '@/components/right-side/PbRightSide.vue';
 // import ImageInfo from '@/build-in/image';
 import BuilderModule from '@/store/modules/builder';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   name: 'Builder',
@@ -87,6 +93,18 @@ export default defineComponent({
       });
       state.pbMode = mode;
     };
+
+    const clipboard = new Clipboard('.copy-html', {
+      text(trigger) {
+        const iframe = document.getElementById('iframe') as HTMLIFrameElement;
+        const html = iframe.contentWindow?.document.getElementsByTagName('html')[0].outerHTML.replace(/\\n/g, '') || '';
+        return html;
+      },
+    });
+
+    clipboard.on('success', (e) => {
+      ElMessage('Html copied!');
+    });
     return {
       ...toRefs(state),
       setMode,
@@ -118,9 +136,12 @@ export default defineComponent({
       background: rgb(247, 247, 247);
       height: 40px;
       display: flex;
-      justify-content: center;
+      justify-content: start;
       align-items: center;
-      .device-icon {
+      .group {
+        margin: 0 10px;
+      }
+      .toolbar-icon {
         font-size: 24px;
         color: rgb(84, 92, 100);
         &.active {
