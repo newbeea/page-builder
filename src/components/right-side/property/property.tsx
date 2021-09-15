@@ -22,21 +22,50 @@ export default defineComponent({
           list.push(
             <div class={style.pbProperty}>
               <span class={style.pbTitle}>Name</span>
-              <el-input v-model={BuilderModule.builderState.activeConfig.name}></el-input>
+              <el-input size="mini" v-model={BuilderModule.builderState.activeConfig.name}></el-input>
             </div>,
           );
           list.push(
             <div class={style.pbProperty}>
               <span class={style.pbTitle}>Class</span>
-              <el-input v-model={BuilderModule.builderState.activeConfig.props.classes}></el-input>
+              <el-input size="mini" v-model={BuilderModule.builderState.activeConfig.props.classes}></el-input>
             </div>,
           );
           properties?.forEach((p) => {
+            const attribute = p.input.config?.attribute || {};
             if (p.input.component === 'InputExpression') {
               list.push(
                 <div class={style.pbProperty}>
                   <span class={style.pbTitle}>{p.label}</span>
-                  <el-input v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}></el-input>
+                  <el-input { ...attribute } size="mini" v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}></el-input>
+                </div>,
+              );
+            }
+            if (p.input.component === 'InputImage') {
+              const uploading = ref(false);
+              const onSuccess = (response: any, file: any, fileList: any[]) => {
+                BuilderModule.UPDATE_PROPS({
+                  [p.prop]: eval(`file.response.${p.input.config.imageUrlExpression}`),
+                });
+                uploading.value = false;
+              };
+
+              const beforeUpload = () => {
+                uploading.value = true;
+              };
+
+              list.push(
+                <div class={style.pbProperty}>
+                  <span class={style.pbTitle}>{p.label}</span>
+                  <el-input size="mini" v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}></el-input>
+                  <el-upload size="mini"
+                    on-success={onSuccess}
+                    before-upload={beforeUpload}
+                    { ...attribute }
+                    show-file-list={false}
+                  >
+                    <el-button loading={uploading.value} size="mini" style="margin-top: 5px;">upload</el-button>
+                  </el-upload>
                 </div>,
               );
             }
@@ -44,7 +73,7 @@ export default defineComponent({
               list.push(
                   <div class={style.pbProperty}>
                     <span class={style.pbTitle}>{p.label}</span>
-                    <el-select v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
+                    <el-select { ...attribute } size="mini" v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
                       {
                         p.input.config.options.map((item: any) => (<el-option
                             key={item.value}
@@ -60,7 +89,7 @@ export default defineComponent({
               list.push(
                   <div class={style.pbProperty}>
                     <span class={style.pbTitle}>{p.label}</span>
-                    <el-switch v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
+                    <el-switch { ...attribute } size="mini" v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
                     </el-switch>
                   </div>,
               );

@@ -27,6 +27,7 @@
   -moz-osx-font-smoothing: grayscale;
   // text-align: center;
   color: #2c3e50;
+  font-size: 14px;
   padding: 0;
   // background: rgb(58, 58, 58);
   .el-menu {
