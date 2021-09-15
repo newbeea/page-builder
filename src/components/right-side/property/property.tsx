@@ -18,45 +18,55 @@ export default defineComponent({
       const properties = BuilderModule.builderState.activeProps;
       const render = () => {
         const list: any = [];
-
-        properties?.forEach((p) => {
-          if (BuilderModule.builderState.activeConfig) {
+        if (BuilderModule.builderState.activeConfig) {
+          list.push(
+            <div class={style.pbProperty}>
+              <span class={style.pbTitle}>Name</span>
+              <el-input v-model={BuilderModule.builderState.activeConfig.name}></el-input>
+            </div>,
+          );
+          list.push(
+            <div class={style.pbProperty}>
+              <span class={style.pbTitle}>Class</span>
+              <el-input v-model={BuilderModule.builderState.activeConfig.props.classes}></el-input>
+            </div>,
+          );
+          properties?.forEach((p) => {
             if (p.input.component === 'InputExpression') {
               list.push(
-              <div class={style.pbProperty}>
-                <span class={style.pbTitle}>{p.label}</span>
-                <el-input v-model={BuilderModule.builderState.activeConfig.props[p.prop]}></el-input>
-              </div>,
+                <div class={style.pbProperty}>
+                  <span class={style.pbTitle}>{p.label}</span>
+                  <el-input v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}></el-input>
+                </div>,
               );
             }
             if (p.input.component === 'Select') {
               list.push(
-                <div class={style.pbProperty}>
-                  <span class={style.pbTitle}>{p.label}</span>
-                  <el-select v-model={BuilderModule.builderState.activeConfig.props[p.prop]}>
-                    {
-                      p.input.config.options.map((item: any) => (<el-option
-                          key={item.value}
-                          label={item.label}
-                          value={item.value}>
-                        </el-option>))
-                    }
-                  </el-select>
-                </div>,
+                  <div class={style.pbProperty}>
+                    <span class={style.pbTitle}>{p.label}</span>
+                    <el-select v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
+                      {
+                        p.input.config.options.map((item: any) => (<el-option
+                            key={item.value}
+                            label={item.label}
+                            value={item.value}>
+                          </el-option>))
+                      }
+                    </el-select>
+                  </div>,
               );
             }
             if (p.input.component === 'Switch') {
               list.push(
-                <div class={style.pbProperty}>
-                  <span class={style.pbTitle}>{p.label}</span>
-                  <el-switch v-model={BuilderModule.builderState.activeConfig.props[p.prop]}>
-                  </el-switch>
-                </div>,
+                  <div class={style.pbProperty}>
+                    <span class={style.pbTitle}>{p.label}</span>
+                    <el-switch v-model={BuilderModule.builderState.activeConfig!.props[p.prop]}>
+                    </el-switch>
+                  </div>,
               );
             }
-          }
-        });
-
+          });
+        }
         return list;
       };
       return render();

@@ -2,6 +2,7 @@ export type ComponentConfig = {
   _currentId?: number,
   _id?: number,
   _active?: boolean,
+  name?: string,
   componentName: string,
   props: {
     [key: string]: any,
