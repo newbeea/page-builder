@@ -2,6 +2,7 @@ import {
   Module, VuexModule, Mutation, Action, getModule,
 } from 'vuex-module-decorators';
 import * as jsonuri from 'jsonuri';
+import axios from 'axios';
 import store from '..';
 import { ComponentConfig } from './types';
 
@@ -84,6 +85,8 @@ class Builder extends VuexModule {
   public fonts: Set<string> = new Set();
 
   public builderState: {
+    dirty: boolean,
+    pageId: string,
     page: any,
     pageReady: boolean,
     panels: any[],
@@ -98,13 +101,19 @@ class Builder extends VuexModule {
     activePath: string,
     activeId: number | null,
   } = {
+    dirty: false,
+    pageId: '',
     page: undefined,
     pageReady: false,
     panels: [],
     componentList: [],
     activeConfig: null,
     activeProps: [],
-    config: undefined,
+    config: {
+      componentName: '',
+      props: {
+      },
+    },
     activePath: '',
     activeId: null,
   }
@@ -121,6 +130,11 @@ class Builder extends VuexModule {
       input: any,
     }>
   } = {
+  }
+
+  @Mutation
+  SET_PAGE_ID(page: string) {
+    this.builderState.pageId = page;
   }
 
   @Mutation
@@ -156,6 +170,12 @@ class Builder extends VuexModule {
       data,
     }));
     console.log(222);
+    this.SET_DIRTY(true);
+  }
+
+  @Mutation
+  SET_DIRTY(dirty: boolean) {
+    this.builderState.dirty = dirty;
   }
 
   @Mutation
@@ -301,12 +321,6 @@ class Builder extends VuexModule {
   //   }
   // }
 
-  @Mutation
-  UPDATE_CONFIG(componentConfig: ComponentConfig) {
-    console.log(123123);
-    this.builderState.config = componentConfig;
-  }
-
   @Action
   setActiveConfigByPath(path: string) {
     this.SET_ACTIVE_BY_PATH(path);
@@ -340,16 +354,30 @@ class Builder extends VuexModule {
     }
   }
 
-  @Action({ rawError: true })
-  public fetchConfig() {
-    const travers = (c: ComponentConfig) => {
+  @Mutation
+  UPDATE_CONFIG(componentConfig: ComponentConfig) {
+    console.log(123123);
+    this.builderState.config = componentConfig;
+  }
+
+  @Action
+  formatConfig(json: ComponentConfig) {
+    const travers = (c: any) => {
       c._id = this.id;
       // this.addToMap(c);
       this.GEN_ID();
-      config._currentId = c._id;
+      json._currentId = c._id;
       if (!c.props.style) {
         c.props.style = {};
       }
+      // if (c.type && !c.componentName) {
+      //   let { type } = c;
+      //   if (c.type === 'Block'
+      //   || c.type === 'Shape') {
+      //     type = 'Div';
+      //   }
+      //   c.componentName = type;
+      // }
       if (c.props.className) {
         c.props.classes = c.props.className;
         delete c.props.className;
@@ -357,10 +385,16 @@ class Builder extends VuexModule {
       c.children?.forEach((child: ComponentConfig) => travers(child));
       c.slots?.forEach((child: ComponentConfig) => travers(child));
     };
-    travers(config);
 
-    // console.log(config);
-    this.UPDATE_CONFIG(config);
+    travers(json);
+  }
+
+  @Action({ rawError: true })
+  public async fetchConfig(pageId: string) {
+    const res = await axios.get(`/api/pages/${pageId}`);
+    const { json } = res.data.data;
+    this.formatConfig(json);
+    this.UPDATE_CONFIG(json);
   }
 }
 

@@ -2,14 +2,19 @@ import {
   createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw,
 } from 'vue-router';
 import Builder from '@/views/Builder.vue';
+import Pages from '@/views/Pages.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/page-builder',
+    redirect: '/pages',
   },
   {
-    path: '/page-builder',
+    path: '/pages',
+    component: Pages,
+  },
+  {
+    path: '/page-builder/:id',
     name: 'Builder',
     component: Builder,
   },

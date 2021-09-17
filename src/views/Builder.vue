@@ -3,6 +3,15 @@
     <pb-left-side class="pb-left-panel"> </pb-left-side>
     <div class="pb-center-area">
       <div class="pb-canvas-toolbar">
+        <div class="group save">
+          <i
+            class="el-icon-circle-check toolbar-icon"
+            :class="{
+              active: dirty,
+            }"
+            @click="savePage"
+          ></i>
+        </div>
         <div class="group device">
           <i
             class="el-icon-s-platform toolbar-icon"
@@ -55,8 +64,9 @@
 
 <script lang="ts">
 import {
-  computed, defineComponent, reactive, ref, toRefs,
+  computed, defineComponent, reactive, toRefs,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import Clipboard from 'clipboard';
 import PbDevice from '@/components/PbDevice.vue';
 import PbLeftSide from '@/components/PbLeftSide.vue';
@@ -64,6 +74,7 @@ import PbRightSide from '@/components/right-side/PbRightSide.vue';
 // import ImageInfo from '@/build-in/image';
 import BuilderModule from '@/store/modules/builder';
 import { ElMessage } from 'element-plus';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Builder',
@@ -75,7 +86,9 @@ export default defineComponent({
   methods: {
   },
   setup() {
-    BuilderModule.fetchConfig();
+    const route = useRoute();
+    const id = route.params.id as string;
+    BuilderModule.fetchConfig(id);
     const state = reactive({
       pbDevice: 'mobile',
       pbMode: 'edit',
@@ -105,9 +118,20 @@ export default defineComponent({
     clipboard.on('success', (e) => {
       ElMessage('Html copied!');
     });
+
+    const savePage = async () => {
+      await axios.post(`/api/pages/${id}`, {
+        json: BuilderModule.builderState.config,
+      });
+      BuilderModule.SET_DIRTY(false);
+      ElMessage('Saved!');
+    };
+
     return {
+      savePage,
       ...toRefs(state),
       setMode,
+      dirty: computed(() => BuilderModule.builderState.dirty),
       pbDeviceClass: computed(() => (state.pbDevice === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
     };
   },

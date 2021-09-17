@@ -152,19 +152,30 @@ export default defineComponent({
         const configUrl = lib.value.umdUrl.replace(`dist/${filename}`, 'assets/config.json');
         const { data } = await axios.get(configUrl);
         console.log(data);
-        data.forEach((c: any) => {
-          const component = {
-            componentName: c.config.componentName,
-            label: c.config.componentName,
-            props: c.props,
-            config: c.config,
-            thumb: c.thumb || lib.value.thumb, // TODO
-            preview: c.preview || lib.value.preview, // TODO
-            category: c.category,
-            buildIn: false,
-          };
-          components.value.push(component);
-        });
+        // data.forEach((c: any) => {
+        //   const component = {
+        //     componentName: c.config.componentName,
+        //     label: c.config.componentName,
+        //     props: c.props,
+        //     config: c.config,
+        //     thumb: c.thumb || lib.value.thumb, // TODO
+        //     preview: c.preview || lib.value.preview, // TODO
+        //     category: c.category,
+        //     buildIn: false,
+        //   };
+        //   components.value.push(component);
+        // });
+        const component = {
+          componentName: data.config.componentName,
+          label: data.config.componentName,
+          props: data.props,
+          config: data.config,
+          thumb: data.thumb || lib.value.thumb, // TODO
+          preview: data.preview || lib.value.preview, // TODO
+          category: data.category,
+          buildIn: false,
+        };
+        components.value.push(component);
       } catch (e) {
         console.log(e);
       }

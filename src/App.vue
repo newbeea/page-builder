@@ -7,9 +7,12 @@
     active-text-color="#ffd04b"
     class="pb-header"
   >
-    <el-menu-item index="">
-      <router-link to="/">Page Builder</router-link>
+    <el-menu-item index="/pages">
+      <router-link to="/pages">Pages</router-link>
     </el-menu-item>
+    <!-- <el-menu-item index="/page-builder">
+      <router-link :to="{ name: 'Builder', params: { id: '1' }}">Page Builder</router-link>
+    </el-menu-item> -->
     <el-menu-item index="/about">
       <router-link to="/about">Docs</router-link>
     </el-menu-item>

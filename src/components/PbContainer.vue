@@ -60,7 +60,7 @@ export default defineComponent({
   },
   methods: {
     getComonentName(child: ComponentConfig) {
-      if (child.componentName === 'Div') {
+      if (child.componentName === 'Div' || child.componentName === 'Block') {
         return 'PbContainer';
       }
       return child.componentName;
