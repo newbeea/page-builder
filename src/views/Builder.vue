@@ -11,6 +11,10 @@
             }"
             @click="savePage"
           ></i>
+          <i
+            class="el-icon-document toolbar-icon active"
+            @click="configEditor = true"
+          ></i>
         </div>
         <div class="group device">
           <i
@@ -57,14 +61,25 @@
       </div>
     </div>
     <pb-right-side class="pb-right-panel">
-
     </pb-right-side>
+
+    <el-drawer
+      custom-class="pb-config-editor"
+      title="Config Json"
+      v-model="configEditor"
+      direction="ltr"
+      :modal="true"
+      destroy-on-close>
+      <pb-code-editor
+        :code="config"
+        :onChange="onConfigChange"></pb-code-editor>
+    </el-drawer>
   </div>
 </template>
 
 <script lang="ts">
 import {
-  computed, defineComponent, reactive, toRefs,
+  computed, defineComponent, reactive, ref, toRefs,
 } from 'vue';
 import { useRoute } from 'vue-router';
 import Clipboard from 'clipboard';
@@ -75,6 +90,7 @@ import PbRightSide from '@/components/right-side/PbRightSide.vue';
 import BuilderModule from '@/store/modules/builder';
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
+import PbCodeEditor from '@/components/PbCodeEditor.vue';
 
 export default defineComponent({
   name: 'Builder',
@@ -82,6 +98,7 @@ export default defineComponent({
     PbDevice,
     PbLeftSide,
     PbRightSide,
+    PbCodeEditor,
   },
   methods: {
   },
@@ -92,11 +109,6 @@ export default defineComponent({
     const state = reactive({
       pbDevice: 'mobile',
       pbMode: 'edit',
-      myArray: [
-        { name: '轮播1', id: 0 },
-        { name: '轮播2', id: 1 },
-        { name: '轮播3', id: 2 },
-      ],
     });
 
     const setMode = (mode: string) => {
@@ -127,7 +139,13 @@ export default defineComponent({
       ElMessage('Saved!');
     };
 
+    const onConfigChange = (code: string) => {
+      BuilderModule.UPDATE_CONFIG(JSON.parse(code));
+    };
     return {
+      onConfigChange,
+      configEditor: ref(false),
+      config: computed(() => JSON.stringify(BuilderModule.builderState.config)),
       savePage,
       ...toRefs(state),
       setMode,
@@ -199,6 +217,9 @@ export default defineComponent({
   .pb-right-panel {
     width: 400px;
     background: rgb(247, 247, 247);
+  }
+  .pb-config-editor {
+    width: 90% !important;
   }
 }
 </style>

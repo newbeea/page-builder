@@ -28,7 +28,6 @@ export default defineComponent({
     modelValue: String,
 
     code: {
-      // 代码
       type: String as PropType<string>,
       required: true,
     },
@@ -66,23 +65,15 @@ export default defineComponent({
         editorRef.value = monaco.editor.create(root.value as HTMLElement, {
           language: props.lang,
           value: props.code,
+          tabSize: 2,
         });
 
         onChangeListener = editorRef.value?.onDidChangeModelContent((event) => {
-          console.log(editorRef.value!.getValue());
-          // if (!0) {
-          // getValue: 获取编辑器中的所有文本
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           props.onChange?.(editorRef.value!.getValue(), event);
           context.emit('update:modelValue', editorRef.value!.getValue());
-          // }
         });
-        editorRef.value!.getAction('editor.action.formatDocument').run();
-        // const editor = editorRef.value;
-        // // 获取编辑器的textModel文本
-        // const model = editor.getModel();
-        // model?.setValue('{}');
-        // formatCode();
+        formatCode();
       });
     });
     onUnmounted(() => {
