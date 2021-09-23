@@ -71,7 +71,7 @@
       :modal="true"
       destroy-on-close>
       <pb-code-editor
-        :code="config"
+        :panels="panels"
         :onChange="onConfigChange"></pb-code-editor>
     </el-drawer>
   </div>
@@ -145,12 +145,16 @@ export default defineComponent({
     return {
       onConfigChange,
       configEditor: ref(false),
-      config: computed(() => JSON.stringify(BuilderModule.builderState.config)),
       savePage,
       ...toRefs(state),
       setMode,
       dirty: computed(() => BuilderModule.builderState.dirty),
       pbDeviceClass: computed(() => (state.pbDevice === 'mobile' ? 'pb-device-mobile' : 'pb-device-pc')),
+      panels: computed(() => ([{
+        panelType: 'json',
+        panelName: 'Config',
+        panelValue: JSON.stringify(BuilderModule.builderState.config),
+      }])),
     };
   },
 });

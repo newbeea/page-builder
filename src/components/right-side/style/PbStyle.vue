@@ -22,7 +22,7 @@
       :modal="true"
       destroy-on-close>
       <pb-code-editor
-        :code="styleJson"
+        :panels="stylePanels"
         :onChange="onStyleJsonChange"></pb-code-editor>
     </el-drawer>
 
@@ -37,7 +37,7 @@
       destroy-on-close>
       <pb-code-editor
         lang="css"
-        :code="cssString"
+        :panels="cssPanels"
         :onChange="onCssStringChange"></pb-code-editor>
     </el-drawer>
   </div>
@@ -95,10 +95,20 @@ export default defineComponent({
     return {
       active,
       activeNames: ['Layout', 'Typography'],
-      styleJson: computed(() => JSON.stringify(active.value?.props.style)),
+      stylePanels: computed(() => ([{
+        panelType: 'json',
+        panelName: 'Json',
+        panelValue: JSON.stringify(active.value?.props.style),
+      }])),
+      // styleJson: computed(() => JSON.stringify(active.value?.props.style)),
       style: computed(() => active.value?.props.style),
       styleJsonEditor,
-      cssString: computed(() => active.value?.css),
+      cssPanels: computed(() => ([{
+        panelType: 'css',
+        panelName: 'Css',
+        panelValue: active.value?.css,
+      }])),
+      // cssString: computed(() => active.value?.css),
       cssStringEditor,
       onCssStringChange,
       onStyleJsonChange,

@@ -1,4 +1,10 @@
 <template>
+  <div class="pb-tabs" v-if="panels.length > 1">
+    <el-radio-group size="mini" v-model="tab" >
+      <el-radio-button v-for="(panel, index) in panels" :key="index" :label="panel.panelName" @click="setModel(index)"></el-radio-button>
+    </el-radio-group>
+  </div>
+
   <div class="pb-code-editor" ref="root"></div>
 </template>
 
@@ -27,9 +33,13 @@ export default defineComponent({
   props: {
     modelValue: String,
 
-    code: {
-      type: String as PropType<string>,
-      required: true,
+    // code: {
+    //   type: String as PropType<string>,
+    //   required: true,
+    // },
+    panels: {
+      type: Array as PropType<any[]>,
+      default: () => ([]),
     },
     lang: {
       type: String,
@@ -59,12 +69,12 @@ export default defineComponent({
       );
     };
 
+    const models = props.panels?.map((p: any) => monaco.editor.createModel(p.panelValue, p.panelType));
     onMounted(() => {
       nextTick(() => {
-        console.log(1111111);
         editorRef.value = monaco.editor.create(root.value as HTMLElement, {
           language: props.lang,
-          value: props.code,
+          model: models![0],
           tabSize: 2,
         });
 
@@ -80,7 +90,17 @@ export default defineComponent({
       onChangeListener?.dispose();
       editorRef.value?.dispose();
     });
+
+    const setModel = (index: number) => {
+      // models[index].setValue(props.panels[index].panelValue);
+      editorRef.value!.setModel(models[index]);
+      formatCode();
+    };
+
+    const tab = ref(props.panels[0].panelName);
     return {
+      setModel,
+      tab,
       root,
       editorRef,
     };
@@ -89,6 +109,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.pb-tabs {
+  padding: 0 20px 20px;
+}
 .pb-code-editor {
   width: 100%;
   height: 100%;
