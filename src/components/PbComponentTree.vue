@@ -49,6 +49,12 @@
               <i class="el-icon-plus active" ></i>
               <span>Create Template</span>
             </div>
+            <div
+              class="pb-context-menu-item"
+              @click.stop="getCode(data, 'vue@2')">
+              <i class="el-icon-plus active" ></i>
+              <span>Get Vue2 Code</span>
+            </div>
           </div>
 
         <!-- <span class="custom-tree-node"> -->
@@ -96,6 +102,17 @@
         </span>
       </template>
     </el-dialog>
+    <el-drawer
+      custom-class="pb-code-editor"
+      title="Code"
+      v-model="codeEditor"
+      direction="ltr"
+      :modal="true"
+      destroy-on-close>
+      <pb-code-editor
+        :panels="panels"
+      ></pb-code-editor>
+    </el-drawer>
   </div>
 
 </template>
@@ -107,10 +124,12 @@ import {
 import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import PbCodeEditor from '@/components/PbCodeEditor.vue';
 
 export default defineComponent({
   name: 'PbComponentTree',
   components: {
+    PbCodeEditor,
   },
   methods: {
   },
@@ -195,7 +214,25 @@ export default defineComponent({
 
       loading.value = false;
     };
+
+    const panels = ref<any[]>([]);
+    const codeEditor = ref(false);
+    const getCode = async (data: any, dslType: string) => {
+      try {
+        const res = await axios.post('/api/code', {
+          json: data,
+          dslType,
+        });
+        panels.value = res.data.data.panelDisplay;
+        codeEditor.value = true;
+      } catch (e) {
+        ElMessage(e.message);
+      }
+    };
     return {
+      panels,
+      codeEditor,
+      getCode,
       loading,
       showDialog,
       tree,
@@ -247,7 +284,9 @@ export default defineComponent({
       color: #409eff;
     }
   }
-
+  .pb-code-editor {
+    width: 90% !important;
+  }
 }
 .pb-context-menu {
   .pb-context-menu-item {
