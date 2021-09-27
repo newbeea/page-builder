@@ -17,8 +17,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import PbComponentList from '@/components/PbComponentList.vue'; // @ is an alias to /src
-import PbComponentTree from '@/components/PbComponentTree.vue'; // @ is an alias to /src
+import PbComponentList from './PbComponentList.vue'; // @ is an alias to /src
+import PbComponentTree from './PbComponentTree.vue'; // @ is an alias to /src
 
 export default defineComponent({
   name: 'PbLeftSide',

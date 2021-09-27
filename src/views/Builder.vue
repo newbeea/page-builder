@@ -55,9 +55,21 @@
         </div>
       </div>
       <div class="pb-canvas">
-        <div class="pb-device" :class="pbDeviceClass">
+        <div class="pb-device" :class="pbDeviceClass"
+          :style="{
+            transform: `scale(${pbDevice == 'mobile' ? scale/100 : 1})`
+          }"
+        >
           <pb-device></pb-device>
+          <img v-if="pbDevice == 'mobile'" src="../assets/phone.png" alt="">
         </div>
+        <div class="pb-footer-toolbar">
+          <div class="pb-scale">
+            <el-slider v-if="pbDevice == 'mobile'" v-model="scale" show-input></el-slider>
+          </div>
+
+        </div>
+
       </div>
     </div>
     <pb-right-side class="pb-right-panel">
@@ -79,12 +91,12 @@
 
 <script lang="ts">
 import {
-  computed, defineComponent, reactive, ref, toRefs,
+  computed, defineComponent, nextTick, onMounted, reactive, ref, toRefs,
 } from 'vue';
 import { useRoute } from 'vue-router';
 import Clipboard from 'clipboard';
 import PbDevice from '@/components/PbDevice.vue';
-import PbLeftSide from '@/components/PbLeftSide.vue';
+import PbLeftSide from '@/components/left-side/PbLeftSide.vue';
 import PbRightSide from '@/components/right-side/PbRightSide.vue';
 // import ImageInfo from '@/build-in/image';
 import BuilderModule from '@/store/modules/builder';
@@ -107,7 +119,7 @@ export default defineComponent({
     const id = route.params.id as string;
     BuilderModule.fetchConfig(id);
     const state = reactive({
-      pbDevice: 'mobile',
+      pbDevice: 'pc',
       pbMode: 'edit',
     });
 
@@ -143,7 +155,11 @@ export default defineComponent({
       BuilderModule.UPDATE_CONFIG(JSON.parse(code));
       BuilderModule.SET_ACTIVE_BY_PATH(BuilderModule.builderState.activePath);
     };
+
+    const scale = ref(70);
+
     return {
+      scale,
       onConfigChange,
       configEditor: ref(false),
       savePage,
@@ -185,6 +201,7 @@ export default defineComponent({
       display: flex;
       justify-content: start;
       align-items: center;
+      flex-shrink: 0;
       .group {
         margin: 0 10px;
       }
@@ -202,20 +219,42 @@ export default defineComponent({
       left: 0;
       right: 0;
       bottom: 0;
+
       justify-content: center;
       align-items: center;
       display: flex;
       // position: relative;
       flex-grow: 1;
       .pb-device-mobile {
-        width: 375px;
-        height: 574px;
-        background: coral;
+        width: 431px;
+        height: 864px;
+        padding: 27px 29px 25px 27px;
+        // background: url('../assets/phone.png');
+        // background-size: 100%;
+        transform: scale(0.6);
+        position: relative;
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          pointer-events:none;
+        }
       }
       .pb-device-pc {
         display: block;
         width: 100%;
         height: 100%;
+      }
+      .pb-footer-toolbar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        .pb-scale {
+          width: 300px;
+          padding: 5px;
+        }
       }
     }
   }

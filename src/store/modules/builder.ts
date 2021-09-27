@@ -6,69 +6,6 @@ import axios from 'axios';
 import store from '..';
 import { ComponentConfig } from './types';
 
-const img = {
-  componentName: 'Image',
-  props: {
-    style: {
-      // width: '100%',
-    },
-    className: 'a b',
-    // href: 'https://a.com',
-    src: 'https://media.fameandpartners.com/product/strappy-draped-gown/preview/main/1000xAUTO/matte-satin~champagne~0.jpg',
-  },
-};
-const config: ComponentConfig = {
-  componentName: 'Page',
-
-  props: {
-    style: {
-    },
-  },
-  children: [{
-    componentName: 'Div',
-    css: `
-  
-    @media only screen and (max-width: 540px) {
-      body {
-        color: red;
-      }
-    }
-        
-      `,
-    props: {
-      style: {
-        display: 'flex',
-      },
-    },
-    children: [{
-      componentName: 'Div',
-      // mode: 'alignable',
-      props: {
-        style: {
-          width: '40%',
-          backgroundColor: '#df9999',
-        },
-      },
-      children: [img],
-    }, {
-      componentName: 'Div',
-      props: {
-        style: {
-          display: 'flex',
-          width: '60%',
-          backgroundColor: '#c4ffc3',
-        },
-      },
-      children: [{
-        componentName: 'Div',
-        props: {
-        },
-        children: [],
-      }],
-    }],
-  }],
-};
-
 @Module({
   name: 'builder',
   store,
@@ -117,12 +54,8 @@ class Builder extends VuexModule {
     activePath: '',
     activeId: null,
   }
-  // public idConfigMap: {
-  //   [key: string]: ComponentConfig
-  // } = {}
 
-  // public activeConfig: ComponentConfig = img;
-
+  // property config map
   public propConfig: {
     [key: string]: Array<{
       prop: string,
@@ -132,6 +65,9 @@ class Builder extends VuexModule {
   } = {
   }
 
+  /**
+   * record property to be exported as component's "props"
+   */
   @Mutation
   MARK_PROPS({
     key, prop, action,
@@ -152,7 +88,6 @@ class Builder extends VuexModule {
             },
           },
         };
-        console.log(_prop);
         this.builderState.activeConfig._props[prop.prop] = _prop;
       } else {
         delete this.builderState.activeConfig._props[prop.prop];
@@ -160,16 +95,19 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * store iframe ref
+   * @param pageRef iframe ref
+   */
   @Mutation
-  SET_PAGE_ID(page: string) {
-    this.builderState.pageId = page;
+  SET_PAGE(pageRef: any) {
+    this.builderState.page = pageRef;
   }
 
-  @Mutation
-  SET_PAGE(page: any) {
-    this.builderState.page = page;
-  }
-
+  /**
+   * set css string
+   * @param css
+   */
   @Mutation
   SET_CUSTOM_CSS(css: string) {
     if (this.builderState.activeConfig) {
@@ -177,15 +115,25 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * add font-face to css string
+   * @param font font-face css
+   */
   @Action
   setFonts(font: string) {
     if (!this.builderState.activeConfig?.css?.includes(font)) {
       if (this.builderState.activeConfig) {
-        this.builderState.activeConfig.css = this.builderState.activeConfig.css ? this.builderState.activeConfig.css + font : font;
+        this.builderState.activeConfig.css = this.builderState.activeConfig.css
+          ? this.builderState.activeConfig.css + font
+          : font;
       }
     }
   }
 
+  /**
+   * comunicate with page iframe
+   * @param message: { cmd, data }
+   */
   @Action
   postMessageToPageWindow({ cmd, data }: {
     cmd: string,
@@ -201,16 +149,29 @@ class Builder extends VuexModule {
     this.SET_DIRTY(true);
   }
 
+  /**
+   * means need to save
+   * @param dirty
+   */
   @Mutation
   SET_DIRTY(dirty: boolean) {
     this.builderState.dirty = dirty;
   }
 
+  /**
+   * store thirdparty panels from server
+   * @param panels
+   */
   @Mutation
   SET_PANELS(panels: any[]) {
     this.builderState.panels = panels;
   }
 
+  /**
+   * store thirdparty components from server
+   * store relative property config
+   * @param componentList
+   */
   @Mutation
   SET_COMPONENTS(componentList: any[]) {
     console.log(componentList);
@@ -220,13 +181,21 @@ class Builder extends VuexModule {
     });
   }
 
+  /**
+   * add template to component list dynamically
+   * @param template
+   */
   @Mutation
   ADD_TEMPLATE(template: any) {
     this.builderState.componentList.push(template);
   }
 
+  /**
+   * Delete component from page
+   * @param component component needs to be deleted
+   */
   @Action
-  deleteComponent(component: any) {
+  deleteComponent(component: ComponentConfig) {
     jsonuri.walk(this.builderState.config, (value, key, parent, { path }) => {
       console.log(value._id, path);
 
@@ -242,6 +211,9 @@ class Builder extends VuexModule {
     });
   }
 
+  /**
+   * listen command from page
+   */
   @Action
   listenPage() {
     window.addEventListener('message', (event) => {
@@ -271,12 +243,18 @@ class Builder extends VuexModule {
     });
   }
 
+  /**
+   * generate id for component
+   */
   @Mutation
   GEN_ID() {
     this.id += 1;
     if (this.builderState.config) { this.builderState.config._currentId = this.id; }
   }
 
+  /**
+   * update style json by key-value
+   */
   @Mutation
   UPDATE_STYLE({ value, key }: {
     value: string,
@@ -287,6 +265,9 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * update style json by key-value
+   */
   @Action
   updateStyle({ value, key }: {
     value: string,
@@ -298,6 +279,9 @@ class Builder extends VuexModule {
     });
   }
 
+  /**
+   * update style json
+   */
   @Mutation
   UPDATE_STYLES(style: any) {
     if (this.builderState.activeConfig?.props) {
@@ -305,11 +289,17 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * update style json
+   */
   @Action
   updateStyles(style: any) {
     this.UPDATE_STYLES(style);
   }
 
+  /**
+   * update component props
+   */
   @Mutation
   UPDATE_PROPS(props: any) {
     if (this.builderState.activeConfig?.props) {
@@ -317,43 +307,30 @@ class Builder extends VuexModule {
     }
   }
 
-  // @Mutation
-  // addToMap(c: ComponentConfig) {
-  //   if (c._id) { this.idConfigMap[c._id] = c; }
-  // }
-  @Mutation
-  SET_ACTIVE_PATH(path: string) {
-    this.builderState.activePath = path;
-  }
-
+  /**
+   *
+   * @param id store active id
+   */
   @Mutation
   SET_ACTIVE_ID(id: number) {
     this.builderState.activeId = id;
   }
 
-  // @Action
-  // setActiveConfigById(id: number) {
-  //   this.SET_ACTIVE_BY_ID(id);
-  // }
-
-  // @Mutation
-  // SET_ACTIVE_BY_ID(path: string) {
-  //   const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
-  //   if (activeConfig) activeConfig._active = false;
-  //   this.builderState.activePath = path;
-  //   const newActiveConfig = jsonuri.get(this.builderState.config, path);
-  //   this.builderState.activeConfig = newActiveConfig;
-  //   if (this.builderState.activeConfig?.componentName) {
-  //     newActiveConfig._active = true;
-  //     this.builderState.activeProps = this.propConfig[this.builderState.activeConfig?.componentName];
-  //   }
-  // }
-
+  /**
+   * set active config by path
+   * @param path
+   */
   @Action
   setActiveConfigByPath(path: string) {
     this.SET_ACTIVE_BY_PATH(path);
   }
 
+  /**
+   * set builderState.activeConfig by path
+   * store the active path to builderState.activePath
+   * store the active props to builderState.activeProps
+   * @param path
+   */
   @Mutation
   SET_ACTIVE_BY_PATH(path: string) {
     const activeConfig = jsonuri.get(this.builderState.config, this.builderState.activePath);
@@ -367,6 +344,11 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * set active config by config
+   * find the path then call SET_ACTIVE_BY_PATH
+   * @param path
+   */
   @Action
   setActive(componentConfig: ComponentConfig) {
     if (componentConfig._id === 0) {
@@ -382,12 +364,20 @@ class Builder extends VuexModule {
     }
   }
 
+  /**
+   * set page config
+   * @param componentConfig
+   */
   @Mutation
   UPDATE_CONFIG(componentConfig: ComponentConfig) {
     console.log(123123);
     this.builderState.config = componentConfig;
   }
 
+  /**
+   * format the config, add some necessary config, e.g. _props: {}
+   * @param json
+   */
   @Action
   formatConfig(json: ComponentConfig) {
     const travers = (c: any) => {
@@ -420,6 +410,10 @@ class Builder extends VuexModule {
     travers(json);
   }
 
+  /**
+   * fetch page config from server
+   * @param pageId
+   */
   @Action({ rawError: true })
   public async fetchConfig(pageId: string) {
     const res = await axios.get(`/api/pages/${pageId}`);
