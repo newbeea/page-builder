@@ -13,11 +13,14 @@
     <!-- <el-menu-item index="/page-builder">
       <router-link :to="{ name: 'Builder', params: { id: '1' }}">Page Builder</router-link>
     </el-menu-item> -->
-    <el-menu-item index="/about">
+    <!-- <el-menu-item index="/about">
       <router-link to="/about">Docs</router-link>
-    </el-menu-item>
+    </el-menu-item> -->
     <el-menu-item index="/component-store">
       <router-link to="/component-store">Components</router-link>
+    </el-menu-item>
+    <el-menu-item index="/panel-store">
+      <router-link to="/panel-store">Panels</router-link>
     </el-menu-item>
   </el-menu>
   <router-view />

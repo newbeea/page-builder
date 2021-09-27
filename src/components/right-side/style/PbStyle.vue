@@ -8,7 +8,7 @@
       <el-collapse-item title="Typography" name="Typography" >
         <pb-font v-model="style" @updateStyles="updateStyles"></pb-font>
       </el-collapse-item>
-      <el-collapse-item v-for="p in thirdPartyComponents" :key="p.name" :title="p.title" :name="p.name" >
+      <el-collapse-item v-for="p in thirdPartyComponents" :key="p.id" :title="p.title" :name="p.id" >
         <component :is="p.name" v-model="style"></component>
       </el-collapse-item>
     </el-collapse>
