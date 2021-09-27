@@ -141,6 +141,7 @@ export default defineComponent({
 
     const onConfigChange = (code: string) => {
       BuilderModule.UPDATE_CONFIG(JSON.parse(code));
+      BuilderModule.SET_ACTIVE_BY_PATH(BuilderModule.builderState.activePath);
     };
     return {
       onConfigChange,

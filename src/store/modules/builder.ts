@@ -133,6 +133,34 @@ class Builder extends VuexModule {
   }
 
   @Mutation
+  MARK_PROPS({
+    key, prop, action,
+  }: {
+    key: string,
+    prop: any,
+    action: string,
+  }) {
+    if (this.builderState.activeConfig) {
+      this.builderState.activeConfig._props = this.builderState.activeConfig._props || {};
+      if (action === 'add') {
+        const _prop = {
+          input: {
+            config: {
+              prop: prop.prop,
+              type: prop.input.config?.type ? prop.input.config.type : 'String',
+              default: this.builderState.activeConfig.props[prop.prop],
+            },
+          },
+        };
+        console.log(_prop);
+        this.builderState.activeConfig._props[prop.prop] = _prop;
+      } else {
+        delete this.builderState.activeConfig._props[prop.prop];
+      }
+    }
+  }
+
+  @Mutation
   SET_PAGE_ID(page: string) {
     this.builderState.pageId = page;
   }
@@ -369,6 +397,9 @@ class Builder extends VuexModule {
       json._currentId = c._id;
       if (!c.props.style) {
         c.props.style = {};
+      }
+      if (!c._props) {
+        c._props = {};
       }
       // if (c.type && !c.componentName) {
       //   let { type } = c;

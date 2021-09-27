@@ -52,7 +52,7 @@
             <div
               class="pb-context-menu-item"
               @click.stop="getCode(data, 'vue@2')">
-              <i class="el-icon-plus active" ></i>
+              <i class="el-icon-suitcase active" ></i>
               <span>Get Vue2 Code</span>
             </div>
           </div>

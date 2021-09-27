@@ -1,8 +1,17 @@
+
 .pb-property {
   padding: 10px;
-  .pb-title {
-    // font-size: 14px;
-    display: block;
+  .pb-property-header {
+    display: flex;
+    align-items: center;
     margin-bottom: 5px;
+    height: 30px;
+    .pb-title {
+      margin: 0 10px;
+    }
+    .pb-export-title {
+      margin: 0 10px;
+    }
   }
 }
+

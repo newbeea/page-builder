@@ -174,6 +174,9 @@ class Page extends VuexModule {
       if (!c.props.style) {
         c.props.style = {};
       }
+      if (!c._props) {
+        c._props = {};
+      }
       c.children?.forEach((child: ComponentConfig) => genId(child));
       c.slots?.forEach((child: ComponentConfig) => genId(child));
     };
