@@ -30,7 +30,7 @@
       width="960px"
     >
 
-      <el-form label-position="top" label-width="80px">
+      <el-form label-position="top" label-width="80px"  autocomplete="off">
         <el-form-item label="Name">
           <el-input v-model="name"></el-input>
         </el-form-item>
