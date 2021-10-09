@@ -86,6 +86,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import axios from 'axios';
+import { createPanel, getPanels } from '@/api';
 
 export default defineComponent({
   name: 'ComponentStore',
@@ -95,9 +96,8 @@ export default defineComponent({
     const panels = ref([]);
 
     const load = async () => {
-      const res = await axios.get('/api/panels');
-      panels.value = res.data.data;
-      console.log(res);
+      const { data } = await getPanels();
+      panels.value = data;
     };
 
     onBeforeMount(load);
@@ -145,7 +145,7 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      await axios.post('/api/panels', lib.value);
+      await createPanel(lib.value);
       window.location.reload();
     };
     const onUmdChanged = () => {

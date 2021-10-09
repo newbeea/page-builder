@@ -3,7 +3,7 @@
   <iframe
     id="iframe"
     v-else
-    src="http://localhost:3000/iframe.html"
+    src="iframe.html"
     ref="iframeRef"
     sandbox="allow-modals allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts"
     scrolling="yes"

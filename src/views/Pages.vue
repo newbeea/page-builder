@@ -52,18 +52,18 @@
 import { reactive, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import BuilderModule from '@/store/modules/builder';
+import { getPages, createPage } from '@/api';
 
 const pageIndex = ref(1);
 const pages = ref([]);
 onMounted(async () => {
-  const res = await axios.get('/api/pages', {
+  const { data } = await getPages({
     params: {
       pageIndex: pageIndex.value,
     },
   });
-  console.log(res);
-  pages.value = res.data.data.pages;
+  console.log(data);
+  pages.value = data.pages;
 });
 
 const dialogVisible = ref(false);
@@ -73,14 +73,14 @@ const description = ref('');
 
 const newPage = async () => {
   loading.value = true;
-  const res = await axios.post('/api/pages', {
+  const { data } = await createPage({
     json: {
       name: 'Div', props: { style: {} }, children: [], componentName: 'Div',
     },
     name: name.value,
     description: description.value,
   });
-  pages.value.push(res.data.data);
+  pages.value.push(data);
   loading.value = false;
   dialogVisible.value = false;
 };

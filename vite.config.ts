@@ -29,8 +29,15 @@ const baseConfig: UserConfig = {
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        iframe: resolve(__dirname, 'iframe.html'),
       },
 
+    },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
     },
   },
   define: {

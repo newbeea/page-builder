@@ -87,6 +87,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import axios from 'axios';
+import { createComponent, getLibs } from '@/api';
 
 export default defineComponent({
   name: 'ComponentStore',
@@ -96,9 +97,8 @@ export default defineComponent({
     const libs = ref([]);
 
     const load = async () => {
-      const res = await axios.get('/api/libs');
-      libs.value = res.data.data;
-      console.log(res);
+      const { data } = await getLibs();
+      libs.value = data;
     };
 
     onBeforeMount(load);
@@ -183,7 +183,7 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      await axios.post('/api/components', {
+      await createComponent({
         lib: lib.value,
         components: components.value,
       });

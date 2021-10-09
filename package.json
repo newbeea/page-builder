@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "build:iframe": "vite --config vite.config.iframe.ts build",
     "build:lib": "vite --config vite.config.lib.ts build",
     "build:panel": "vite --config vite.config.panel.ts build",
@@ -15,6 +15,7 @@
     "@vueuse/integrations": "^5.1.3",
     "axios": "^0.21.1",
     "clipboard": "^2.0.8",
+    "cross-env": "^7.0.3",
     "element-plus": "^1.0.2-beta.55",
     "jsonuri": "^2.3.1",
     "monaco-editor": "^0.26.1",

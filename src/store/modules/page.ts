@@ -205,7 +205,7 @@ class Page extends VuexModule {
     });
     console.log(currentPath, targetPath);
     if (this.pageState.dragging) {
-      console.log(JSON.stringify(this.pageState.config));
+      // console.log(JSON.stringify(this.pageState.config));
       if (!targetPath.startsWith(currentPath)) {
         if (!mvBug(currentPath, targetPath, movement.direction)) {
           console.log(currentPath, targetPath, movement.direction);
@@ -219,7 +219,7 @@ class Page extends VuexModule {
       }
 
       // jsonuri.rm(this.pageState.config, currentPath);
-      console.log(JSON.stringify(this.pageState.config));
+      // console.log(JSON.stringify(this.pageState.config));
     } else {
       // this.genId();
       // movement.draggingConfig._id = this.id;

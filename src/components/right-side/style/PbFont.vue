@@ -83,7 +83,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="addFont" :loading="adding">Add Font</el-button>
+          <el-button type="primary" @click="onAddFont" :loading="adding">Add Font</el-button>
         </span>
       </template>
     </el-dialog>
@@ -98,6 +98,7 @@ import {
 import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import { addFont, getFonts } from '@/api';
 import { buildInFonts } from './style-utils';
 
 export default defineComponent({
@@ -183,13 +184,13 @@ export default defineComponent({
     });
     const adding = ref(false);
     const dialogVisible = ref(false);
-    const addFont = async () => {
+    const onAddFont = async () => {
       if (!font.fontFamily || !font.url) {
         ElMessage('Empty');
         return;
       }
       adding.value = true;
-      await axios.post('/api/fonts', font);
+      await addFont(font);
       fontMap[font.fontFamily] = font;
       fonts.value.push(font.fontFamily);
       adding.value = false;
@@ -201,8 +202,8 @@ export default defineComponent({
       dialogVisible.value = true;
     };
     onMounted(async () => {
-      const res = await axios.get('/api/fonts');
-      res.data.data.forEach((f: any) => {
+      const { data } = await getFonts();
+      data.forEach((f: any) => {
         fontMap[f.fontFamily] = f;
         fonts.value.push(f.fontFamily);
       });
@@ -210,7 +211,7 @@ export default defineComponent({
     return {
       font,
       dialogVisible,
-      addFont,
+      onAddFont,
       openDialog,
       adding,
       fonts,

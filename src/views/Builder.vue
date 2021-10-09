@@ -9,7 +9,7 @@
             :class="{
               active: dirty,
             }"
-            @click="savePage"
+            @click="onSavePage"
           ></i>
           <i
             class="el-icon-document toolbar-icon active"
@@ -103,6 +103,7 @@ import BuilderModule from '@/store/modules/builder';
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
 import PbCodeEditor from '@/components/PbCodeEditor.vue';
+import { savePage } from '@/api';
 
 export default defineComponent({
   name: 'Builder',
@@ -143,9 +144,9 @@ export default defineComponent({
       ElMessage('Html copied!');
     });
 
-    const savePage = async () => {
-      await axios.post(`/api/pages/${id}`, {
-        json: BuilderModule.builderState.config,
+    const onSavePage = async () => {
+      await savePage(id, {
+        json: BuilderModule.builderState.config!,
       });
       BuilderModule.SET_DIRTY(false);
       ElMessage('Saved!');
@@ -162,7 +163,7 @@ export default defineComponent({
       scale,
       onConfigChange,
       configEditor: ref(false),
-      savePage,
+      onSavePage,
       ...toRefs(state),
       setMode,
       dirty: computed(() => BuilderModule.builderState.dirty),

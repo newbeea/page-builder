@@ -3,6 +3,7 @@ import {
 } from 'vuex-module-decorators';
 import * as jsonuri from 'jsonuri';
 import axios from 'axios';
+import { getPage } from '@/api';
 import store from '..';
 import { ComponentConfig } from './types';
 
@@ -391,6 +392,9 @@ class Builder extends VuexModule {
       if (!c._props) {
         c._props = {};
       }
+      if (c._active !== undefined) {
+        c._active = false;
+      }
       // if (c.type && !c.componentName) {
       //   let { type } = c;
       //   if (c.type === 'Block'
@@ -416,8 +420,9 @@ class Builder extends VuexModule {
    */
   @Action({ rawError: true })
   public async fetchConfig(pageId: string) {
-    const res = await axios.get(`/api/pages/${pageId}`);
-    const { json } = res.data.data;
+    const { data } = await getPage(pageId);
+    const { json } = data;
+
     this.formatConfig(json);
     this.UPDATE_CONFIG(json);
   }

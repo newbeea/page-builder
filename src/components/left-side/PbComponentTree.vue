@@ -51,7 +51,7 @@
             </div>
             <div
               class="pb-context-menu-item"
-              @click.stop="getCode(data, 'vue@2')">
+              @click.stop="showCode(data, 'vue@2')">
               <i class="el-icon-suitcase active" ></i>
               <span>Get Vue2 Code</span>
             </div>
@@ -98,7 +98,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showDialog = false">Cancel</el-button>
-          <el-button type="primary" @click="createTemplate" :loading="loading">Create Template</el-button>
+          <el-button type="primary" @click="onCreateTemplate" :loading="loading">Create Template</el-button>
         </span>
       </template>
     </el-dialog>
@@ -125,6 +125,8 @@ import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import PbCodeEditor from '@/components/PbCodeEditor.vue';
+import { createTemplate, getCode } from '@/api';
+import { Template } from '@/types';
 
 export default defineComponent({
   name: 'PbComponentTree',
@@ -170,10 +172,12 @@ export default defineComponent({
     const loading = ref(false);
     const current = ref(null);
     const showDialog = ref(false);
-    const template = reactive({
+    const template = reactive<Template>({
       thumb: '',
       preview: '',
       config: {
+        componentName: '',
+        props: {},
       },
       category: '',
       componentName: 'PbContainer',
@@ -191,17 +195,17 @@ export default defineComponent({
       showDialog.value = true;
       // BuilderModule.deleteComponent(data);
     };
-    const createTemplate = async () => {
+    const onCreateTemplate = async () => {
       try {
-        await axios.post('/api/template', {
-          component: template,
-        });
+        await createTemplate(template);
         showDialog.value = false;
         BuilderModule.ADD_TEMPLATE(JSON.parse(JSON.stringify(template)));
         Object.assign(template, {
           thumb: '',
           preview: '',
           config: {
+            componentName: '',
+            props: {},
           },
           category: '',
           componentName: 'PbContainer',
@@ -217,13 +221,13 @@ export default defineComponent({
 
     const panels = ref<any[]>([]);
     const codeEditor = ref(false);
-    const getCode = async (data: any, dslType: string) => {
+    const showCode = async (config: any, dslType: string) => {
       try {
-        const res = await axios.post('/api/code', {
-          json: data,
+        const { data } = await getCode({
+          json: config,
           dslType,
         });
-        panels.value = res.data.data.panelDisplay;
+        panels.value = data.panelDisplay;
         codeEditor.value = true;
       } catch (e) {
         ElMessage(e.message);
@@ -232,12 +236,12 @@ export default defineComponent({
     return {
       panels,
       codeEditor,
-      getCode,
+      showCode,
       loading,
       showDialog,
       tree,
       template,
-      createTemplate,
+      onCreateTemplate,
       createTemplateDialog,
       deleteComponent,
       hideComponent,

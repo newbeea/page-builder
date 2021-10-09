@@ -10,6 +10,8 @@ import BuilderModule from '@/store/modules/builder';
 import axios from 'axios';
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
+import { getComonents, getPanels } from './api';
+import { Request } from './api/request';
 
 const app = Vue.createApp(App);
 app.use(ElementPlus);
@@ -22,9 +24,8 @@ app.use(Draggable, {
 app.use(store).use(router);
 
 (async () => {
-  const { data: response } = await axios.get('/api/panels');
-
-  const thirdPartyPanels = response.data;
+  const { data } = await getPanels();
+  const thirdPartyPanels = data;
   BuilderModule.SET_PANELS(thirdPartyPanels);
   for (let i = 0; i < thirdPartyPanels.length; i += 1) {
     const component = thirdPartyPanels[i];
@@ -36,13 +37,15 @@ app.use(store).use(router);
     link.type = 'text/css';
     head?.appendChild(link);
 
-    const res = await axios.get(component.umdUrl);
-    eval(`window.Vue = Vue; ${res.data}; app.component(component.name, ${component.name});`);
+    const res = await Request({
+      url: component.umdUrl,
+      withCredentials: false,
+    });
+    eval(`window.Vue = Vue; ${res}; app.component(component.name, ${component.name});`);
   }
 
-  const { data: res } = await axios.get('/api/components');
+  const { data: componentList } = await getComonents();
 
-  const componentList = res.data;
   BuilderModule.SET_COMPONENTS(componentList);
   app
     .mount('#app');

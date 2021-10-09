@@ -4,7 +4,7 @@ import '@/assets/common.scss';
 import Draggable from '@/directives/draggable';
 import Selectable from '@/directives/selectable';
 import PageModule from '@/store/modules/page';
-import axios from 'axios';
+import { Request } from '@/api/request';
 import * as Vue from 'vue';
 import { componentList as buildInList } from '@/build-in/index';
 import {
@@ -12,6 +12,7 @@ import {
   ElButton,
   ElCard,
 } from 'element-plus';
+import { getComonents } from './api';
 
 const components = [
   ElInput,
@@ -34,9 +35,9 @@ components.forEach((component) => {
     app.component(component.name, component);
   });
 
-  const { data: response } = await axios.get('/api/components');
+  const { data } = await getComonents();
 
-  const componentList = response.data;
+  const componentList = data;
   for (let i = 0; i < componentList.length; i += 1) {
     const component = componentList[i];
     eval('window.Vue = Vue;');
@@ -48,12 +49,15 @@ components.forEach((component) => {
       link.type = 'text/css';
       head?.appendChild(link);
 
-      const res = await axios.get(component.lib.umdUrl);
-      eval(`${res.data};`);
+      const res = await Request({
+        url: component.lib.umdUrl,
+        withCredentials: false,
+      });
+      eval(`${res};`);
     }
     if (component.componentName && !component.buildIn) {
       // console.log(`${component.componentName}`);
-      eval(`console.log(1, ${component.componentName}); app.component(component.componentName, ${component.componentName});`);
+      eval(`app.component(component.componentName, ${component.componentName});`);
     }
   }
 
