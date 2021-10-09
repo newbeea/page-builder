@@ -7,7 +7,7 @@
 
 页面编辑器、拖拽布局、lowcode、DSL、imgcook、vue3、vite
 ## DEMO
-<https://page-builder.philxu.cn/>
+<https://page-builder.philxu.cn/> (测试版本，不定期重置数据)
 ### 主要功能
 - 拖拽式布局
 - 第三方组件市场，免编译安装到系统使用
