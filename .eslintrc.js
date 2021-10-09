@@ -19,6 +19,7 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',
@@ -43,8 +44,8 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/ban-types': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-console': 'off',
+    'no-debugger': 'off',
   },
   overrides: [
     {

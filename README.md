@@ -1,13 +1,3 @@
----
-date: 2021-10-1
-tag:
-  - page-builder使用文档
-  - page-builder
-  - lowcode
-  - nocode
-author: PhilXu
-location: Hangzhou  
----
 
 # Page Builder
 
@@ -16,6 +6,8 @@ location: Hangzhou
 #### 关键字
 
 页面编辑器、拖拽布局、lowcode、DSL、imgcook、vue3、vite
+## DEMO
+<https://page-builder.philxu.cn/>
 ### 主要功能
 - 拖拽式布局
 - 第三方组件市场，免编译安装到系统使用
